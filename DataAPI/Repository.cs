@@ -12,10 +12,10 @@ namespace DataAPI
 
         public Repository()
         {
-            Products.Add(new Product() { ID = 0, Name = "Product1", Price = 10.0, AmountInMagazine = 1 });
-            Products.Add(new Product() { ID = 1, Name = "Product2", Price = 20.0, AmountInMagazine = 1 });
-            Products.Add(new Product() { ID = 2, Name = "Product3", Price = 30.0, AmountInMagazine = 1 });
-            Products.Add(new Product() { ID = 3, Name = "Product4", Price = 40.0, AmountInMagazine = 1 });
+            Products.Add(new Product() { ID = 0, Name = "Product1", Price = 10, AmountInMagazine = 1 });
+            Products.Add(new Product() { ID = 1, Name = "Product2", Price = 20, AmountInMagazine = 1 });
+            Products.Add(new Product() { ID = 2, Name = "Product3", Price = 30, AmountInMagazine = 1 });
+            Products.Add(new Product() { ID = 3, Name = "Product4", Price = 40, AmountInMagazine = 1 });
 
             Clients.Add(new Client() { ID = 0, Name = "Anny Mouse", Adress = "Warsaw, Aleje Jerozolimskie 2"});
             Clients.Add(new Client() { ID = 1, Name = "Jane Doe", Adress = "Łódź, Dolna 10"});
@@ -43,28 +43,42 @@ namespace DataAPI
         }
 
         // ADD
-        public void AddProduct(Product product)
+        public bool AddProduct(Product product)
         {
             if (FindProductByID(product.ID) == null)
-                Products.Add(new Product() { ID = product.ID, Name = product.Name, Price = product.Price, AmountInMagazine = product.AmountInMagazine});
+            {
+                Products.Add(new Product() { ID = product.ID, Name = product.Name, Price = product.Price, AmountInMagazine = product.AmountInMagazine });
+                return true;
+            }
+            else
+                return false;
+                
         }
 
-        public void AddOrder(Order order)
+        public bool AddOrder(Order order)
         {
             if (FindOrderByID(order.ID) == null)
-                Orders.Add(new Order() { ID = order.ID, ClientID = order.ClientID, Products = new Dictionary<int, int>(order.Products)});
+            {
+                Orders.Add(new Order() { ID = order.ID, ClientID = order.ClientID, Products = new Dictionary<int, int>(order.Products) });
+                return true;
+            }
+            else
+                return false;
+                
         }
-        public void AddClient(Client client)
+        public bool AddClient(Client client)
         {
             if (FindClientByID(client.ID) == null)
             {
                 Clients.Add(new Client() { ID = client.ID, Name = client.Name, Adress = client.Adress});
+                return true;
             }
+            return false;
                 
         }
 
         // MODIFY
-        public void ModifyProduct(Product product)
+        public bool ModifyProduct(Product product)
         {
             foreach(Product pr in Products)
             {
@@ -73,11 +87,13 @@ namespace DataAPI
                     pr.Name = product.Name;
                     pr.Price = product.Price;
                     pr.AmountInMagazine = product.AmountInMagazine;
+                    return true;
                 }
             }
+            return false;
         }
 
-        public void ModifyClient(Client client)
+        public bool ModifyClient(Client client)
         {
             foreach (Client cl in Clients)
             {
@@ -85,11 +101,13 @@ namespace DataAPI
                 {
                     cl.Name = client.Name;
                     cl.Adress = client.Adress;
+                    return true;
                 }
             }
+            return false;
         }
 
-        public void ModifyOrder(Order order)
+        public bool ModifyOrder(Order order)
         {
             foreach (Order or in Orders)
             {
@@ -97,38 +115,46 @@ namespace DataAPI
                 {
                     or.Products = new Dictionary<int, int>(order.Products);
                     or.ClientID = order.ClientID;
+                    return true;
                 }
             }
+            return false;
         }
         // FIND
         public Product FindProductByName(string name)
         {
-            return Products?.Find(x => x.Name == name);
+            return Products?.Find(x => x.Name == name)?.Clone() as Product;
         }
 
         public Product FindProductByID(int id)
         {
-            return Products?.Find(x => x.ID == id);
+            return Products?.Find(x => x.ID == id)?.Clone() as Product;
         }
 
         public Client FindClientByID(int id)
         {
-            return Clients?.Find(x => x.ID == id);
+            return Clients?.Find(x => x.ID == id)?.Clone() as Client;
         }
 
         public Client FindClientByName(string name)
         {
-            return Clients?.Find(x => x.Name == name);
+            return Clients?.Find(x => x.Name == name)?.Clone() as Client;
         }
 
         public Order FindOrderByID(int id)
         {
-            return Orders?.Find(x => x.ID == id);
+            return Orders?.Find(x => x.ID == id)?.Clone() as Order;
         }
 
         public List<Order> FindOrdersByClientID(int clientID)
         {
-            return Orders?.FindAll(x => x.ClientID == clientID);
+            // Orders?.FindAll(x => x.ClientID == clientID)
+            List<Order> copy = new List<Order>();
+            foreach(Order order in Orders.FindAll(x => x.ClientID == clientID))
+            {
+                copy.Add(order.Clone() as Order);
+            }
+            return copy;
         }
     }
 }

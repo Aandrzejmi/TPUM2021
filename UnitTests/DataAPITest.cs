@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using DataAPI;
+using System.Collections;
 
 namespace UnitTests
 {
@@ -26,7 +27,7 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindProductByID(3));
 
             // Modify existing product and check its name
-            Product product1 = new Product() { ID = 0, Name = "Extra New Cool Product", Price = 15.0, AmountInMagazine = 2 };
+            Product product1 = new Product() { ID = 0, Name = "Extra New Cool Product", Price = 10.0M, AmountInMagazine = 2 };
             repo.ModifyProduct(product1);
             Assert.IsTrue(repo.FindProductByID(0).Name == "Extra New Cool Product");
 
@@ -34,7 +35,7 @@ namespace UnitTests
             Assert.IsNull(repo.FindProductByID(4));
 
             // Create new product and try to add it
-            Product product2 = new Product() { ID = 4, Name = "Boring Product", Price = 25.0, AmountInMagazine = 1};
+            Product product2 = new Product() { ID = 4, Name = "Boring Product", Price = 25.0M, AmountInMagazine = 1};
             repo.AddProduct(product2);
             Assert.IsNotNull(repo.FindProductByID(4));
 
@@ -87,6 +88,10 @@ namespace UnitTests
 
             // Find all orders by clients, 0 products, 1 product, more then 1 product
             Assert.AreEqual(repo.FindOrdersByClientID(1).Count, 2);
+
+            repo.FindOrdersByClientID(1)[0].ID = 555;
+            Assert.IsNull(repo.FindOrderByID(555));
+
             Assert.AreEqual(repo.FindOrdersByClientID(2).Count, 1);
             Assert.AreEqual(repo.FindOrdersByClientID(0).Count, 0);
 
