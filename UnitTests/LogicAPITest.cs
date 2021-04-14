@@ -1,12 +1,14 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using LogicAPI;
 
 namespace UnitTests
 {
-    public class Tests
+    public class LogicAPITest
     {
         [SetUp]
         public void Setup()
         {
+            
         }
 
         [Test]
