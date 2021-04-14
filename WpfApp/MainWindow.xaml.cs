@@ -23,6 +23,7 @@ namespace WpfApp
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = person;
         }
 
         private void TestFunction(object sender, RoutedEventArgs e)
