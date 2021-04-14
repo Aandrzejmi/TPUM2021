@@ -24,5 +24,12 @@ namespace WpfApp
         {
             InitializeComponent();
         }
+
+        private void TestFunction(object sender, RoutedEventArgs e)
+        {
+            var line = $"You clicked on button {sender}!";
+
+            MessageBox.Show(line);
+        }
     }
 }

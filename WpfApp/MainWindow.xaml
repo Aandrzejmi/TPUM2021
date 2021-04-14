@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="TPUM App 2021" Height="450" Width="800">
+    <Grid x:Name="MainGrid">
+        <TextBlock x:Name="Hello_WPF_test_text_block" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="48" Margin="10,10,0,0" Height="70" Width="270" TextAlignment="Center">
+            Hello, WPF!
+        </TextBlock>
+        <Button Content="Button 1" HorizontalAlignment="Left" Margin="125,217,0,0" VerticalAlignment="Top" Click="TestFunction"/>
+        <Button Content="Button 2" HorizontalAlignment="Left" Margin="125,242,0,0" VerticalAlignment="Top" Click="TestFunction"/>
+        <Button Content="Button 3" HorizontalAlignment="Left" Margin="125,267,0,0" VerticalAlignment="Top" Click="TestFunction"/>
     </Grid>
 </Window>
