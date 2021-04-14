@@ -27,9 +27,14 @@ namespace WpfApp
 
         private void TestFunction(object sender, RoutedEventArgs e)
         {
-            var line = $"You clicked on button {sender}!";
-
-            MessageBox.Show(line);
+            if (sender is Button b)
+            {
+                lastButtonLabel.Content = $"Last button: {b.Name[^1]}";
+            }
+            else
+            {
+                lastButtonLabel.Content = $"Last button: ?";
+            }
         }
     }
 }
