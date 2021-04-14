@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Program\Program.csproj" />
+    <ProjectReference Include="..\DataAPI\DataAPI.csproj" />
+    <ProjectReference Include="..\LogicAPI\LogicAPI.csproj" />
+    <ProjectReference Include="..\WpfApp\WpfApp.csproj" />
   </ItemGroup>
 
 </Project>
