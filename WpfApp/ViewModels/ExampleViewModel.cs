@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,11 +13,14 @@ namespace WpfApp
 {
     public partial class MainWindow : Window
     {
-        ExampleViewModel person = new ExampleViewModel { Name = "Salman", Age = 26 };
+        public ExampleViewModel person = new ExampleViewModel { Name = "Salman", Age = 26 };
     }
 
-    public class ExampleViewModel
+    public class ExampleViewModel : INotifyPropertyChanged
     {
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private static ICommand globalCommand = new GlobalCommand();
 
         public ICommand GlobalCommand => globalCommand;
@@ -38,7 +43,11 @@ namespace WpfApp
         public string Name
         {
             get => nameValue;
-            set => nameValue = value;
+            set 
+            {
+                nameValue = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
+            } 
         }
 
         private double ageValue;
@@ -46,7 +55,11 @@ namespace WpfApp
         public double Age
         {
             get => ageValue;
-            set => ageValue = value;
+            set 
+            {
+                ageValue = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
+            }
         }
     }
 
@@ -86,6 +99,12 @@ namespace WpfApp
 
                 var window = Application.Current.MainWindow as MainWindow;
                 window.lastButtonLabel.Content = $"Last button: {nr}";
+
+                Thread t = new Thread(() => {
+                    Thread.Sleep(3000);
+                    window.person.Name = "Maria";
+                });
+                t.Start();
             }
         }
     }
