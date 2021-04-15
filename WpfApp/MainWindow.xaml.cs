@@ -25,17 +25,5 @@ namespace WpfApp
             InitializeComponent();
             this.DataContext = person;
         }
-
-        private void TestFunction(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button b)
-            {
-                lastButtonLabel.Content = $"Last button: {b.Name[^1]}";
-            }
-            else
-            {
-                lastButtonLabel.Content = $"Last button: ?";
-            }
-        }
     }
 }

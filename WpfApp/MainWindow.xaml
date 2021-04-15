@@ -32,14 +32,17 @@
             </TextBlock>
 
             <Button x:Name="button1" Content="Button 1" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center" Margin="0,104,0,0" Click="TestFunction" Width="80" Height="20"/>
+                    HorizontalContentAlignment="Center" Margin="0,104,0,0" Width="80" Height="20"
+                    Command="{Binding GlobalCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
             <Button x:Name="button2" Content="Button 2" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center" Margin="0,129,0,0" Click="TestFunction" Width="80" Height="20"/>
+                    HorizontalContentAlignment="Center" Margin="0,129,0,0" Width="80" Height="20"
+                    Command="{Binding GlobalCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
             <Button x:Name="button3" Content="Button 3" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center" Margin="0,154,0,0" Click="TestFunction" Width="80" Height="20"/>
+                    HorizontalContentAlignment="Center" Margin="0,154,0,0" Width="80" Height="20"
+                    Command="{Binding GlobalCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
 
-            <Label x:Name="lastButtonLabel" Content="Last button:" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                   Foreground="White" HorizontalContentAlignment="Center" Width="80" Height="25" Margin="0,0,0,20"/>
+            <Label x:Name="lastButtonLabel" Content="Last button:" HorizontalAlignment="Center" VerticalAlignment="Top"
+                   Foreground="White" HorizontalContentAlignment="Center" Width="150" Height="25" Margin="0,364,0,0"/>
 
             <Grid x:Name="dataBindingTestTable" Grid.Column="1">
                 <!--https://www.tutorialspoint.com/wpf/wpf_data_binding.htm-->
@@ -66,9 +69,9 @@
                     Text = "{Binding Age, Mode = TwoWay}"/>
 
                 <StackPanel Grid.Row = "2" Grid.ColumnSpan = "2">
-                    <Button Content = "_Show..." Click="Button_Click" />
+                    <Button Content = "_Show..." Command="{Binding ShowName}" />
                 </StackPanel>
-            </Grid>            
+            </Grid>
         </Grid>
     </Grid>
 </Window>
