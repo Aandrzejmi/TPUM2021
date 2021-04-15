@@ -4,15 +4,17 @@ using System.Text;
 
 namespace DataAPI
 {
-    public class Order : ICloneable
+    public class Order : IModel
     {
         public int ID { get; set; }
-        public Dictionary<int, int> Products { get; set; } = new Dictionary<int, int>();
+
+        // Product ID, Products in Order
+        public List<EvidenceEntry> Products { get; set; } = new List<EvidenceEntry>();
         public int ClientID { get; set; }
 
         public object Clone()
         {
-            return new Order() { ID = ID, ClientID = ClientID, Products = new Dictionary<int, int>(Products) };
+            return new Order() { ID = ID, ClientID = ClientID, Products = new List<EvidenceEntry>(Products) };
         }
     }
 }
