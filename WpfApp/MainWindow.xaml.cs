@@ -23,7 +23,8 @@ namespace WpfApp
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = person;
+
+            this.DataContext = this;
         }
     }
 }

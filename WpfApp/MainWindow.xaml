@@ -24,7 +24,9 @@
                 <ColumnDefinition Width = "*" />
             </Grid.ColumnDefinitions>
 
-            <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1"/>
+            <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1">
+                <TextBox HorizontalAlignment="Center" Margin="0,271,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
+            </Border>
 
             <TextBlock x:Name="AppNameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" Foreground="White"
                        Margin="0,10,0,0" Height="45" Width="167" TextAlignment="Center">
@@ -43,35 +45,22 @@
 
             <Label x:Name="lastButtonLabel" Content="Last button:" HorizontalAlignment="Center" VerticalAlignment="Top"
                    Foreground="White" HorizontalContentAlignment="Center" Width="150" Height="25" Margin="0,364,0,0"/>
-
-            <Grid x:Name="dataBindingTestTable" Grid.Column="1">
-                <!--https://www.tutorialspoint.com/wpf/wpf_data_binding.htm-->
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height = "Auto" />
-                    <RowDefinition Height = "Auto" />
-                    <RowDefinition Height = "*" />
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width = "Auto" />
-                    <ColumnDefinition Width = "200" />
-                </Grid.ColumnDefinitions>
-
-                <Label Name = "nameLabel" Margin = "2">_Name:</Label>
-
-                <TextBox Name = "nameText" Grid.Column = "1" Margin = "2" 
-                    Text = "{Binding Name, Mode = TwoWay}"/>
-
-                <Label Name = "ageLabel" Margin = "2" Grid.Row = "1">_Age:</Label>
-
-                <TextBox Name = "ageText" Grid.Column = "1" Grid.Row = "1" Margin = "2" 
-                    Text = "{Binding Age, Mode = TwoWay}"/>
-
-                <StackPanel Grid.Row = "2" Grid.ColumnSpan = "2">
-                    <Button Content = "_Show..." Command="{Binding ShowName}" />
-                </StackPanel>
-            </Grid>
+            <ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Center" Height="389" VerticalAlignment="Center" Width="610"
+                      ItemsSource="{Binding Collection}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                        <GridViewColumn Header="Show">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content = "_Show..." Command="{Binding ShowName}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
     </Grid>
 </Window>
