@@ -11,9 +11,9 @@ namespace LogicAPI.Services
     {
         private readonly IRepository _repository;
 
-        public ClientService()
+        public ClientService(IRepository repository)
         {
-
+            _repository = repository;
         }
         public bool ValidateModel(IModel _model)
         {
@@ -22,7 +22,7 @@ namespace LogicAPI.Services
                 if (client.ID < 0)
                     throw new ClientInvalidIDException();
 
-                if (_repository.FindClientByID(0) is null)
+                if (_repository.FindClientByID(client.ID) is null)
                     throw new ClientNotFoundException();
 
                 if (client.Name.Length == 0)

@@ -11,27 +11,24 @@ namespace LogicAPI.Services
     {
         private readonly IRepository _repository;
 
-        public ProductService()
+        public ProductService(IRepository repository)
         {
-
+            _repository = repository;
         }
         public bool ValidateModel(IModel _model)
         {
             if (_model is Product product)
             {
-                if (product.ID > 0)
-                {
-                    if (_repository.FindProductByID(product.ID) is null)
-                        throw new ProductNotFoundException();
-                }
-                else
+                if (product.ID < 0)
                     throw new ProductInvalidIDException();
 
+                if (_repository.FindProductByID(product.ID) is null)
+                    throw new ProductNotFoundException();
 
                 if (product.Name.Length == 0)
                     throw new ProductInvalidNameException();
 
-                if (product.Price == 0.0M)
+                if (product.Price <= 0.0M)
                     throw new ProductInvalidPriceException();
 
                 return true;
