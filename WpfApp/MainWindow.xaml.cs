@@ -22,6 +22,8 @@ namespace WpfApp
     {
         public MainWindow()
         {
+            InputVM = new InputViewModel(Collection);
+
             InitializeComponent();
 
             this.DataContext = this;
