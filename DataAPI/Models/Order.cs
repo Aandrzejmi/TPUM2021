@@ -8,12 +8,12 @@ namespace DataAPI
     {
         public int ID { get; set; }
 
-        public List<int> Products { get; set; } = new List<int>();
+        public List<EvidenceEntry> Products { get; set; } = new List<EvidenceEntry>();
         public int ClientID { get; set; }
 
         public object Clone()
         {
-            return new Order() { ID = ID, ClientID = ClientID, Products = new List<int>(Products) };
+            return new Order() { ID = ID, ClientID = ClientID, Products = new List<EvidenceEntry>(Products) };
         }
     }
 }

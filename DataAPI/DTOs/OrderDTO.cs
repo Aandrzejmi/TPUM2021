@@ -8,6 +8,6 @@ namespace DataAPI.DTOs
     {
         public int ID { get; set; }
         public List<EvidenceEntryDTO> Products { get; set; } = new List<EvidenceEntryDTO>();
-        public int ClientID { get; set; }
+        public ClientDTO Client{ get; set; }
     }
 }

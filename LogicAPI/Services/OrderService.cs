@@ -40,9 +40,9 @@ namespace LogicAPI
                 else
                     throw new OrderClientNotFoundException();
 
-                foreach (int productID in order.Products)
+                foreach (EvidenceEntry product in order.Products)
                 {
-                    if (!_evidenceEntryService.ValidateModel(_repository.FindEvidenceEntryByID(productID)))
+                    if (!_evidenceEntryService.ValidateModel(product))
                         return false;
                 }
                 return true;
@@ -57,11 +57,11 @@ namespace LogicAPI
             if (_repository.FindOrderByID(id) is Order order)
             {
                 orderDTO.ID = order.ID;
-                orderDTO.ClientID = order.ClientID;
+                orderDTO.Client = _clientService.GetClientDTOByID(order.ClientID);
                 List<EvidenceEntryDTO> evidenceEntriesDTO = new List<EvidenceEntryDTO>();
-                foreach(int productID in order.Products )
+                foreach(EvidenceEntry product in order.Products )
                 {
-                    evidenceEntriesDTO.Add(_evidenceEntryService.GetEvidenceEntryDTOByID(productID));
+                    evidenceEntriesDTO.Add(_evidenceEntryService.GetEvidenceEntryDTOByID(product.ID));
                 }
                 orderDTO.Products = new List<EvidenceEntryDTO>(evidenceEntriesDTO);
                 return orderDTO;

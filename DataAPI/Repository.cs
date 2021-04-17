@@ -6,10 +6,10 @@ namespace DataAPI
 {
     public class Repository : IRepository
     {
-        private List<Client> Clients { get; set; } = new List<Client>();
-        private List<Order> Orders { get; set; } = new List<Order>();
-        private List<Product> Products { get; set; } = new List<Product>();
-        private List<EvidenceEntry> ProductEvidency { get; set; } = new List<EvidenceEntry>();
+        private List<Client> clients = new List<Client>();
+        private List<Order> orders = new List<Order>();
+        private List<Product> products = new List<Product>();
+        private List<EvidenceEntry> productEvidency = new List<EvidenceEntry>();
 
         public Repository()
         {
@@ -21,7 +21,7 @@ namespace DataAPI
         {
             if (FindProductByID(product.ID) == null)
             {
-                Products.Add(product.Clone() as Product);
+                products.Add(product.Clone() as Product);
                 return AddEvidenceEntry((new EvidenceEntry() { ProductID = product.ID, ProductAmount = 1 }));
             }
             else
@@ -32,7 +32,7 @@ namespace DataAPI
         {
             if (FindEvidenceEntryByID(evidenceEntry.ID) == null)
             {
-                ProductEvidency.Add(evidenceEntry.Clone() as EvidenceEntry);
+                productEvidency.Add(evidenceEntry.Clone() as EvidenceEntry);
                 return true;
             }
             return false;
@@ -42,7 +42,7 @@ namespace DataAPI
         {
             if (FindOrderByID(order.ID) == null)
             {
-                Orders.Add(order.Clone() as Order);
+                orders.Add(order.Clone() as Order);
                 return true;
             }
             else
@@ -53,7 +53,7 @@ namespace DataAPI
         {
             if (FindClientByID(client.ID) == null)
             {
-                Clients.Add(client.Clone() as Client);
+                clients.Add(client.Clone() as Client);
                 return true;
             }
             return false;
@@ -62,7 +62,7 @@ namespace DataAPI
         // MODIFY
         public bool ModifyProduct(Product product)
         {
-            foreach(Product pr in Products)
+            foreach(Product pr in products)
             {
                 if (pr.ID == product.ID)
                 {
@@ -76,7 +76,7 @@ namespace DataAPI
 
         public bool ModifyClient(Client client)
         {
-            foreach (Client cl in Clients)
+            foreach (Client cl in clients)
             {
                 if (cl.ID == client.ID)
                 {
@@ -90,11 +90,11 @@ namespace DataAPI
 
         public bool ModifyOrder(Order order)
         {
-            foreach (Order or in Orders)
+            foreach (Order or in orders)
             {
                 if (or.ID == order.ID)
                 {
-                    or.Products = new List<int>(order.Products);
+                    or.Products = new List<EvidenceEntry>(order.Products);
                     or.ClientID = order.ClientID;
                     return true;
                 }
@@ -104,7 +104,7 @@ namespace DataAPI
 
         public bool ChangeProductAmount(int productID, int newAmount)
         {
-            foreach (EvidenceEntry ev in ProductEvidency)
+            foreach (EvidenceEntry ev in productEvidency)
             {
                 if (ev.ID == productID)
                 {
@@ -117,38 +117,38 @@ namespace DataAPI
         // FIND
         public Product FindProductByName(string name)
         {
-            return Products?.Find(x => x.Name == name)?.Clone() as Product;
+            return products?.Find(x => x.Name == name)?.Clone() as Product;
         }
 
         public Product FindProductByID(int id)
         {
-            return Products?.Find(x => x.ID == id)?.Clone() as Product;
+            return products?.Find(x => x.ID == id)?.Clone() as Product;
         }
 
         public EvidenceEntry FindEvidenceEntryByID(int id)
         {
-            return ProductEvidency?.Find(x => x.ID == id)?.Clone() as EvidenceEntry;
+            return productEvidency?.Find(x => x.ID == id)?.Clone() as EvidenceEntry;
         }
 
         public Client FindClientByID(int id)
         {
-            return Clients?.Find(x => x.ID == id)?.Clone() as Client;
+            return clients?.Find(x => x.ID == id)?.Clone() as Client;
         }
 
         public Client FindClientByName(string name)
         {
-            return Clients?.Find(x => x.Name == name)?.Clone() as Client;
+            return clients?.Find(x => x.Name == name)?.Clone() as Client;
         }
 
         public Order FindOrderByID(int id)
         {
-            return Orders?.Find(x => x.ID == id)?.Clone() as Order;
+            return orders?.Find(x => x.ID == id)?.Clone() as Order;
         }
 
         public List<Order> FindOrdersByClientID(int clientID)
         {
             List<Order> copy = new List<Order>();
-            foreach(Order order in Orders.FindAll(x => x.ClientID == clientID))
+            foreach(Order order in orders.FindAll(x => x.ClientID == clientID))
             {
                 copy.Add(order.Clone() as Order);
             }
@@ -156,24 +156,12 @@ namespace DataAPI
         }
 
         // LIST GETTERS
-        public int CountProducts()
-        {
-            return Products.Count;
-        }
+        public int CountProducts { get { return products.Count; } }
 
-        public int CountOrders()
-        {
-            return Orders.Count;
-        }
+        public int CountOrders { get { return orders.Count; } }
 
-        public int CountClients()
-        {
-            return Clients.Count;
-        }
+        public int CountClients { get { return clients.Count; } }
 
-        public int CountProductEntries()
-        {
-            return ProductEvidency.Count;
-        }
+        public int CountProductEntries { get { return productEvidency.Count; } }
     }
 }

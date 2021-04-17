@@ -21,9 +21,9 @@ namespace DataAPI
         public Client FindClientByName(string name);
         public Order FindOrderByID(int id);
         public List<Order> FindOrdersByClientID(int clientID);
-        public int CountProducts();
-        public int CountOrders();
-        public int CountClients();
-        public int CountProductEntries();
+        public int CountProducts { get; }
+        public int CountOrders { get; }
+        public int CountClients { get; }
+        public int CountProductEntries { get; }
     }
 }

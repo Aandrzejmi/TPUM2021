@@ -23,11 +23,11 @@ namespace UnitTests.LogicAPITests
         {
             repositoryMock = new Mock<IRepository>();
 
-            List<int> evidenceEntries = new List<int>();
+            List<EvidenceEntry> evidenceEntries = new List<EvidenceEntry>();
             Product product = new Product() { ID = 0, Name = "Temp Product", Price = 1.0M };
 
             EvidenceEntry evidenceEntry = new EvidenceEntry() { ProductID = 0, ProductAmount = 0 };
-            evidenceEntries.Add(evidenceEntry.ID);
+            evidenceEntries.Add(evidenceEntry);
 
             repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
             repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Client);
@@ -68,11 +68,18 @@ namespace UnitTests.LogicAPITests
             OrderDTO orderDTO = _orderService.GetOrderDTOByID(0);
             Order order = repositoryMock.Object.FindOrderByID(0);
             Assert.AreEqual(orderDTO.ID, order.ID);
-            Assert.AreEqual(orderDTO.ClientID, order.ClientID);
+            Assert.AreEqual(orderDTO.Client.ID, order.ClientID);
             Assert.AreEqual(orderDTO.Products.Count, order.Products.Count);
             foreach (EvidenceEntryDTO evidenceEntryDTO in orderDTO.Products)
             {
-                Assert.IsTrue(order.Products.Contains(evidenceEntryDTO.ID));
+                foreach(EvidenceEntry evidenceEntry in order.Products)
+                {
+                    if (evidenceEntryDTO.ID == evidenceEntry.ID)
+                    {
+                        Assert.AreEqual(evidenceEntryDTO.Product.ID, evidenceEntry.ProductID);
+                        Assert.AreEqual(evidenceEntryDTO.ProductAmount, evidenceEntry.ProductAmount);
+                    }
+                }               
             }
 
             Assert.That(() => _orderService.GetOrderDTOByID(-1), Throws.TypeOf<OrderNotFoundException>());
@@ -125,7 +132,6 @@ namespace UnitTests.LogicAPITests
             Assert.AreEqual(clientDTO2.Adress, client2.Adress);
 
             Assert.That(() => _clientService.GetClientDTOByName(""), Throws.TypeOf<ClientNotFoundException>());
-
         }
 
         [Test]

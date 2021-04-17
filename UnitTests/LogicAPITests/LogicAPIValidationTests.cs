@@ -22,11 +22,11 @@ namespace UnitTests
         {
             repositoryMock = new Mock<IRepository>();
 
-            List<int> evidenceEntries = new List<int>();
+            List<EvidenceEntry> evidenceEntries = new List<EvidenceEntry>();
             Product product = new Product() { ID = 0, Name = "Temp Product", Price = 1.0M };
 
             EvidenceEntry evidenceEntry = new EvidenceEntry() { ProductID = 0, ProductAmount = 0 };
-            evidenceEntries.Add(evidenceEntry.ID);
+            evidenceEntries.Add(evidenceEntry);
 
             repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
             repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Client);

@@ -17,7 +17,7 @@ namespace UnitTests
         public void RepositoryProductEvidency()
         {
             // Size of the list of Entries
-            Assert.AreEqual(repo.CountProductEntries(), 4);
+            Assert.AreEqual(repo.CountProductEntries, 4);
 
             // Find entry by ID
             Assert.IsNotNull(repo.FindEvidenceEntryByID(0));
@@ -37,19 +37,19 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindEvidenceEntryByID(4));
             Assert.AreEqual(repo.FindEvidenceEntryByID(4).ProductAmount, 1);
             // Size of the list of Entries
-            Assert.AreEqual(repo.CountProductEntries(), 5);
+            Assert.AreEqual(repo.CountProductEntries, 5);
 
             // Try to add new evidence entry with product that already exists
             Assert.IsFalse(repo.AddEvidenceEntry(new EvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 }));
             // Size of the list of Entries
-            Assert.AreEqual(repo.CountProductEntries(), 5);
+            Assert.AreEqual(repo.CountProductEntries, 5);
         }
 
         [Test]
         public void RepositoryProducts()
         {
             // Size of the list of Products
-            Assert.AreEqual(repo.CountProducts(), 4);
+            Assert.AreEqual(repo.CountProducts, 4);
 
             // Find product by name
             Assert.IsNotNull(repo.FindProductByName("Product2"));
@@ -71,16 +71,16 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindProductByID(4));
 
             // Check if you can add product with existing ID, you shouldn't be able to do that
-            Assert.AreEqual(repo.CountProducts(), 5);
+            Assert.AreEqual(repo.CountProducts, 5);
             repo.AddProduct(product2);
-            Assert.AreEqual(repo.CountProducts(), 5);
+            Assert.AreEqual(repo.CountProducts, 5);
         }
 
         [Test]
         public void RepositoryClients()
         {
             // Size of the list of Clients
-            Assert.AreEqual(repo.CountClients(), 4);
+            Assert.AreEqual(repo.CountClients, 4);
 
             // Find Client by name
             Assert.IsNotNull(repo.FindClientByName("Jane Doe"));
@@ -102,9 +102,9 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindClientByID(4));
 
             // Check if you can add client with existing ID, you shouldn't be able to do that
-            Assert.AreEqual(repo.CountClients(), 5);
+            Assert.AreEqual(repo.CountClients, 5);
             repo.AddClient(client2);
-            Assert.AreEqual(repo.CountClients(), 5);
+            Assert.AreEqual(repo.CountClients, 5);
         }
 
 
@@ -112,7 +112,7 @@ namespace UnitTests
         public void RepositoryOrders()
         {
             // Size of the list of Clients
-            Assert.AreEqual(repo.CountOrders(), 4);
+            Assert.AreEqual(repo.CountOrders, 4);
 
             // Find order by ID
             Assert.IsNotNull(repo.FindOrderByID(0));
@@ -141,9 +141,9 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindOrderByID(4));
 
             // Check if you can add order with existing ID, you shouldn't be able to do that
-            Assert.AreEqual(repo.CountOrders(), 5);
+            Assert.AreEqual(repo.CountOrders, 5);
             repo.AddOrder(order2);
-            Assert.AreEqual(repo.CountOrders(), 5);
+            Assert.AreEqual(repo.CountOrders, 5);
         }
     }
 }
