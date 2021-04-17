@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using DataAPI;
+using DataAPI.DTOs;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 using LogicAPI.Services;
@@ -38,23 +40,55 @@ namespace LogicAPI
                 else
                     throw new OrderClientNotFoundException();
 
-                
-
-                foreach (DataAPI.EvidenceEntry entry in order.Products)
+                foreach (int productID in order.Products)
                 {
-                    if (!_evidenceEntryService.ValidateModel(entry))
+                    if (!_evidenceEntryService.ValidateModel(_repository.FindEvidenceEntryByID(productID)))
                         return false;
                 }
                 return true;
             }
             throw new ModelIsNotOrderException();
         }
-        public decimal GetPriceOfOrder(Order order)
+
+        public OrderDTO GetOrderDTOByID(int id)
+        {
+            var orderDTO = new OrderDTO();
+
+            if (_repository.FindOrderByID(id) is Order order)
+            {
+                orderDTO.ID = order.ID;
+                orderDTO.ClientID = order.ClientID;
+                List<EvidenceEntryDTO> evidenceEntriesDTO = new List<EvidenceEntryDTO>();
+                foreach(int productID in order.Products )
+                {
+                    evidenceEntriesDTO.Add(_evidenceEntryService.GetEvidenceEntryDTOByID(productID));
+                }
+                orderDTO.Products = new List<EvidenceEntryDTO>(evidenceEntriesDTO);
+                return orderDTO;
+            }
+            throw new OrderNotFoundException();
+        }
+        public List<OrderDTO> GetOrdersDTOByClientID(int clientID)
+        {
+            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+
+            if (_repository.FindOrdersByClientID(clientID) is List<Order> orders && orders.Count > 0)
+            {
+                foreach(Order order in orders)
+                {
+                    orderDTOs.Add(GetOrderDTOByID(order.ID));
+                }
+                return orderDTOs;
+            }
+            throw new OrderNotFoundException();
+        }
+
+        public decimal GetPriceOfOrder(OrderDTO order)
         {
             decimal sum = 0.0M;
             foreach (var item in order.Products)
             {
-                int itemCount = item.productAmount;
+                int itemCount = item.ProductAmount;
                 sum += (itemCount * item.Product.Price);
             }
             return sum;

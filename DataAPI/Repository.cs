@@ -22,7 +22,7 @@ namespace DataAPI
             if (FindProductByID(product.ID) == null)
             {
                 Products.Add(product.Clone() as Product);
-                return AddEvidenceEntry((new EvidenceEntry() { Product = product, productAmount = 1 }));
+                return AddEvidenceEntry((new EvidenceEntry() { ProductID = product.ID, ProductAmount = 1 }));
             }
             else
                 return false;
@@ -94,7 +94,7 @@ namespace DataAPI
             {
                 if (or.ID == order.ID)
                 {
-                    or.Products = new List<EvidenceEntry>(order.Products);
+                    or.Products = new List<int>(order.Products);
                     or.ClientID = order.ClientID;
                     return true;
                 }
@@ -108,7 +108,7 @@ namespace DataAPI
             {
                 if (ev.ID == productID)
                 {
-                    ev.productAmount = newAmount;
+                    ev.ProductAmount = newAmount;
                     return true;
                 }
             }

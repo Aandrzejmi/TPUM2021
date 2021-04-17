@@ -9,7 +9,7 @@ using Moq;
 
 namespace UnitTests
 {
-    public class LogicAPITest
+    public class LogicAPIValidationTests
     {
         Mock<IRepository> repositoryMock;
         IOrderService _orderService;
@@ -22,11 +22,11 @@ namespace UnitTests
         {
             repositoryMock = new Mock<IRepository>();
 
-            List<EvidenceEntry> evidenceEntries = new List<EvidenceEntry>();
+            List<int> evidenceEntries = new List<int>();
             Product product = new Product() { ID = 0, Name = "Temp Product", Price = 1.0M };
 
-            EvidenceEntry evidenceEntry = new EvidenceEntry() { Product = product };
-            evidenceEntries.Add(evidenceEntry);
+            EvidenceEntry evidenceEntry = new EvidenceEntry() { ProductID = 0, ProductAmount = 0 };
+            evidenceEntries.Add(evidenceEntry.ID);
 
             repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
             repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Client);
@@ -36,7 +36,7 @@ namespace UnitTests
             repositoryMock.Setup(p => p.FindProductByID(-1)).Returns(null as Product);
             repositoryMock.Setup(p => p.FindProductByID(5)).Returns(null as Product);
 
-            repositoryMock.Setup(p => p.FindEvidenceEntryByID(0)).Returns(evidenceEntry.Clone() as EvidenceEntry);
+            repositoryMock.Setup(p => p.FindEvidenceEntryByID(0)).Returns(new EvidenceEntry() { ProductID = 0, ProductAmount = 0 });
             repositoryMock.Setup(p => p.FindEvidenceEntryByID(-1)).Returns(null as EvidenceEntry);
             repositoryMock.Setup(p => p.FindEvidenceEntryByID(5)).Returns(null as EvidenceEntry);
 
@@ -160,19 +160,19 @@ namespace UnitTests
             Assert.IsTrue(_evidenceEntryService.ValidateModel(evidenceEntry1));
 
             // try to validate entry with invalid id
-            EvidenceEntry evidenceEntry2 = new EvidenceEntry() { Product = new Product() { ID = -1, Name = "Temp", Price = 1.0M} };
+            EvidenceEntry evidenceEntry2 = new EvidenceEntry() { ProductID = -1, ProductAmount = 0 };
             Assert.That(() => _evidenceEntryService.ValidateModel(evidenceEntry2), Throws.TypeOf<EvidenceEntryInvalidIDException>());
 
             // try to validate entry that isnt in repository
-            EvidenceEntry evidenceEntry3 = new EvidenceEntry() { Product = new Product() { ID = 5, Name = "Temp", Price = 1.0M } };
+            EvidenceEntry evidenceEntry3 = new EvidenceEntry() { ProductID = 5, ProductAmount = 0 };
             Assert.That(() => _evidenceEntryService.ValidateModel(evidenceEntry3), Throws.TypeOf<EvidenceEntryNotFoundException>());
 
             // try to validate entry with invalid product amount
             EvidenceEntry evidenceEntry4 = repositoryMock.Object.FindEvidenceEntryByID(0);
-            evidenceEntry4.productAmount = -1;
+            evidenceEntry4.ProductAmount = -1;
             Assert.That(() => _evidenceEntryService.ValidateModel(evidenceEntry4), Throws.TypeOf<EvidenceEntryInvalidProductAmountException>());
 
-            // try to validate model that isnt evidence entry
+            //// try to validate model that isnt evidence entry
             Product product = new Product() { ID = 0, Name = "Test product", Price = 1.0M };
             Assert.That(() => _evidenceEntryService.ValidateModel(product), Throws.TypeOf<ModelIsNotEvidenceEntryException>());
         }

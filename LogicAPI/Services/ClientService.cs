@@ -4,6 +4,7 @@ using System.Text;
 using DataAPI;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
+using DataAPI.DTOs;
 
 namespace LogicAPI.Services
 {
@@ -34,6 +35,36 @@ namespace LogicAPI.Services
                 return true;
             }
             throw new ModelIsNotClientException();
+        }
+
+        public ClientDTO GetClientDTOByID(int id)
+        {
+            var clientDTO = new ClientDTO();
+
+            if (_repository.FindClientByID(id) is Client client)
+            {
+                clientDTO.ID = client.ID;
+                clientDTO.Name = client.Name;
+                clientDTO.Adress = client.Adress;
+
+                return clientDTO;
+            }
+            throw new ClientNotFoundException();
+        }
+
+        public ClientDTO GetClientDTOByName(string name)
+        {
+            var clientDTO = new ClientDTO();
+
+            if (_repository.FindClientByName(name) is Client client)
+            {
+                clientDTO.ID = client.ID;
+                clientDTO.Name = client.Name;
+                clientDTO.Adress = client.Adress;
+
+                return clientDTO;
+            }
+            throw new ClientNotFoundException();
         }
     }
 }

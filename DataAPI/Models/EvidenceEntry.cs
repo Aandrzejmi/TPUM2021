@@ -6,13 +6,13 @@ namespace DataAPI
 {
     public class EvidenceEntry : IModel
     {
-        public int ID { get { return Product.ID; } set { ID = Product.ID; } }
+        public int ID { get { return ProductID; } set { ID = ProductID; } }
 
-        public Product Product;
-        public int productAmount;
+        public int ProductID { get; set; }
+        public int ProductAmount { get; set; }
         public object Clone()
         {
-            return new EvidenceEntry() { Product = Product, productAmount = productAmount };
+            return new EvidenceEntry() { ProductID = ProductID, ProductAmount = ProductAmount };
         }
     }
 }

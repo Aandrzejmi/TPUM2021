@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace UnitTests
 {
-    public class DataAPITest
+    public class DataAPITests
     {
         IRepository repo;
         [SetUp]
@@ -23,28 +23,27 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindEvidenceEntryByID(0));
 
             // Check if it has 1 product
-            Assert.AreEqual(repo.FindEvidenceEntryByID(1).productAmount, 1);
+            Assert.AreEqual(repo.FindEvidenceEntryByID(1).ProductAmount, 1);
 
             // Check if you can change product amount to 2
             Assert.IsTrue(repo.ChangeProductAmount(1, 2));
 
             // Check if it changed
-            Assert.AreEqual(repo.FindEvidenceEntryByID(1).productAmount, 2);
+            Assert.AreEqual(repo.FindEvidenceEntryByID(1).ProductAmount, 2);
 
             // Add new product with new ID, check if it created new evidence entry with 1 as amount
             Product product2 = new Product() { ID = 4, Name = "Boring Product", Price = 25.0M };
             repo.AddProduct(product2);
             Assert.IsNotNull(repo.FindEvidenceEntryByID(4));
-            Assert.AreEqual(repo.FindEvidenceEntryByID(4).productAmount, 1);
+            Assert.AreEqual(repo.FindEvidenceEntryByID(4).ProductAmount, 1);
             // Size of the list of Entries
             Assert.AreEqual(repo.CountProductEntries(), 5);
 
             // Try to add new evidence entry with product that already exists
-            Assert.IsFalse(repo.AddEvidenceEntry(new EvidenceEntry() { Product = product2, productAmount = 1 }));
+            Assert.IsFalse(repo.AddEvidenceEntry(new EvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 }));
             // Size of the list of Entries
             Assert.AreEqual(repo.CountProductEntries(), 5);
         }
-
 
         [Test]
         public void RepositoryProducts()

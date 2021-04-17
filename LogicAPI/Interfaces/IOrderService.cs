@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataAPI;
+using DataAPI.DTOs;
 
 namespace LogicAPI
 {
     public interface IOrderService : IService
     {
-        public decimal GetPriceOfOrder(Order order);
+        public OrderDTO GetOrderDTOByID(int id);
+        public List<OrderDTO> GetOrdersDTOByClientID(int clientID);
+        public decimal GetPriceOfOrder(OrderDTO order);
     }
 }

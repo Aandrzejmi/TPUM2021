@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DataAPI;
+using DataAPI.DTOs;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 
@@ -34,6 +35,36 @@ namespace LogicAPI.Services
                 return true;
             }
             throw new ModelIsNotProductException();
+        }
+
+        public ProductDTO GetProductDTOByID(int id)
+        {
+            var productDTO = new ProductDTO();
+
+            if (_repository.FindProductByID(id) is Product product)
+            {
+                productDTO.ID = product.ID;
+                productDTO.Name = product.Name;
+                productDTO.Price = product.Price;
+
+                return productDTO;
+            }
+            throw new ProductNotFoundException();
+        }
+
+        public ProductDTO GetProductDTOByName(string name)
+        {
+            var productDTO = new ProductDTO();
+
+            if (_repository.FindProductByName(name) is Product product)
+            {
+                productDTO.ID = product.ID;
+                productDTO.Name = product.Name;
+                productDTO.Price = product.Price;
+
+                return productDTO;
+            }
+            throw new ProductNotFoundException();
         }
     }
 }
