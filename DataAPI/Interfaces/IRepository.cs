@@ -21,6 +21,10 @@ namespace DataAPI
         public Client FindClientByName(string name);
         public Order FindOrderByID(int id);
         public List<Order> FindOrdersByClientID(int clientID);
+        public List<Order> GetAllOrders();
+        public List<Product> GetAllProducts();
+        public List<Client> GetAllClients();
+        public List<EvidenceEntry> GetAllEntries();
         public int CountProducts { get; }
         public int CountOrders { get; }
         public int CountClients { get; }

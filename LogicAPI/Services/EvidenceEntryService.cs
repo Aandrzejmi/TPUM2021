@@ -56,5 +56,15 @@ namespace LogicAPI
             }
             throw new EvidenceEntryNotFoundException();
         }
+
+        public List<EvidenceEntryDTO> GetAllEvidenceEntryDTOs()
+        {
+            List<EvidenceEntryDTO> evidenceEntryDTOs = new List<EvidenceEntryDTO>();
+            foreach(EvidenceEntry evidenceEntry in _repository.GetAllEntries())
+            {
+                evidenceEntryDTOs.Add(GetEvidenceEntryDTOByID(evidenceEntry.ID));
+            }
+            return evidenceEntryDTOs;
+        }
     }
 }

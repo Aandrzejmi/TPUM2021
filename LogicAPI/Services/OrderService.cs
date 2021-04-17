@@ -50,6 +50,16 @@ namespace LogicAPI
             throw new ModelIsNotOrderException();
         }
 
+        public List<OrderDTO> GetAllOrderDTOs()
+        {
+            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+            foreach(Order order in _repository.GetAllOrders())
+            {
+                orderDTOs.Add(GetOrderDTOByID(order.ID));
+            }
+            return orderDTOs;
+        }
+
         public OrderDTO GetOrderDTOByID(int id)
         {
             var orderDTO = new OrderDTO();
@@ -68,7 +78,7 @@ namespace LogicAPI
             }
             throw new OrderNotFoundException();
         }
-        public List<OrderDTO> GetOrdersDTOByClientID(int clientID)
+        public List<OrderDTO> GetOrderDTOsByClientID(int clientID)
         {
             List<OrderDTO> orderDTOs = new List<OrderDTO>();
 
