@@ -12,14 +12,6 @@ using System.Windows.Input;
 
 namespace WpfApp
 {
-    public partial class MainWindow : Window
-    {
-        public InputViewModel InputVM { get; set; } // initialized in constructor
-        public ICommand AddNewVM => InputVM.TryAdd;
-        public ObservableCollection<ExampleViewModel> Collection { get; set; } = ExampleViewModel.Col();
-        public ButtonTestCommand ButtonTest { get; private set; } = new ButtonTestCommand();
-    }
-
     public class ExampleViewModel : INotifyPropertyChanged, ICloneable
     {
         public static ObservableCollection<ExampleViewModel> Col()
@@ -148,6 +140,10 @@ namespace WpfApp
 
     public class ButtonTestCommand : ICommand
     {
+        ObservableCollection<ExampleViewModel> collection;
+
+        public ButtonTestCommand(ObservableCollection<ExampleViewModel> collection) => this.collection = collection;
+
         public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter) => true;
@@ -163,7 +159,7 @@ namespace WpfApp
 
                 Thread t = new Thread(() => {
                     Thread.Sleep(3000);
-                    window.Collection[0].Name = "Maria";
+                    collection[0].Name = "Maria";
                 });
                 t.Start();
             }

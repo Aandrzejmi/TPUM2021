@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
+        xmlns:vm="clr-namespace:WpfApp.ViewModels"
         mc:Ignorable="d"
-        Title="TPUM App 2021" Height="450" Width="800">
-    <Grid x:Name="mainGrid">
+        Title="TPUM App 2021" Height="450" Width="800">    
+    
+    <Window.Resources>
+        <vm:MainViewModel x:Key="mainVM"/>
+    </Window.Resources>
+
+    <Grid x:Name="mainGrid" DataContext="{StaticResource mainVM}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height = "*" />
