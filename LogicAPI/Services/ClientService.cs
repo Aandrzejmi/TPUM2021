@@ -66,5 +66,15 @@ namespace LogicAPI.Services
             }
             throw new ClientNotFoundException();
         }
+
+        public List<ClientDTO> GetAllClientDTOs()
+        {
+            List<ClientDTO> clientDTOs = new List<ClientDTO>();
+            foreach(Client client in _repository.GetAllClients())
+            {
+                clientDTOs.Add(GetClientDTOByID(client.ID));
+            }
+            return clientDTOs;
+        }
     }
 }

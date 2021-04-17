@@ -7,8 +7,9 @@ namespace LogicAPI
 {
     public interface IOrderService : IService
     {
+        public List<OrderDTO> GetAllOrderDTOs();
         public OrderDTO GetOrderDTOByID(int id);
-        public List<OrderDTO> GetOrdersDTOByClientID(int clientID);
+        public List<OrderDTO> GetOrderDTOsByClientID(int clientID);
         public decimal GetPriceOfOrder(OrderDTO order);
     }
 }

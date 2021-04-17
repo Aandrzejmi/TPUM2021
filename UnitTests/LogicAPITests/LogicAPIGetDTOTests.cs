@@ -55,6 +55,11 @@ namespace UnitTests.LogicAPITests
             repositoryMock.Setup(p => p.FindOrdersByClientID(-1)).Returns(new List<Order>());
             repositoryMock.Setup(p => p.FindOrdersByClientID(5)).Returns(new List<Order>());
 
+            repositoryMock.Setup(p => p.GetAllClients()).Returns(new List<Client>() { new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" } });
+            repositoryMock.Setup(p => p.GetAllEntries()).Returns(new List<EvidenceEntry>() { new EvidenceEntry() { ProductID = 0, ProductAmount = 0 } });
+            repositoryMock.Setup(p => p.GetAllOrders()).Returns(new List<Order>() { new Order() { Products = evidenceEntries, ClientID = 0 } });
+            repositoryMock.Setup(p => p.GetAllProducts()).Returns(new List<Product>() { new Product() { ID = 0, Name = "Temp Product", Price = 1.0M } });
+
             _orderService = new OrderService(repositoryMock.Object);
             _productService = new ProductService(repositoryMock.Object);
             _evidenceEntryService = new EvidenceEntryService(repositoryMock.Object);
@@ -85,11 +90,31 @@ namespace UnitTests.LogicAPITests
             Assert.That(() => _orderService.GetOrderDTOByID(-1), Throws.TypeOf<OrderNotFoundException>());
 
             // Find order by ClientID
-            List<OrderDTO> orderDTOs = _orderService.GetOrdersDTOByClientID(0);
+            List<OrderDTO> orderDTOs = _orderService.GetOrderDTOsByClientID(0);
             List<Order> orders = repositoryMock.Object.FindOrdersByClientID(0);
 
             Assert.AreEqual(orders.Count, orders.Count);
             Assert.AreEqual(orders.Count, 1);
+        }
+
+        [Test]
+        public void GetAllModelDTOsTest()
+        {
+            // OrderDTO
+            Assert.AreEqual(_orderService.GetAllOrderDTOs().Count, 1);
+            Assert.AreEqual(_orderService.GetAllOrderDTOs()[0].ID, 0);
+
+            // ClientDTO
+            Assert.AreEqual(_clientService.GetAllClientDTOs().Count, 1);
+            Assert.AreEqual(_clientService.GetAllClientDTOs()[0].ID, 0);
+
+            // ProductDTO
+            Assert.AreEqual(_productService.GetAllProductDTOs().Count, 1);
+            Assert.AreEqual(_productService.GetAllProductDTOs()[0].ID, 0);
+
+            // EvidenceEntryDTO
+            Assert.AreEqual(_evidenceEntryService.GetAllEvidenceEntryDTOs().Count, 1);
+            Assert.AreEqual(_evidenceEntryService.GetAllEvidenceEntryDTOs()[0].ID, 0);
         }
 
         [Test]

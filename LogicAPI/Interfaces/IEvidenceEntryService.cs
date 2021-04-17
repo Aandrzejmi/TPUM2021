@@ -7,6 +7,7 @@ namespace LogicAPI
 {
     public interface IEvidenceEntryService : IService
     {
+        public List<EvidenceEntryDTO> GetAllEvidenceEntryDTOs();
         public EvidenceEntryDTO GetEvidenceEntryDTOByID(int id);
     }
 }

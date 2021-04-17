@@ -66,5 +66,15 @@ namespace LogicAPI.Services
             }
             throw new ProductNotFoundException();
         }
+
+        public List<ProductDTO> GetAllProductDTOs()
+        {
+            List<ProductDTO> productDTOs = new List<ProductDTO>();
+            foreach(Product product in _repository.GetAllProducts())
+            {
+                productDTOs.Add(GetProductDTOByID(product.ID));
+            }
+            return productDTOs;
+        }
     }
 }

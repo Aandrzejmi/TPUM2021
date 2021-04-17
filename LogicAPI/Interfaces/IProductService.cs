@@ -7,6 +7,7 @@ namespace LogicAPI.Interfaces
 {
     public interface IProductService : IService
     {
+        public List<ProductDTO> GetAllProductDTOs();
         public ProductDTO GetProductDTOByID(int id);
         public ProductDTO GetProductDTOByName(string name);
     }
