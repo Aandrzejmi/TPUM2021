@@ -11,7 +11,7 @@
     <Window.Resources>
         <vm:MainViewModel x:Key="mainVM"/>
     </Window.Resources>
-
+    
     <Grid x:Name="mainGrid" DataContext="{StaticResource mainVM}">
 
         <Grid.RowDefinitions>
@@ -47,8 +47,8 @@
                     HorizontalContentAlignment="Center" Margin="0,154,0,0" Width="80" Height="20"
                     Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
 
-            <TextBox x:Name="newName" Text="{Binding InputName, Mode=TwoWay}" DataContext="{Binding InputVM}" HorizontalAlignment="Stretch" Margin="0,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
-            <TextBox x:Name="newAge" Text="{Binding InputAge, Mode=TwoWay}" DataContext="{Binding InputVM}" Margin="32,276,32,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
+            <TextBox x:Name="newName" Text="{Binding NewName, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
+            <TextBox x:Name="newAge" Text="{Binding NewAge, Mode=TwoWay}" Margin="32,276,32,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
 
             <Label Content="Enter new User" HorizontalAlignment="Stretch" Margin="0,217,0,0" VerticalAlignment="Top" Width="106" HorizontalContentAlignment="Center" Foreground="White"/>
             <Button Content="Add to data set" Margin="32,299,32,0" VerticalAlignment="Top" Width="106" 
@@ -63,13 +63,6 @@
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                         <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
-                        <GridViewColumn Header="Show">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content = "_Show..." Command="{Binding ShowName}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
