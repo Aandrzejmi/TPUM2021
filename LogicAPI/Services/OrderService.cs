@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataAPI;
-using DataAPI.DTOs;
+using LogicAPI.DTOs;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 using LogicAPI.Services;

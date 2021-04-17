@@ -1,4 +1,5 @@
 ﻿using LogicAPI;
+using LogicAPI.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +17,11 @@ namespace WpfApp.Commands
 
         public ButtonTestCommand(ObservableCollection<ExampleDTO> collection) => this.collection = collection;
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public bool CanExecute(object parameter) => true;
 

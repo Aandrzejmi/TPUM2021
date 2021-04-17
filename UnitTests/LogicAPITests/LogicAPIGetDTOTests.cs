@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using LogicAPI;
 using DataAPI;
-using DataAPI.DTOs;
+using LogicAPI.DTOs;
 using LogicAPI.Interfaces;
 using LogicAPI.Services;
 using LogicAPI.Exceptions;

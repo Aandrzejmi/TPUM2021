@@ -4,7 +4,7 @@ using System.Text;
 using DataAPI;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
-using DataAPI.DTOs;
+using LogicAPI.DTOs;
 
 namespace LogicAPI.Services
 {

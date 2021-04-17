@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataAPI.DTOs;
+using LogicAPI.DTOs;
 
 namespace LogicAPI
 {

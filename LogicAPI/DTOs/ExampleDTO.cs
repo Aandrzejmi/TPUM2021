@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LogicAPI
+namespace LogicAPI.DTOs
 {
     public class ExampleDTO
     {

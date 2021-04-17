@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAPI.DTOs
+namespace LogicAPI.DTOs
 {
-    public class ProductDTO
+    public class ClientDTO
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
+        public string Adress { get; set; }
+
     }
 }
