@@ -96,8 +96,18 @@ namespace LogicAPI.Services
         {
             if (ValidateModel(product))
             {
+                List<ProductDTO> productDTOs = GetAllProductDTOs();
+                int newID = 0;
+                foreach (ProductDTO productDTOListObject in productDTOs)
+                {
+                    if (newID == productDTOListObject.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
                 var productModel = new Product();
-                productModel.ID = product.ID;
+                productModel.ID = newID;
                 productModel.Name = product.Name;
                 productModel.Price = product.Price;
                 ValidateModel(productModel);

@@ -96,8 +96,18 @@ namespace LogicAPI.Services
         {
             if(ValidateModel(client))
             {
+                List<ClientDTO> clientDTOs = GetAllClientDTOs();
+                int newID = 0;
+                foreach (ClientDTO clientDTOListObject in clientDTOs)
+                {
+                    if (newID == clientDTOListObject.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
                 var clientModel = new Client();
-                clientModel.ID = client.ID;
+                clientModel.ID = newID;
                 clientModel.Name = client.Name;
                 clientModel.Adress = client.Adress;
 
@@ -110,7 +120,7 @@ namespace LogicAPI.Services
         public bool ChangeClientDTO(int clientID, ClientDTO clientDTO)
         {
             if (_repository.FindClientByID(clientID) is Client client)
-            {
+            {   
                 if (ValidateModel(clientDTO))
                 {
                     client.Adress = clientDTO.Adress;

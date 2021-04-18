@@ -134,7 +134,17 @@ namespace LogicAPI.Services
             {
                 var orderModel = new Order();
 
-                orderModel.ID = order.ID;
+                List<OrderDTO> orderDTOs = GetAllOrderDTOs();
+                int newID = 0;
+                foreach(OrderDTO orderDTOListObject in orderDTOs)
+                {
+                    if (newID == orderDTOListObject.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
+                orderModel.ID = newID;
                 orderModel.ClientID = order.Client.ID;
                 orderModel.Products = new List<EvidenceEntry>();
 

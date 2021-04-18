@@ -87,7 +87,17 @@ namespace LogicAPI.Services
         {
             if (ValidateModel(evidenceEntry))
             {
-                var evidenceEntryModel = new EvidenceEntry() { ProductID = evidenceEntry.Product.ID , ProductAmount = evidenceEntry.ProductAmount };
+                List<EvidenceEntryDTO> evidenceEntryDTOs = GetAllEvidenceEntryDTOs();
+                int newID = 0;
+                foreach (EvidenceEntryDTO evidenceEntryDTOInList in evidenceEntryDTOs)
+                {
+                    if (newID == evidenceEntryDTOInList.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
+                var evidenceEntryModel = new EvidenceEntry() { ProductID = newID, ProductAmount = evidenceEntry.ProductAmount };
                 ValidateModel(evidenceEntryModel);
                 if (_repository.AddEvidenceEntry(evidenceEntryModel))
                     return true;
