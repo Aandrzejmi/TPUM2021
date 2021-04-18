@@ -9,24 +9,19 @@ namespace LogicAPI
 {
     public static class Logic
     {
-        public static IProductService CreateProductService()
-        {
-            return new ProductService(Data.GetRepository());
-        }
+        public static event Action ClientsChanged;
+        public static event Action EvidenceEntryChanged;
+        public static event Action OrdersChanged;
+        public static event Action ProductsChanged;
 
-        public static IOrderService CreateOrderService()
-        {
-            return new OrderService(Data.GetRepository());
-        }
+        public static IClientService CreateClientService() => new ClientService(Data.GetRepository());
+        public static IEvidenceEntryService CreateEvidenceEntryService() => new EvidenceEntryService(Data.GetRepository());
+        public static IOrderService CreateOrderService() => new OrderService(Data.GetRepository());
+        public static IProductService CreateProductService() => new ProductService(Data.GetRepository());
 
-        public static IClientService CreateClientService()
-        {
-            return new ClientService(Data.GetRepository());
-        }
-
-        public static IEvidenceEntryService CreateEvidenceEntryService()
-        {
-            return new EvidenceEntryService(Data.GetRepository());
-        }
+        internal static void InvokeClientsChanged() => ClientsChanged?.Invoke();
+        internal static void InvokeEvidenceEntryChanged() => EvidenceEntryChanged?.Invoke();
+        internal static void InvokeOrdersChanged() => OrdersChanged?.Invoke();
+        internal static void InvokeProductsChanged() => ProductsChanged?.Invoke();
     }
 }

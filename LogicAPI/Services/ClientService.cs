@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DataAPI;
+using LogicAPI;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 using LogicAPI.DTOs;
@@ -96,13 +97,26 @@ namespace LogicAPI.Services
         {
             if(ValidateModel(client))
             {
+                List<ClientDTO> clientDTOs = GetAllClientDTOs();
+                int newID = 0;
+                foreach (ClientDTO clientDTOListObject in clientDTOs)
+                {
+                    if (newID == clientDTOListObject.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
                 var clientModel = new Client();
-                clientModel.ID = client.ID;
+                clientModel.ID = newID;
                 clientModel.Name = client.Name;
                 clientModel.Adress = client.Adress;
 
                 if (_repository.AddClient(clientModel))
+                {
+                    Logic.InvokeClientsChanged();
                     return true;
+                }
             }
             return false;
         }
@@ -110,21 +124,30 @@ namespace LogicAPI.Services
         public bool ChangeClientDTO(int clientID, ClientDTO clientDTO)
         {
             if (_repository.FindClientByID(clientID) is Client client)
-            {
+            {   
                 if (ValidateModel(clientDTO))
                 {
                     client.Adress = clientDTO.Adress;
                     client.Name = clientDTO.Name;
                     if (_repository.ModifyClient(client))
+                    {
+                        Logic.InvokeClientsChanged();
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
                 else
+                {
                     return false;
+                }
             }
             else
+            {
                 throw new ClientNotFoundException();
+            }
         }
     }
 }

@@ -134,7 +134,17 @@ namespace LogicAPI.Services
             {
                 var orderModel = new Order();
 
-                orderModel.ID = order.ID;
+                List<OrderDTO> orderDTOs = GetAllOrderDTOs();
+                int newID = 0;
+                foreach(OrderDTO orderDTOListObject in orderDTOs)
+                {
+                    if (newID == orderDTOListObject.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
+                orderModel.ID = newID;
                 orderModel.ClientID = order.Client.ID;
                 orderModel.Products = new List<EvidenceEntry>();
 
@@ -153,7 +163,10 @@ namespace LogicAPI.Services
                     orderModel.Products.Add(evidenceEntryModel);
                 }
                 if (_repository.AddOrder(orderModel))
+                {
+                    Logic.InvokeOrdersChanged();
                     return true;
+                }
 
             }
             return false;
@@ -172,15 +185,24 @@ namespace LogicAPI.Services
                         order.Products.Add(new EvidenceEntry() { ProductID = evidenceEntryDTO.Product.ID, ProductAmount = evidenceEntryDTO.ProductAmount });
                     }
                     if (_repository.ModifyOrder(order))
+                    {
+                        Logic.InvokeOrdersChanged();
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
                 else
+                {
                     return false;
+                }
             }
             else
+            {
                 throw new OrderNotFoundException();
+            }
         }
     }
 }
