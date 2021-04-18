@@ -96,9 +96,10 @@ namespace LogicAPI.Services
                 }
 
                 var evidenceEntryModel = new EvidenceEntry() { ProductID = newID, ProductAmount = evidenceEntry.ProductAmount };
-                ValidateModel(evidenceEntryModel);
-                if (_repository.AddEvidenceEntry(evidenceEntryModel))
+                if (_productService.AddProductDTO(evidenceEntry.Product))
                 {
+                    ValidateModel(evidenceEntryModel);
+                    ChangeEvidenceEntryDTO(newID, evidenceEntry);
                     Logic.InvokeEvidenceEntryChanged();
                     return true;
                 }
@@ -118,19 +119,13 @@ namespace LogicAPI.Services
                         return true;
                     }
                     else
-                    {
                         return false;
-                    }
                 }
                 else
-                {
                     return false;
-                }
             }
             else
-            {
                 throw new EvidenceEntryNotFoundException();
-            }
         }
     }
 }

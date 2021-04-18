@@ -45,8 +45,8 @@ namespace UnitTests.LogicAPITests
             repositoryMock.Setup(p => p.FindProductByName("Temp Product")).Returns(new Product() { ID = 0, Name = "Temp Product", Price = 1.0M });
             repositoryMock.Setup(p => p.FindProductByName("")).Returns(null as Product);
 
-            repositoryMock.Setup(p => p.FindEvidenceEntryByID(0)).Returns(new EvidenceEntry() { ProductID = 0, ProductAmount = 0 });
             repositoryMock.Setup(p => p.FindEvidenceEntryByID(-1)).Returns(null as EvidenceEntry);
+            repositoryMock.Setup(p => p.FindEvidenceEntryByID(It.IsInRange<int>(0, 100, Range.Inclusive))).Returns(new EvidenceEntry() { ProductID = 0, ProductAmount = 0 });
             repositoryMock.Setup(p => p.AddEvidenceEntry(It.IsAny<EvidenceEntry>())).Returns(true);
 
             repositoryMock.Setup(p => p.FindOrderByID(0)).Returns(new Order() { Products = evidenceEntries, ClientID = 0 });
@@ -56,6 +56,12 @@ namespace UnitTests.LogicAPITests
             repositoryMock.Setup(p => p.FindOrdersByClientID(0)).Returns(new List<Order> { new Order() { Products = evidenceEntries, ClientID = 0 } });
             repositoryMock.Setup(p => p.FindOrdersByClientID(-1)).Returns(new List<Order>());
 
+            repositoryMock.Setup(p => p.GetAllClients()).Returns(new List<Client>() { new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" } });
+            repositoryMock.Setup(p => p.GetAllEntries()).Returns(new List<EvidenceEntry>() { new EvidenceEntry() { ProductID = 0, ProductAmount = 0 } });
+            repositoryMock.Setup(p => p.GetAllOrders()).Returns(new List<Order>() { new Order() { Products = evidenceEntries, ClientID = 0 } });
+            repositoryMock.Setup(p => p.GetAllProducts()).Returns(new List<Product>() { new Product() { ID = 0, Name = "Temp Product", Price = 1.0M } });
+
+            repositoryMock.Setup(p => p.ChangeProductAmount(It.IsAny<int>(), It.IsAny<int>())).Returns(true);
 
             _orderService = new OrderService(repositoryMock.Object);
             _productService = new ProductService(repositoryMock.Object);

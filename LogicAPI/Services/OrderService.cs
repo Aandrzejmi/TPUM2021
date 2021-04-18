@@ -151,7 +151,6 @@ namespace LogicAPI.Services
                 foreach(EvidenceEntryDTO entryDTO in order.Products)
                 {
                     var evidenceEntryModel = new EvidenceEntry();
-                    evidenceEntryModel.ID = entryDTO.ID;
                     evidenceEntryModel.ProductID = entryDTO.Product.ID;
                     evidenceEntryModel.ProductAmount = entryDTO.ProductAmount;
 
