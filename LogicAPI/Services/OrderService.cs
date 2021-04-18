@@ -134,7 +134,8 @@ namespace LogicAPI.Services
             {
                 var orderModel = new Order();
 
-                List<OrderDTO> orderDTOs = GetAllOrderDTOs();
+                List<OrderDTO> orderDTOs = new List<OrderDTO>();
+                orderDTOs = GetAllOrderDTOs();
                 int newID = 0;
                 foreach(OrderDTO orderDTOListObject in orderDTOs)
                 {
@@ -151,12 +152,10 @@ namespace LogicAPI.Services
                 foreach(EvidenceEntryDTO entryDTO in order.Products)
                 {
                     var evidenceEntryModel = new EvidenceEntry();
-                    evidenceEntryModel.ID = entryDTO.ID;
                     evidenceEntryModel.ProductID = entryDTO.Product.ID;
                     evidenceEntryModel.ProductAmount = entryDTO.ProductAmount;
 
                     _evidenceEntryService.ValidateModel(evidenceEntryModel);
-
                     if (_repository.FindProductByID(evidenceEntryModel.ProductID) is null)
                         throw new ProductNotFoundException();
 

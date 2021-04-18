@@ -32,15 +32,17 @@ namespace UnitTests.LogicAPITests
 
             repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
             repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Client);
-            
+            repositoryMock.Setup(p => p.GetAllClients()).Returns(new List<Client>() { new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" }});
 
             repositoryMock.Setup(p => p.FindClientByName("Temp Name")).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
             repositoryMock.Setup(p => p.FindClientByName("")).Returns(null as Client);
             repositoryMock.Setup(p => p.AddClient(It.IsAny<Client>())).Returns(true);
 
             repositoryMock.Setup(p => p.FindProductByID(0)).Returns(new Product() { ID = 0, Name = "Temp Product", Price = 1.0M });
+            repositoryMock.Setup(p => p.FindProductByID(1)).Returns(new Product() { ID = 1, Name = "Temp Product", Price = 1.0M });
             repositoryMock.Setup(p => p.FindProductByID(-1)).Returns(null as Product);
             repositoryMock.Setup(p => p.AddProduct(It.IsAny<Product>())).Returns(true);
+            repositoryMock.Setup(p => p.GetAllProducts()).Returns(new List<Product>() { new Product() { ID = 0, Name = "Temp Product", Price = 1.0M } });
 
             repositoryMock.Setup(p => p.FindProductByName("Temp Product")).Returns(new Product() { ID = 0, Name = "Temp Product", Price = 1.0M });
             repositoryMock.Setup(p => p.FindProductByName("")).Returns(null as Product);
@@ -48,10 +50,12 @@ namespace UnitTests.LogicAPITests
             repositoryMock.Setup(p => p.FindEvidenceEntryByID(0)).Returns(new EvidenceEntry() { ProductID = 0, ProductAmount = 0 });
             repositoryMock.Setup(p => p.FindEvidenceEntryByID(-1)).Returns(null as EvidenceEntry);
             repositoryMock.Setup(p => p.AddEvidenceEntry(It.IsAny<EvidenceEntry>())).Returns(true);
+            repositoryMock.Setup(p => p.GetAllEntries()).Returns(new List<EvidenceEntry>() { new EvidenceEntry() { ProductID = 0, ProductAmount = 0 } });
 
             repositoryMock.Setup(p => p.FindOrderByID(0)).Returns(new Order() { Products = evidenceEntries, ClientID = 0 });
             repositoryMock.Setup(p => p.FindOrderByID(-1)).Returns(null as Order);
             repositoryMock.Setup(p => p.AddOrder(It.IsAny<Order>())).Returns(true);
+            repositoryMock.Setup(p => p.GetAllOrders()).Returns(new List<Order>() { new Order() { Products = evidenceEntries, ClientID = 0 } });
 
             repositoryMock.Setup(p => p.FindOrdersByClientID(0)).Returns(new List<Order> { new Order() { Products = evidenceEntries, ClientID = 0 } });
             repositoryMock.Setup(p => p.FindOrdersByClientID(-1)).Returns(new List<Order>());
