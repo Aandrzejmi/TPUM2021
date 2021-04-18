@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DataAPI;
 
-namespace LogicAPI
+namespace LogicAPI.Interfaces
 {
     public interface IService
     {

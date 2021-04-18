@@ -7,7 +7,7 @@ using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 using LogicAPI.Services;
 
-namespace LogicAPI
+namespace LogicAPI.Services
 {
     public class EvidenceEntryService : IEvidenceEntryService
     {
@@ -28,10 +28,26 @@ namespace LogicAPI
                 if (evidenceEntry.ID < 0)
                     throw new EvidenceEntryInvalidIDException();
 
-                if (_repository.FindEvidenceEntryByID(evidenceEntry.ID) is null)
-                    throw new EvidenceEntryNotFoundException();
+                _productService.ValidateModel(_repository.FindProductByID(evidenceEntry.ProductID));
 
-                if (!_productService.ValidateModel(_repository.FindProductByID(evidenceEntry.ProductID)))
+                // it should be at least 0
+                if (evidenceEntry.ProductAmount < 0)
+                    throw new EvidenceEntryInvalidProductAmountException();
+
+                return true;
+            }
+            throw new ModelIsNotEvidenceEntryException();
+        }
+
+        public bool ValidateModel(EvidenceEntryDTO evidenceEntry)
+        {
+            // it actually is
+            if (evidenceEntry is EvidenceEntryDTO)
+            {
+                if (evidenceEntry.ID < 0)
+                    throw new EvidenceEntryInvalidIDException();
+
+                if (!_productService.ValidateModel(evidenceEntry.Product))
                     return false;
 
                 // it should be at least 0
@@ -65,6 +81,21 @@ namespace LogicAPI
                 evidenceEntryDTOs.Add(GetEvidenceEntryDTOByID(evidenceEntry.ID));
             }
             return evidenceEntryDTOs;
+        }
+
+        public bool AddEvidenceEntryDTO(EvidenceEntryDTO evidenceEntry)
+        {
+            if (ValidateModel(evidenceEntry))
+            {
+                var evidenceEntryModel = new EvidenceEntry();
+                evidenceEntryModel.ID = evidenceEntry.ID;
+                evidenceEntryModel.ProductID = evidenceEntry.Product.ID;
+                evidenceEntryModel.ProductAmount = evidenceEntry.ProductAmount;
+                ValidateModel(evidenceEntryModel);
+                if (_repository.AddEvidenceEntry(evidenceEntryModel))
+                    return true;
+            }
+            return false;
         }
     }
 }
