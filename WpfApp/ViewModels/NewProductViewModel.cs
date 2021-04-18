@@ -10,30 +10,28 @@ using WpfApp.Commands;
 
 namespace WpfApp.ViewModels
 {
-    class NewClientViewModel : INotifyPropertyChanged
+    class NewProductViewModel : INotifyPropertyChanged
     {
         public const string defaultName = "Enter name";
-        public const string defaultAddres = "Enter adress";
-
-        private IClientService _clientService;
-        private string _name;
-        private string _adress;
-
         public ICommand Add { get; set; }
 
-        public NewClientViewModel()
+        private string _name;
+        private decimal _price;
+        private int _amount;
+
+        public NewProductViewModel()
         {
-            _clientService = Logic.CreateClientService();
-            Add = new AddClientCommand(this, _clientService);
+            Add = new AddProductCommand(this);
             ResetFields();
         }
 
-        public ClientDTO CreateDTO()
+        public EvidenceEntryDTO CreateDTO()
         {
-            return new ClientDTO()
+            return new EvidenceEntryDTO()
             {
                 Name = _name,
-                Adress = _adress,
+                Price = _price,
+                ProductAmount = _amount,
             };
         }
 
@@ -46,25 +44,32 @@ namespace WpfApp.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
             }
         }
-
-        public string Adress
+        public decimal Price
         {
-            get => _adress;
+            get => _price;
             set
             {
-                _adress = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Adress"));
+                _price = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Price"));
+            }
+        }
+        public int Amount
+        {
+            get => _amount;
+            set
+            {
+                _amount = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Amount"));
             }
         }
 
         public void ResetFields()
         {
             Name = defaultName;
-            Adress = defaultAddres;
+            Price = 0.0m;
+            Amount = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-
     }
 }

@@ -6,6 +6,11 @@ namespace LogicAPI.DTOs
 {
     public class EvidenceEntryDTO
     {
+        public EvidenceEntryDTO()
+        {
+            Product = new ProductDTO();
+        }
+
         public ProductDTO Product { get; set; }
 
         public int ID => Product.ID;

@@ -16,20 +16,18 @@ namespace WpfApp.ViewModels
         public ProductsViewModel()
         {
             _evidenceEntryService = Logic.CreateEvidenceEntryService();
-            Logic.ProductsChanged += OnProductsChanged;
-            Logic.EvidenceEntryChanged += OnProductsChanged;
+            Logic.EvidenceEntryChanged += OnEvidenceEntriessChanged;
         }
 
         ~ProductsViewModel()
         {
-            Logic.ProductsChanged -= OnProductsChanged;
-            Logic.EvidenceEntryChanged -= OnProductsChanged;
+            Logic.EvidenceEntryChanged -= OnEvidenceEntriessChanged;
         }
 
         public ObservableCollection<EvidenceEntryDTO> Entries => new ObservableCollection<EvidenceEntryDTO>(_evidenceEntryService.GetAllEvidenceEntryDTOs());
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnProductsChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Entries"));
+        private void OnEvidenceEntriessChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Entries"));
     }
 }

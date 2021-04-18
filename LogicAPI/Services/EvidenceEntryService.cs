@@ -28,8 +28,6 @@ namespace LogicAPI.Services
                 if (evidenceEntry.ID < 0)
                     throw new EvidenceEntryInvalidIDException();
 
-                _productService.ValidateModel(_repository.FindProductByID(evidenceEntry.ProductID));
-
                 // it should be at least 0
                 if (evidenceEntry.ProductAmount < 0)
                     throw new EvidenceEntryInvalidProductAmountException();

@@ -11,10 +11,9 @@
 
 
     <Page.Resources>
-        <vm:TempViewModel x:Key="tempVM"/>
     </Page.Resources>
 
-    <Grid DataContext="{StaticResource tempVM}">
+    <Grid DataContext="">
         <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1"/>
 
         <TextBlock x:Name="AppNameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" Foreground="White"

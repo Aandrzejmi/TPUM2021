@@ -9,7 +9,7 @@
         Title="TPUM App 2021" Height="450" Width="800">
 
     <Window.Resources>
-        <vm:TempViewModel x:Key="tempVM"/>
+        
     </Window.Resources>
 
     <Grid x:Name="mainGrid">
@@ -25,23 +25,27 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "170" />
                 <ColumnDefinition Width = "*" />
-                <ColumnDefinition Width = "150" />
+                <ColumnDefinition Width = "250" />
             </Grid.ColumnDefinitions>
 
             <Grid x:Name="vmTests" Grid.Column="2" >
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+
+
+
+                <Frame Source="Pages/AddClientPage.xaml" Grid.Column="2" Grid.Row="0" NavigationUIVisibility="Hidden"/>
+                <Frame Source="Pages/AddProductPage.xaml" Grid.Column="2" Grid.Row="2" NavigationUIVisibility="Hidden"/>
+
+
             </Grid>
 
             <!--SIDE PANEL-->
 
             <Frame Source="Pages/SidePanel.xaml" Grid.Column="0" NavigationUIVisibility="Hidden"/>
-
-            <Frame Source="Pages/AddClientPAge.xaml" Grid.Column="2" NavigationUIVisibility="Hidden"/>
-
             <!--MAIN VIEW-->
 
             <TabControl Grid.Column="1">
@@ -58,19 +62,6 @@
                 <TabItem Header="Prducts">
                     <Grid Background="#FFE5E5E5">
                         <Frame Source="Pages/ProductsPage.xaml"/>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="temp">
-                    <Grid Background="#FFE5E5E5" DataContext="{StaticResource tempVM}">
-                        <ListView x:Name="listView" Grid.Column="1"
-                            ItemsSource="{Binding Collection}">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>        
                     </Grid>
                 </TabItem>
             </TabControl>
