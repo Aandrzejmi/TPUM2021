@@ -65,7 +65,7 @@ namespace WpfApp.ViewModels
         }
 
         public string OrderHeader => $"Order № {Selected.ID}: {Selected.ClientName} - {Selected.ClientAdress}";
-        public string TotalPrice => $"Total price: [będzie, jak dodam wsparcie dla Serviceów]";
+        public string TotalPrice => $"Total price: {_orderService.GetPriceOfOrder(Selected)}";
 
         public OrderDTO Selected
         {
