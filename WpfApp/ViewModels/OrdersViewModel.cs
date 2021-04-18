@@ -1,4 +1,7 @@
-﻿using LogicAPI.DTOs;
+﻿using DataAPI; // must be removed
+using LogicAPI.DTOs;
+using LogicAPI.Services;
+using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,47 +15,49 @@ namespace WpfApp.ViewModels
 {
     class OrdersViewModel : INotifyPropertyChanged
     {
+
+        private IOrderService _orderService;
         public OrdersViewModel()
         {
+            _orderService = new OrderService(Data.CreateRepository());
             Selected = Orders[0];
         }
 
         private OrderDTO _selected;
+        private ObservableCollection<OrderDTO> _orders;
 
-        public ObservableCollection<OrderDTO> Orders { get; set; } = new ObservableCollection<OrderDTO>()
-        {
-            new OrderDTO()
-            { 
-                ID = 1,
-                Client = new ClientDTO(){ID = 1, Name = "Jan Kowalski", Adress = "Południowa 23"},
-                Products = new List<EvidenceEntryDTO>()
-                {
-                    new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 1, Name = "Kawa", Price = 5.20M }, ProductAmount = 2 },
-                }
-            },
-            new OrderDTO()
+        public ObservableCollection<OrderDTO> Orders 
+        { 
+            get
             {
-                ID = 2,
-                Client = new ClientDTO(){ID = 1, Name = "Jan Kowalski", Adress = "Południowa 23"},
-                Products = new List<EvidenceEntryDTO>()
+                int index;
+                if (_selected != null)
                 {
-                    new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 2, Name = "Ciastka", Price = 4.20M }, ProductAmount = 2 },
-                    new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 3, Name = "Ładowarka USB C", Price = 15.50M }, ProductAmount = 1}
+                    index = _orders.IndexOf(_selected);
                 }
-            },
-            new OrderDTO()
-            {
-                ID = 3,
-                Client = new ClientDTO(){ID = 3, Name = "Alicja Makota ", Adress = "Długa 281 mieszkania 12"},
-                Products = new List<EvidenceEntryDTO>()
+                else
                 {
-                    new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 4, Name = "Jabłka (kg)", Price = 1.20M }, ProductAmount = 3},
-                    new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 5, Name = "Sliwki (kg)", Price = 4.50M }, ProductAmount = 4},
-                    new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 6, Name = "Lampka nocna", Price = 65.99M }, ProductAmount = 1},
+                    index = 0;
+                }
 
+                _orders = new ObservableCollection<OrderDTO>(_orderService.GetAllOrderDTOs());
+                
+                if (_orders.Count > index)
+                {
+                    _selected = _orders[index];
                 }
-            },
-        };
+                else
+                {
+                    _selected = _orders[^1];
+                }
+
+                return _orders;
+            }
+            set
+            {
+                _orders = value;
+            }
+        }
 
         public string OrderHeader => $"Order № {Selected.ID}: {Selected.ClientName} - {Selected.ClientAdress}";
         public string TotalPrice => $"Total price: [będzie, jak dodam wsparcie dla Serviceów]";

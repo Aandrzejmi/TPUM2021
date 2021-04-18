@@ -1,4 +1,7 @@
-﻿using LogicAPI.DTOs;
+﻿using DataAPI; // must be removed
+using LogicAPI.DTOs;
+using LogicAPI.Services;
+using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,12 +12,27 @@ namespace WpfApp.ViewModels
 {
     class ProductsViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<EvidenceEntryDTO> Entries { get; set; } = new ObservableCollection<EvidenceEntryDTO>()
+        private IEvidenceEntryService _evidenceEntryService;
+        private ObservableCollection<EvidenceEntryDTO> _entries;
+
+        public ProductsViewModel()
         {
-            new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 1, Name = "Kawa", Price = 5.20M }, ProductAmount = 5 },
-            new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 2, Name = "Ładowarka USB C", Price = 15.50M }, ProductAmount = 3},
-            new EvidenceEntryDTO(){ Product = new ProductDTO() {ID = 3, Name = "Lampka nocna", Price = 65.99M }, ProductAmount = 1},
-        };
+            _evidenceEntryService = new EvidenceEntryService(Data.CreateRepository());
+        }
+
+        public ObservableCollection<EvidenceEntryDTO> Entries
+        {
+            get
+            {
+                _entries = new ObservableCollection<EvidenceEntryDTO>(_evidenceEntryService.GetAllEvidenceEntryDTOs());
+                return _entries;
+            }
+            set
+            {
+                _entries = value;
+                // _clientService.???
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

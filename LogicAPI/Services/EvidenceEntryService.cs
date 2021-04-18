@@ -7,7 +7,7 @@ using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 using LogicAPI.Services;
 
-namespace LogicAPI
+namespace LogicAPI.Services
 {
     public class EvidenceEntryService : IEvidenceEntryService
     {

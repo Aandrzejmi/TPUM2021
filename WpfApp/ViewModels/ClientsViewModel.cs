@@ -1,21 +1,40 @@
-﻿using LogicAPI.DTOs;
+﻿using DataAPI; // must be removed
+using LogicAPI.DTOs;
+using LogicAPI.Services;
+using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
-
+using Moq;
 
 namespace WpfApp.ViewModels
 {
     class ClientsViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ClientDTO> Clients { get; set; } = new ObservableCollection<ClientDTO>()
+        private IClientService _clientService;
+        private ObservableCollection<ClientDTO> _clients;
+
+        public ClientsViewModel()
         {
-            new ClientDTO(){ID = 1, Name = "Jan Kowalski", Adress = "Południowa 23"},
-            new ClientDTO(){ID = 2, Name = "Anna Nowak", Adress = "Złota 15b"},
-            new ClientDTO(){ID = 3, Name = "Alicja Makota ", Adress = "Długa 281 mieszkania 12"},
-        };
+            _clientService = new ClientService(Data.CreateRepository());
+            // Logic.CreateClientService()
+        }
+
+        public ObservableCollection<ClientDTO> Clients 
+        {
+            get
+            {
+                _clients = new ObservableCollection<ClientDTO>(_clientService.GetAllClientDTOs());
+                return _clients;
+            }
+            set
+            {
+                _clients = value;
+                // _clientService.???
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
