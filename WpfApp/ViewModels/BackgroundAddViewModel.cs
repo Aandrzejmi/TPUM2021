@@ -10,8 +10,8 @@ namespace WpfApp.ViewModels
     class BackgroundAddViewModel : INotifyPropertyChanged
     {
         public AddClientsThreadCommand AddClients { get; set; } = new AddClientsThreadCommand();
-        public AddClientsThreadCommand AddOrders { get; set; } = new AddClientsThreadCommand();
-        public AddClientsThreadCommand AddProducts { get; set; } = new AddClientsThreadCommand();
+        public AddOrderThreadCommand AddOrders { get; set; } = new AddOrderThreadCommand();
+        public AddProductThreadCommand AddProducts { get; set; } = new AddProductThreadCommand();
 
         public string ClientsLabel => AddClients.IsActive ? "Stop clients" : "Start clients";
         public string OrderssLabel => AddOrders.IsActive ? "Stop orders" : "Start orders";

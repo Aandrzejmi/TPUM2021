@@ -11,13 +11,16 @@ namespace WpfApp.Commands
 {
     class AddOrderThreadCommand : ICommand
     {
-        private static int index = 0;
+        public event Action OnExecute;
+
         private IOrderService _orderService = Logic.CreateOrderService();
         private IEvidenceEntryService _evidenceEntryService = Logic.CreateEvidenceEntryService();
         private IClientService _clientService = Logic.CreateClientService();
         private Thread _thread;
 
         public event EventHandler CanExecuteChanged;
+
+        public bool IsActive { get; set; } = false;
 
         public bool CanExecute(object parameter) => true;
 
@@ -28,11 +31,9 @@ namespace WpfApp.Commands
                 _thread = new Thread(AddOrdersLoop);
                 _thread.Start();
             }
-            else
-            {
-                _thread.Abort();
-                _thread = null;
-            }
+
+            IsActive = !IsActive;
+            OnExecute?.Invoke();
         }
 
         private EvidenceEntryDTO CreateEvidenceEntryDTO() => _evidenceEntryService.GetEvidenceEntryDTOByID(0);
@@ -42,8 +43,10 @@ namespace WpfApp.Commands
         {
             while (true)
             {
+                while (!IsActive) { }
+
                 _orderService.AddOrderDTO(CreateDTO());
-                Thread.Sleep(30000);
+                Thread.Sleep(5000);
             }
         }
     }

@@ -11,11 +11,15 @@ namespace WpfApp.Commands
 {
     class AddProductThreadCommand : ICommand
     {
+        public event Action OnExecute;
+
         private static int index = 0;
-        private IProductService _productService = Logic.CreateProductService();
+        private IEvidenceEntryService _productService = Logic.CreateEvidenceEntryService();
         private Thread _thread;
+        private Random _random = new Random();
 
         public event EventHandler CanExecuteChanged;
+        public bool IsActive { get; set; } = false;
 
         public bool CanExecute(object parameter) => true;
 
@@ -26,11 +30,9 @@ namespace WpfApp.Commands
                 _thread = new Thread(AddProductsLoop);
                 _thread.Start();
             }
-            else
-            {
-                _thread.Abort();
-                _thread = null;
-            }
+
+            IsActive = !IsActive;
+            OnExecute?.Invoke();
         }
 
         private ProductDTO CreateDTO() => new ProductDTO() { Price = 2.0M, Name = $"New product {index++}" };
@@ -39,8 +41,14 @@ namespace WpfApp.Commands
         {
             while (true)
             {
-                _productService.AddProductDTO(CreateDTO());
-                Thread.Sleep(30000);
+                while (!IsActive) { }
+
+                _productService.AddEvidenceEntryDTO(new EvidenceEntryDTO() 
+                { 
+                    Product = CreateDTO(),
+                    ProductAmount = _random.Next(1,10),
+                });
+                Thread.Sleep(5000);
             }
         }
     }
