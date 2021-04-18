@@ -111,8 +111,12 @@ namespace LogicAPI.Services
                 productModel.Name = product.Name;
                 productModel.Price = product.Price;
                 ValidateModel(productModel);
+
                 if (_repository.AddProduct(productModel))
+                {
+                    Logic.InvokeProductsChanged();
                     return true;
+                }
             }
             return false;
         }
@@ -126,15 +130,24 @@ namespace LogicAPI.Services
                     product.Name = product.Name;
                     product.Price = product.Price;
                     if (_repository.ModifyProduct(product))
+                    {
+                        Logic.InvokeProductsChanged();
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
                 else
+                {
                     return false;
+                }
             }
             else
+            {
                 throw new ProductNotFoundException();
+            }
         }
     }
 }
