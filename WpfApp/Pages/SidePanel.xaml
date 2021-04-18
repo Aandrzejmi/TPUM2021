@@ -11,9 +11,10 @@
 
 
     <Page.Resources>
+        <vm:BackgroundAddViewModel x:Key="vm"/>
     </Page.Resources>
 
-    <Grid DataContext="">
+    <Grid DataContext="{StaticResource vm}">
         <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1"/>
 
         <TextBlock x:Name="AppNameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" Foreground="White"
@@ -21,25 +22,15 @@
                 TPUM 2021
         </TextBlock>
 
-        <Button x:Name="button1" Content="Button 1" HorizontalAlignment="Center" VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center" Margin="0,104,0,0" Width="80" Height="20"
-                        Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-        <Button x:Name="button2" Content="Button 2" HorizontalAlignment="Center" VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center" Margin="0,129,0,0" Width="80" Height="20"
-                        Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-        <Button x:Name="button3" Content="Button 3" HorizontalAlignment="Center" VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center" Margin="0,154,0,0" Width="80" Height="20"
-                        Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-
-        <TextBox x:Name="newName" Text="{Binding NewName, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
-        <TextBox x:Name="newAge" Text="{Binding NewAge, Mode=TwoWay}" Margin="32,276,32,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
-
-        <Label Content="Enter new User" HorizontalAlignment="Stretch" Margin="0,217,0,0" VerticalAlignment="Top" Width="106" HorizontalContentAlignment="Center" Foreground="White"/>
-        <Button Content="Add to data set" Margin="32,299,32,0" VerticalAlignment="Top" Width="106" 
-                        Command="{Binding AddNewVM}"/>
-
-
-        <Label x:Name="lastButtonLabel" Content="Last button:" HorizontalAlignment="Center" VerticalAlignment="Top"
-                       Foreground="White" HorizontalContentAlignment="Center" Width="150" Height="25" Margin="0,364,0,0"/>
+        <Button x:Name="button1" Content="{Binding ClientsLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,80" Width="80" Height="20"
+                        Command="{Binding AddClients}"/>
+        <Button x:Name="button2" Content="{Binding OrderssLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,56" Width="80" Height="20"
+                        Command="{Binding AddOrders}"/>
+        <Button x:Name="button3" Content="{Binding ProductsLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,31" Width="80" Height="20"
+                        Command="{Binding AddProducts}"/>
+        <Label Content="Auto add:" HorizontalAlignment="Left" Margin="58,0,0,105" VerticalAlignment="Bottom" Foreground="White"/>
     </Grid>
 </Page>
