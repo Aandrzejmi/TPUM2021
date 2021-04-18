@@ -106,5 +106,25 @@ namespace LogicAPI.Services
             }
             return false;
         }
+
+        public bool ChangeProductDTO(int productID, ProductDTO productDTO)
+        {
+            if (_repository.FindProductByID(productID) is Product product)
+            {
+                if (ValidateModel(productDTO))
+                {
+                    product.Name = product.Name;
+                    product.Price = product.Price;
+                    if (_repository.ModifyProduct(product))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new ProductNotFoundException();
+        }
     }
 }

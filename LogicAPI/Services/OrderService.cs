@@ -158,5 +158,29 @@ namespace LogicAPI.Services
             }
             return false;
         }
+
+        public bool ChangeOrderDTO(int orderID, OrderDTO orderDTO)
+        {
+            if (_repository.FindOrderByID(orderID) is Order order)
+            {
+                if (ValidateModel(orderDTO))
+                {
+                    order.ClientID = orderDTO.Client.ID;
+                    order.Products = new List<EvidenceEntry>();
+                    foreach(EvidenceEntryDTO evidenceEntryDTO in orderDTO.Products)
+                    {
+                        order.Products.Add(new EvidenceEntry() { ProductID = evidenceEntryDTO.Product.ID, ProductAmount = evidenceEntryDTO.ProductAmount });
+                    }
+                    if (_repository.ModifyOrder(order))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new OrderNotFoundException();
+        }
     }
 }

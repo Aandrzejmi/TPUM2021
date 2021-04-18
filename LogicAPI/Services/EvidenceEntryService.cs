@@ -94,5 +94,23 @@ namespace LogicAPI.Services
             }
             return false;
         }
+
+        public bool ChangeEvidenceEntryDTO(int evidenceEntryID, EvidenceEntryDTO evidenceEntryDTO)
+        {
+            if (_repository.FindEvidenceEntryByID(evidenceEntryID) is EvidenceEntry evidenceEntry)
+            {
+                if (ValidateModel(evidenceEntryDTO))
+                {
+                    if (_repository.ChangeProductAmount(evidenceEntryID, evidenceEntryDTO.ProductAmount))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new EvidenceEntryNotFoundException();
+        }
     }
 }

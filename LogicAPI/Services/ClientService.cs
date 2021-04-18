@@ -106,5 +106,25 @@ namespace LogicAPI.Services
             }
             return false;
         }
+
+        public bool ChangeClientDTO(int clientID, ClientDTO clientDTO)
+        {
+            if (_repository.FindClientByID(clientID) is Client client)
+            {
+                if (ValidateModel(clientDTO))
+                {
+                    client.Adress = clientDTO.Adress;
+                    client.Name = clientDTO.Name;
+                    if (_repository.ModifyClient(client))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new ClientNotFoundException();
+        }
     }
 }
