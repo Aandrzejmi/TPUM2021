@@ -32,7 +32,7 @@ namespace WpfApp.Commands
                 char nr = b.Name[^1];
 
                 var window = Application.Current.MainWindow as MainWindow;
-                window.lastButtonLabel.Content = $"Last button: {nr}";
+                //window.lastButtonLabel.Content = $"Last button: {nr}";
 
                 Thread t = new Thread(() => {
                     Thread.Sleep(3000);

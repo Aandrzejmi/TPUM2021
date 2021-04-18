@@ -1,0 +1,40 @@
+﻿<Page x:Class="WpfApp.Pages.SidePanel"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SidePanel">
+
+    <Grid>
+        <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1"/>
+
+        <TextBlock x:Name="AppNameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" Foreground="White"
+                           Margin="0,10,0,0" Height="45" Width="167" TextAlignment="Center">
+                TPUM 2021
+        </TextBlock>
+
+        <Button x:Name="button1" Content="Button 1" HorizontalAlignment="Center" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center" Margin="0,104,0,0" Width="80" Height="20"
+                        Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+        <Button x:Name="button2" Content="Button 2" HorizontalAlignment="Center" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center" Margin="0,129,0,0" Width="80" Height="20"
+                        Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+        <Button x:Name="button3" Content="Button 3" HorizontalAlignment="Center" VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center" Margin="0,154,0,0" Width="80" Height="20"
+                        Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+
+        <TextBox x:Name="newName" Text="{Binding NewName, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
+        <TextBox x:Name="newAge" Text="{Binding NewAge, Mode=TwoWay}" Margin="32,276,32,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
+
+        <Label Content="Enter new User" HorizontalAlignment="Stretch" Margin="0,217,0,0" VerticalAlignment="Top" Width="106" HorizontalContentAlignment="Center" Foreground="White"/>
+        <Button Content="Add to data set" Margin="32,299,32,0" VerticalAlignment="Top" Width="106" 
+                        Command="{Binding AddNewVM}"/>
+
+
+        <Label x:Name="lastButtonLabel" Content="Last button:" HorizontalAlignment="Center" VerticalAlignment="Top"
+                       Foreground="White" HorizontalContentAlignment="Center" Width="150" Height="25" Margin="0,364,0,0"/>
+    </Grid>
+</Page>

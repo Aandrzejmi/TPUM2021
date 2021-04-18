@@ -13,15 +13,16 @@ namespace WpfApp.ViewModels
 
         private string _currentPage;
 
-        public ICommand SetMainPage { get; set; }
+        //public ICommand SetMainPage { get; set; }
         public ICommand SetClientsPage { get; set; }
         public ICommand SetOrdersPage { get; set; }
         public ICommand SetProductsPage { get; set; }
 
         public NavigationViewModel()
         {
-            SetMainPage = new SetPageCommand(this, "Pages/TestPage.xaml");
             SetClientsPage = new SetPageCommand(this, "Pages/ClientsPage.xaml");
+            SetOrdersPage = new SetPageCommand(this, "Pages/OrdersPage.xaml");
+            SetProductsPage = new SetPageCommand(this, "Pages/ProductsPage.xaml");
         }
 
 

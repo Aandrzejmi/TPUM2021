@@ -11,7 +11,6 @@
     <Window.Resources>
         <vm:NavigationViewModel x:Key="naviVM"/>
         <vm:MainViewModel x:Key="mainVM"/>
-        <vm:ClientsViewModel x:Key="clientsVM"/>
         <vm:OrdersViewModel x:Key="ordersVM"/>
         <vm:ProductsViewModel x:Key="productsVM"/>
     </Window.Resources>
@@ -25,65 +24,42 @@
             </RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="innerGrid" Grid.Column="1">
+        <Grid x:Name="innerGrid" Grid.Column="1" DataContext="{StaticResource naviVM}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width = "170" />
                 <ColumnDefinition Width = "*" />
                 <ColumnDefinition Width = "150" />
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="vmTests" Grid.Column="2" DataContext="{StaticResource naviVM}">
+            <Grid x:Name="vmTests" Grid.Column="2" >
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Frame Source="{Binding CurrentPage}" NavigationUIVisibility="Hidden"/>
-
-
-                <Button Grid.Row="1" Content="Main" Command="{Binding SetMainPage}"/>
-                <Button Grid.Row="2" Content="Cliient" Command="{Binding SetClientsPage}"/>
+                <Button Grid.Row="0" Content="Cliients" Command="{Binding SetClientsPage}"/>
+                <Button Grid.Row="1" Content="Orders"   Command="{Binding SetOrdersPage}"/>
+                <Button Grid.Row="2" Content="Products" Command="{Binding SetProductsPage}"/>
 
             </Grid>
 
+            <!--SIDE PANEL-->
 
-            <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1"/>
+            <Frame Source="Pages/SidePanel.xaml" Grid.Column="0" NavigationUIVisibility="Hidden"/>
 
-            <TextBlock x:Name="AppNameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" Foreground="White"
-                       Margin="0,10,0,0" Height="45" Width="167" TextAlignment="Center">
-            TPUM 2021
-            </TextBlock>
+            <!--MAIN VIEW-->
 
-            <Button x:Name="button1" Content="Button 1" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center" Margin="0,104,0,0" Width="80" Height="20"
-                    Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-            <Button x:Name="button2" Content="Button 2" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center" Margin="0,129,0,0" Width="80" Height="20"
-                    Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-            <Button x:Name="button3" Content="Button 3" HorizontalAlignment="Center" VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center" Margin="0,154,0,0" Width="80" Height="20"
-                    Command="{Binding ButtonTest}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+            <Frame Source="{Binding CurrentPage}" Grid.Column="1" NavigationUIVisibility="Hidden"/>
 
-            <TextBox x:Name="newName" Text="{Binding NewName, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
-            <TextBox x:Name="newAge" Text="{Binding NewAge, Mode=TwoWay}" Margin="32,276,32,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="106"/>
-
-            <Label Content="Enter new User" HorizontalAlignment="Stretch" Margin="0,217,0,0" VerticalAlignment="Top" Width="106" HorizontalContentAlignment="Center" Foreground="White"/>
-            <Button Content="Add to data set" Margin="32,299,32,0" VerticalAlignment="Top" Width="106" 
-                    Command="{Binding AddNewVM}"/>
-
-
-            <Label x:Name="lastButtonLabel" Content="Last button:" HorizontalAlignment="Center" VerticalAlignment="Top"
-                   Foreground="White" HorizontalContentAlignment="Center" Width="150" Height="25" Margin="0,364,0,0"/>
-            <ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Stretch" Height="389" VerticalAlignment="Center"
+            <!--ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Stretch" Height="389" VerticalAlignment="Center"
                       ItemsSource="{Binding Collection}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                         <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
                     </GridView>
-                </ListView.View>
-            </ListView>
+                </ListView.View-->
         </Grid>
 
         <!--FOOTER-->

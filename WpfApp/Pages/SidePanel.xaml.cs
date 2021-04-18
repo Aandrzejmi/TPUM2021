@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace WpfApp.Pages
 {
     /// <summary>
-    /// Interaction logic for TestPage.xaml
+    /// Interaction logic for SidePanel.xaml
     /// </summary>
-    public partial class TestPage : Page
+    public partial class SidePanel : Page
     {
-        public TestPage()
+        public SidePanel()
         {
             InitializeComponent();
         }
