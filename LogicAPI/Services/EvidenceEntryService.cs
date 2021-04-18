@@ -28,10 +28,26 @@ namespace LogicAPI.Services
                 if (evidenceEntry.ID < 0)
                     throw new EvidenceEntryInvalidIDException();
 
-                if (_repository.FindEvidenceEntryByID(evidenceEntry.ID) is null)
-                    throw new EvidenceEntryNotFoundException();
+                _productService.ValidateModel(_repository.FindProductByID(evidenceEntry.ProductID));
 
-                if (!_productService.ValidateModel(_repository.FindProductByID(evidenceEntry.ProductID)))
+                // it should be at least 0
+                if (evidenceEntry.ProductAmount < 0)
+                    throw new EvidenceEntryInvalidProductAmountException();
+
+                return true;
+            }
+            throw new ModelIsNotEvidenceEntryException();
+        }
+
+        public bool ValidateModel(EvidenceEntryDTO evidenceEntry)
+        {
+            // it actually is
+            if (evidenceEntry is EvidenceEntryDTO)
+            {
+                if (evidenceEntry.ID < 0)
+                    throw new EvidenceEntryInvalidIDException();
+
+                if (!_productService.ValidateModel(evidenceEntry.Product))
                     return false;
 
                 // it should be at least 0
@@ -65,6 +81,36 @@ namespace LogicAPI.Services
                 evidenceEntryDTOs.Add(GetEvidenceEntryDTOByID(evidenceEntry.ID));
             }
             return evidenceEntryDTOs;
+        }
+
+        public bool AddEvidenceEntryDTO(EvidenceEntryDTO evidenceEntry)
+        {
+            if (ValidateModel(evidenceEntry))
+            {
+                var evidenceEntryModel = new EvidenceEntry() { ProductID = evidenceEntry.Product.ID , ProductAmount = evidenceEntry.ProductAmount };
+                ValidateModel(evidenceEntryModel);
+                if (_repository.AddEvidenceEntry(evidenceEntryModel))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool ChangeEvidenceEntryDTO(int evidenceEntryID, EvidenceEntryDTO evidenceEntryDTO)
+        {
+            if (_repository.FindEvidenceEntryByID(evidenceEntryID) is EvidenceEntry evidenceEntry)
+            {
+                if (ValidateModel(evidenceEntryDTO))
+                {
+                    if (_repository.ChangeProductAmount(evidenceEntryID, evidenceEntryDTO.ProductAmount))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new EvidenceEntryNotFoundException();
         }
     }
 }

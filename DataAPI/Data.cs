@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace DataAPI
 {
     public static class Data
     {
-        public static Repository CreateRepository()
+        private static Repository repository;
+
+        private static Repository CreateRepository()
         {
-            Repository repository = new Repository();
+            repository = new Repository();
             Product product1 = new Product() { ID = 0, Name = "Product1", Price = 10 };
             Product product2 = new Product() { ID = 1, Name = "Product2", Price = 20 };
             Product product3 = new Product() { ID = 2, Name = "Product3", Price = 30 };
@@ -47,6 +50,20 @@ namespace DataAPI
             repository.AddOrder(order3);
 
             return repository;
+        }
+
+        public static Repository GetRepository()
+        {
+            if (repository is null)
+            {
+                repository = CreateRepository();
+            }
+            return repository;
+        }
+
+        public static void ClearRepository()
+        {
+            repository = null;
         }
     }
 }

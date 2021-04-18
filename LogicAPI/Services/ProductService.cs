@@ -23,8 +23,23 @@ namespace LogicAPI.Services
                 if (product.ID < 0)
                     throw new ProductInvalidIDException();
 
-                if (_repository.FindProductByID(product.ID) is null)
-                    throw new ProductNotFoundException();
+                if (product.Name.Length == 0)
+                    throw new ProductInvalidNameException();
+
+                if (product.Price <= 0.0M)
+                    throw new ProductInvalidPriceException();
+
+                return true;
+            }
+            throw new ModelIsNotProductException();
+        }
+
+        public bool ValidateModel(ProductDTO product)
+        {
+            if (product is ProductDTO)
+            {
+                if (product.ID < 0)
+                    throw new ProductInvalidIDException();
 
                 if (product.Name.Length == 0)
                     throw new ProductInvalidNameException();
@@ -75,6 +90,41 @@ namespace LogicAPI.Services
                 productDTOs.Add(GetProductDTOByID(product.ID));
             }
             return productDTOs;
+        }
+
+        public bool AddProductDTO(ProductDTO product)
+        {
+            if (ValidateModel(product))
+            {
+                var productModel = new Product();
+                productModel.ID = product.ID;
+                productModel.Name = product.Name;
+                productModel.Price = product.Price;
+                ValidateModel(productModel);
+                if (_repository.AddProduct(productModel))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool ChangeProductDTO(int productID, ProductDTO productDTO)
+        {
+            if (_repository.FindProductByID(productID) is Product product)
+            {
+                if (ValidateModel(productDTO))
+                {
+                    product.Name = product.Name;
+                    product.Price = product.Price;
+                    if (_repository.ModifyProduct(product))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new ProductNotFoundException();
         }
     }
 }

@@ -10,7 +10,8 @@ namespace UnitTests
         [SetUp]
         public void Setup()
         {
-            repo = Data.CreateRepository();
+            Data.ClearRepository();
+            repo = Data.GetRepository();           
         }
 
         [Test]
@@ -49,7 +50,7 @@ namespace UnitTests
         public void RepositoryProducts()
         {
             // Size of the list of Products
-            Assert.AreEqual(repo.CountProducts, 4);
+            Assert.AreEqual(4, repo.CountProducts);
 
             // Find product by name
             Assert.IsNotNull(repo.FindProductByName("Product2"));
@@ -106,7 +107,6 @@ namespace UnitTests
             repo.AddClient(client2);
             Assert.AreEqual(repo.CountClients, 5);
         }
-
 
         [Test]
         public void RepositoryOrders()
