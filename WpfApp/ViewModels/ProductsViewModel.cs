@@ -1,6 +1,5 @@
-﻿using DataAPI; // must be removed
+﻿using LogicAPI;
 using LogicAPI.DTOs;
-using LogicAPI.Services;
 using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,7 +16,7 @@ namespace WpfApp.ViewModels
 
         public ProductsViewModel()
         {
-            _evidenceEntryService = new EvidenceEntryService(Data.CreateRepository());
+            _evidenceEntryService = Logic.CreateEvidenceEntryService();
         }
 
         public ObservableCollection<EvidenceEntryDTO> Entries

@@ -1,6 +1,5 @@
-﻿using DataAPI; // must be removed
+﻿using LogicAPI;
 using LogicAPI.DTOs;
-using LogicAPI.Services;
 using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace WpfApp.ViewModels
 
         public ClientsViewModel()
         {
-            _clientService = new ClientService(Data.CreateRepository());
+            _clientService = Logic.CreateClientService();
             // Logic.CreateClientService()
         }
 

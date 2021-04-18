@@ -1,6 +1,5 @@
-﻿using DataAPI; // must be removed
+﻿using LogicAPI;
 using LogicAPI.DTOs;
-using LogicAPI.Services;
 using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,7 @@ namespace WpfApp.ViewModels
         private IOrderService _orderService;
         public OrdersViewModel()
         {
-            _orderService = new OrderService(Data.CreateRepository());
+            _orderService = Logic.CreateOrderService();
             Selected = Orders[0];
         }
 
