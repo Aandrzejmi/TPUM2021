@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
-using LogicAPI;
 using DataAPI;
 using LogicAPI.DTOs;
 using LogicAPI.Interfaces;

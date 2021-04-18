@@ -136,6 +136,7 @@ namespace LogicAPI.Services
 
                 orderModel.ID = order.ID;
                 orderModel.ClientID = order.Client.ID;
+                orderModel.Products = new List<EvidenceEntry>();
 
                 foreach(EvidenceEntryDTO entryDTO in order.Products)
                 {
