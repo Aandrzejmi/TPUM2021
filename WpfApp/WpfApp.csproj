@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" Version="4.16.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LogicAPI\LogicAPI.csproj" />
   </ItemGroup>
 

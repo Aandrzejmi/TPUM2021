@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DataAPI;
+using LogicAPI;
 using LogicAPI.Interfaces;
 using LogicAPI.Exceptions;
 using LogicAPI.DTOs;
@@ -112,7 +113,10 @@ namespace LogicAPI.Services
                 clientModel.Adress = client.Adress;
 
                 if (_repository.AddClient(clientModel))
+                {
+                    Logic.InvokeClientsChanged();
                     return true;
+                }
             }
             return false;
         }
@@ -126,15 +130,24 @@ namespace LogicAPI.Services
                     client.Adress = clientDTO.Adress;
                     client.Name = clientDTO.Name;
                     if (_repository.ModifyClient(client))
+                    {
+                        Logic.InvokeClientsChanged();
                         return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
                 else
+                {
                     return false;
+                }
             }
             else
+            {
                 throw new ClientNotFoundException();
+            }
         }
     }
 }

@@ -28,8 +28,6 @@ namespace LogicAPI.Services
                 if (evidenceEntry.ID < 0)
                     throw new EvidenceEntryInvalidIDException();
 
-                _productService.ValidateModel(_repository.FindProductByID(evidenceEntry.ProductID));
-
                 // it should be at least 0
                 if (evidenceEntry.ProductAmount < 0)
                     throw new EvidenceEntryInvalidProductAmountException();
@@ -98,9 +96,13 @@ namespace LogicAPI.Services
                 }
 
                 var evidenceEntryModel = new EvidenceEntry() { ProductID = newID, ProductAmount = evidenceEntry.ProductAmount };
-                ValidateModel(evidenceEntryModel);
-                if (_repository.AddEvidenceEntry(evidenceEntryModel))
+                if (_productService.AddProductDTO(evidenceEntry.Product))
+                {
+                    ValidateModel(evidenceEntryModel);
+                    ChangeEvidenceEntryDTO(newID, evidenceEntry);
+                    Logic.InvokeEvidenceEntryChanged();
                     return true;
+                }
             }
             return false;
         }
@@ -112,7 +114,10 @@ namespace LogicAPI.Services
                 if (ValidateModel(evidenceEntryDTO))
                 {
                     if (_repository.ChangeProductAmount(evidenceEntryID, evidenceEntryDTO.ProductAmount))
+                    {
+                        Logic.InvokeEvidenceEntryChanged();
                         return true;
+                    }
                     else
                         return false;
                 }
