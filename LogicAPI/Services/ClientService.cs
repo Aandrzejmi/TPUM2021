@@ -23,8 +23,23 @@ namespace LogicAPI.Services
                 if (client.ID < 0)
                     throw new ClientInvalidIDException();
 
-                if (_repository.FindClientByID(client.ID) is null)
-                    throw new ClientNotFoundException();
+                if (client.Name.Length == 0)
+                    throw new ClientInvalidNameException();
+
+                if (client.Adress.Length == 0)
+                    throw new ClientInvalidAdressException();
+
+                return true;
+            }
+            throw new ModelIsNotClientException();
+        }
+
+        public bool ValidateModel(ClientDTO client)
+        {
+            if (client is ClientDTO)
+            {
+                if (client.ID < 0)
+                    throw new ClientInvalidIDException();
 
                 if (client.Name.Length == 0)
                     throw new ClientInvalidNameException();
@@ -65,6 +80,61 @@ namespace LogicAPI.Services
                 return clientDTO;
             }
             throw new ClientNotFoundException();
+        }
+
+        public List<ClientDTO> GetAllClientDTOs()
+        {
+            List<ClientDTO> clientDTOs = new List<ClientDTO>();
+            foreach(Client client in _repository.GetAllClients())
+            {
+                clientDTOs.Add(GetClientDTOByID(client.ID));
+            }
+            return clientDTOs;
+        }
+
+        public bool AddClientDTO(ClientDTO client)
+        {
+            if(ValidateModel(client))
+            {
+                List<ClientDTO> clientDTOs = GetAllClientDTOs();
+                int newID = 0;
+                foreach (ClientDTO clientDTOListObject in clientDTOs)
+                {
+                    if (newID == clientDTOListObject.ID)
+                        newID++;
+                    else
+                        break;
+                }
+
+                var clientModel = new Client();
+                clientModel.ID = newID;
+                clientModel.Name = client.Name;
+                clientModel.Adress = client.Adress;
+
+                if (_repository.AddClient(clientModel))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool ChangeClientDTO(int clientID, ClientDTO clientDTO)
+        {
+            if (_repository.FindClientByID(clientID) is Client client)
+            {   
+                if (ValidateModel(clientDTO))
+                {
+                    client.Adress = clientDTO.Adress;
+                    client.Name = clientDTO.Name;
+                    if (_repository.ModifyClient(client))
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+            else
+                throw new ClientNotFoundException();
         }
     }
 }

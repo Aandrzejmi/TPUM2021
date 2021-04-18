@@ -32,6 +32,9 @@ namespace DataAPI
         {
             if (FindEvidenceEntryByID(evidenceEntry.ID) == null)
             {
+                if (FindProductByID(evidenceEntry.ProductID) == null)
+                    return false;
+
                 productEvidency.Add(evidenceEntry.Clone() as EvidenceEntry);
                 return true;
             }
@@ -163,5 +166,24 @@ namespace DataAPI
         public int CountClients { get { return clients.Count; } }
 
         public int CountProductEntries { get { return productEvidency.Count; } }
+
+        public List<Product> GetAllProducts()
+        {
+            return new List<Product>(products);
+        }
+
+        public List<Client> GetAllClients()
+        {
+            return new List<Client>(clients);
+        }
+        public List<Order> GetAllOrders()
+        {
+            return new List<Order>(orders);
+        }
+
+        public List<EvidenceEntry> GetAllEntries()
+        {
+            return new List<EvidenceEntry>(productEvidency);
+        }
     }
 }
