@@ -10,7 +10,7 @@ namespace WpfApp.Commands
 {
     public class AddNewViewModellCommand : ICommand
     {
-        private readonly MainViewModel vm;
+        private readonly TempViewModel vm;
 
         public event EventHandler CanExecuteChanged
         {
@@ -18,19 +18,19 @@ namespace WpfApp.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public AddNewViewModellCommand(MainViewModel vm) => this.vm = vm;
+        public AddNewViewModellCommand(TempViewModel vm) => this.vm = vm;
 
         public bool CanExecute(object parameter)
         {
-            return !vm.NewName.Equals(MainViewModel.defaultName)
+            return !vm.NewName.Equals(TempViewModel.defaultName)
                 && vm.NewName.Length > 1
                 && vm.NewAge > 0;
         }
 
         public void Execute(object parameter)
         {
-            vm.Collection.Add(new ExampleDTO() { Name = vm.NewName, Age = vm.NewAge });
-            vm.NewName = MainViewModel.defaultName;
+            vm.Collection.Add(new TempDTO() { Name = vm.NewName, Age = vm.NewAge });
+            vm.NewName = TempViewModel.defaultName;
             vm.NewAge = default;
         }
     }

@@ -13,9 +13,9 @@ namespace WpfApp.Commands
 {
     public class ButtonTestCommand : ICommand
     {
-        ObservableCollection<ExampleDTO> collection;
+        ObservableCollection<TempDTO> collection;
 
-        public ButtonTestCommand(ObservableCollection<ExampleDTO> collection) => this.collection = collection;
+        public ButtonTestCommand(ObservableCollection<TempDTO> collection) => this.collection = collection;
 
         public event EventHandler CanExecuteChanged
         {

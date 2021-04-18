@@ -10,7 +10,7 @@ using WpfApp.Commands;
 
 namespace WpfApp.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class TempViewModel : INotifyPropertyChanged
     {
         public static string defaultName = "Entern new name";
 
@@ -19,7 +19,7 @@ namespace WpfApp.ViewModels
         public ICommand AddNewVM { get; set; }
         public ICommand ButtonTest { get; private set; }
 
-        public ObservableCollection<ExampleDTO> Collection { get; set; }
+        public ObservableCollection<TempDTO> Collection { get; set; }
 
         public string NewName
         {
@@ -42,12 +42,12 @@ namespace WpfApp.ViewModels
         }
 
 
-        public MainViewModel()
+        public TempViewModel()
         {
-            Collection = new ObservableCollection<ExampleDTO>();
-            Collection.Add(new ExampleDTO() { Name = "Anna Nowak", Age = 15 });
-            Collection.Add(new ExampleDTO() { Name = "Jan Kowalski", Age = 34 });
-            Collection.Add(new ExampleDTO() { Name = "Zygmunt Szmidt", Age = 66 });
+            Collection = new ObservableCollection<TempDTO>();
+            Collection.Add(new TempDTO() { Name = "Anna Nowak", Age = 15 });
+            Collection.Add(new TempDTO() { Name = "Jan Kowalski", Age = 34 });
+            Collection.Add(new TempDTO() { Name = "Zygmunt Szmidt", Age = 66 });
 
             ButtonTest = new ButtonTestCommand(Collection);
             AddNewVM = new AddNewViewModellCommand(this);
