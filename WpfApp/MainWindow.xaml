@@ -10,9 +10,6 @@
 
     <Window.Resources>
         <vm:TempViewModel x:Key="tempVM"/>
-        <vm:OrdersViewModel x:Key="ordersVM"/>
-        <vm:ClientsViewModel x:Key="clientsVM"/>
-        <vm:ProductsViewModel x:Key="productsVM"/>
     </Window.Resources>
 
     <Grid x:Name="mainGrid">
@@ -43,9 +40,10 @@
 
             <Frame Source="Pages/SidePanel.xaml" Grid.Column="0" NavigationUIVisibility="Hidden"/>
 
+            <Frame Source="Pages/AddClientPAge.xaml" Grid.Column="2" NavigationUIVisibility="Hidden"/>
+
             <!--MAIN VIEW-->
 
-            <!--Frame Source="{Binding CurrentPage}" Grid.Column="1" NavigationUIVisibility="Hidden"/-->
             <TabControl Grid.Column="1">
                 <TabItem Header="Clients">
                     <Grid Background="#FFE5E5E5">
