@@ -69,7 +69,13 @@ namespace WpfApp.ViewModels
 
         public OrderDTO Selected
         {
-            get => _selected;
+            get
+            {
+                if (_selected == null)
+                    _selected = _orders[0];
+
+                return _selected;
+            }
             set
             {
                 _selected = value;

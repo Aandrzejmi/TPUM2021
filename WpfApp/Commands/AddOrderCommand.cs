@@ -1,4 +1,5 @@
 ﻿using LogicAPI;
+using LogicAPI.Exceptions;
 using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,14 @@ namespace WpfApp.Commands
     class AddOrderCommand : ICommand
     {
         private readonly NewOrderViewModel _vm;
-        private readonly IOrderService _service;
+        private readonly IOrderService _orderService;
+        private readonly IProductService _productService;
 
         public AddOrderCommand(NewOrderViewModel vm)
         {
             _vm = vm;
-            _service = Logic.CreateOrderService();
+            _orderService = Logic.CreateOrderService();
+            _productService = Logic.CreateProductService();
         }
 
         public event EventHandler CanExecuteChanged
@@ -26,17 +29,40 @@ namespace WpfApp.Commands
         }
 
         public bool CanExecute(object parameter)
-        {/*
-            return _vm.Name != NewClientViewModel.defaultName
-                && _vm.Adress != NewClientViewModel.defaultAddres
-                && _vm.Name.Length > 1
-                && _vm.Adress.Length > 1;*/
-            return false;
+        {
+            var splitIDs = _vm.ProductsIDs.Split();
+            var splitAmounts = _vm.ProductsAmounts.Split();
+
+            if (splitAmounts.Length != splitIDs.Length)
+                return false;
+
+            int len = splitIDs.Length;
+
+            var ids = new int[len];
+            var amo = new int[len];
+
+            for (int i = 0; i < splitIDs.Length; i++)
+            {
+                if (!int.TryParse(splitIDs[i], out ids[i]))
+                    return false;
+
+                if (!int.TryParse(splitAmounts[i], out amo[i]))
+                    return false;
+
+                try { _productService.GetProductDTOByID(ids[i]); }
+                catch (ProductNotFoundException)
+                    { return false; }
+
+                if (amo[i] <= 0)
+                    return false;
+            }
+
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            _service.AddOrderDTO(_vm.CreateDTO());
+            _orderService.AddOrderDTO(_vm.CreateDTO());
             _vm.ResetFields();
         }
     }
