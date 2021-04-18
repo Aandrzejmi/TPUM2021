@@ -19,7 +19,13 @@ namespace WpfApp.ViewModels
         public OrdersViewModel()
         {
             _orderService = Logic.CreateOrderService();
+            Logic.OrdersChanged += OnOrdersChanged;
             Selected = Orders[0];
+        }
+
+        ~OrdersViewModel()
+        {
+            Logic.OrdersChanged -= OnOrdersChanged;
         }
 
         private OrderDTO _selected;
@@ -74,5 +80,6 @@ namespace WpfApp.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private void OnOrdersChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Orders"));
     }
 }

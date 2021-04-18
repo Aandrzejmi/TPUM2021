@@ -12,27 +12,24 @@ namespace WpfApp.ViewModels
     class ProductsViewModel : INotifyPropertyChanged
     {
         private IEvidenceEntryService _evidenceEntryService;
-        private ObservableCollection<EvidenceEntryDTO> _entries;
 
         public ProductsViewModel()
         {
             _evidenceEntryService = Logic.CreateEvidenceEntryService();
+            Logic.ProductsChanged += OnProductsChanged;
+            Logic.EvidenceEntryChanged += OnProductsChanged;
         }
 
-        public ObservableCollection<EvidenceEntryDTO> Entries
+        ~ProductsViewModel()
         {
-            get
-            {
-                _entries = new ObservableCollection<EvidenceEntryDTO>(_evidenceEntryService.GetAllEvidenceEntryDTOs());
-                return _entries;
-            }
-            set
-            {
-                _entries = value;
-                // _clientService.???
-            }
+            Logic.ProductsChanged -= OnProductsChanged;
+            Logic.EvidenceEntryChanged -= OnProductsChanged;
         }
+
+        public ObservableCollection<EvidenceEntryDTO> Entries => new ObservableCollection<EvidenceEntryDTO>(_evidenceEntryService.GetAllEvidenceEntryDTOs());
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnProductsChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Entries"));
     }
 }

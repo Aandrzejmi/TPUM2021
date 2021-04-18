@@ -13,28 +13,23 @@ namespace WpfApp.ViewModels
     class ClientsViewModel : INotifyPropertyChanged
     {
         private IClientService _clientService;
-        private ObservableCollection<ClientDTO> _clients;
 
         public ClientsViewModel()
         {
             _clientService = Logic.CreateClientService();
-            // Logic.CreateClientService()
+            Logic.ClientsChanged += OnClientsChanged;
         }
 
-        public ObservableCollection<ClientDTO> Clients 
+        ~ClientsViewModel()
         {
-            get
-            {
-                _clients = new ObservableCollection<ClientDTO>(_clientService.GetAllClientDTOs());
-                return _clients;
-            }
-            set
-            {
-                _clients = value;
-                // _clientService.???
-            }
+            Logic.ClientsChanged -= OnClientsChanged;
         }
+
+        public ObservableCollection<ClientDTO> Clients => new ObservableCollection<ClientDTO>(_clientService.GetAllClientDTOs());
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnClientsChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Clients"));
+
     }
 }
