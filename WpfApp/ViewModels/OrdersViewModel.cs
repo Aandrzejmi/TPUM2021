@@ -64,6 +64,8 @@ namespace WpfApp.ViewModels
             {
                 _selected = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Selected"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OrderHeader"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TotalPrice"));
             }
         }
 
