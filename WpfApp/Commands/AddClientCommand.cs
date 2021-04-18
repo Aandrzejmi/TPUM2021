@@ -1,4 +1,5 @@
-﻿using LogicAPI.Interfaces;
+﻿using LogicAPI;
+using LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,10 +13,10 @@ namespace WpfApp.Commands
         private readonly NewClientViewModel _vm;
         private readonly IClientService _service;
 
-        public AddClientCommand(NewClientViewModel vm, IClientService service)
+        public AddClientCommand(NewClientViewModel vm)
         {
             _vm = vm;
-            _service = service;
+            _service = Logic.CreateClientService();
         }
 
         public event EventHandler CanExecuteChanged

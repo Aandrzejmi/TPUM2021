@@ -32,8 +32,8 @@ namespace DataAPI
         {
             if (FindEvidenceEntryByID(evidenceEntry.ID) == null)
             {
-                if (FindProductByID(evidenceEntry.ProductID) == null)
-                    return false;
+                //if (FindProductByID(evidenceEntry.ProductID) == null)
+                    //return false;
 
                 productEvidency.Add(evidenceEntry.Clone() as EvidenceEntry);
                 return true;

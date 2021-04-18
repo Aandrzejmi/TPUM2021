@@ -8,15 +8,15 @@ using WpfApp.ViewModels;
 
 namespace WpfApp.Commands
 {
-    class AddProductCommand : ICommand
+    class AddOrderCommand : ICommand
     {
-        private readonly NewProductViewModel _vm;
-        private readonly IEvidenceEntryService _service;
+        private readonly NewOrderViewModel _vm;
+        private readonly IOrderService _service;
 
-        public AddProductCommand(NewProductViewModel vm)
+        public AddOrderCommand(NewOrderViewModel vm)
         {
             _vm = vm;
-            _service = Logic.CreateEvidenceEntryService();
+            _service = Logic.CreateOrderService();
         }
 
         public event EventHandler CanExecuteChanged
@@ -26,16 +26,17 @@ namespace WpfApp.Commands
         }
 
         public bool CanExecute(object parameter)
-        {
-            return _vm.Name != NewProductViewModel.defaultName
+        {/*
+            return _vm.Name != NewClientViewModel.defaultName
+                && _vm.Adress != NewClientViewModel.defaultAddres
                 && _vm.Name.Length > 1
-                && _vm.Price > 0
-                && _vm.Amount > 0;
+                && _vm.Adress.Length > 1;*/
+            return false;
         }
 
         public void Execute(object parameter)
         {
-            _service.AddEvidenceEntryDTO(_vm.CreateDTO());
+            _service.AddOrderDTO(_vm.CreateDTO());
             _vm.ResetFields();
         }
     }

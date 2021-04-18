@@ -15,7 +15,6 @@ namespace WpfApp.ViewModels
         public const string defaultName = "Enter name";
         public const string defaultAddres = "Enter adress";
 
-        private IClientService _clientService;
         private string _name;
         private string _adress;
 
@@ -23,8 +22,7 @@ namespace WpfApp.ViewModels
 
         public NewClientViewModel()
         {
-            _clientService = Logic.CreateClientService();
-            Add = new AddClientCommand(this, _clientService);
+            Add = new AddClientCommand(this);
             ResetFields();
         }
 
