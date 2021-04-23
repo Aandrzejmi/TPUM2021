@@ -4,17 +4,14 @@ using System.Text;
 
 namespace DataAPI
 {
-    public class Repository : IRepository
+    internal class Repository : IRepository
     {
         private List<Client> clients = new List<Client>();
         private List<Order> orders = new List<Order>();
         private List<Product> products = new List<Product>();
         private List<EvidenceEntry> productEvidency = new List<EvidenceEntry>();
 
-        public Repository()
-        {
-            
-        }
+        internal Repository() { }
 
         // ADD
         public bool AddProduct(Product product)

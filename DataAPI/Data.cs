@@ -52,13 +52,16 @@ namespace DataAPI
             return repository;
         }
 
-        public static Repository GetRepository()
+        public static IRepository Repository
         {
-            if (repository is null)
+            get
             {
-                repository = CreateRepository();
+                if (repository is null)
+                {
+                    repository = CreateRepository();
+                }
+                return repository;
             }
-            return repository;
         }
 
         public static void ClearRepository()

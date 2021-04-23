@@ -9,7 +9,7 @@ using LogicAPI.DTOs;
 
 namespace LogicAPI.Services
 {
-    public class ClientService : IClientService
+    internal class ClientService : IClientService
     {
         private readonly IRepository _repository;
 

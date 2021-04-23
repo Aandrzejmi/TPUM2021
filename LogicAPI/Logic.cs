@@ -14,10 +14,10 @@ namespace LogicAPI
         public static event Action OrdersChanged;
         public static event Action ProductsChanged;
 
-        public static IClientService CreateClientService() => new ClientService(Data.GetRepository());
-        public static IEvidenceEntryService CreateEvidenceEntryService() => new EvidenceEntryService(Data.GetRepository());
-        public static IOrderService CreateOrderService() => new OrderService(Data.GetRepository());
-        public static IProductService CreateProductService() => new ProductService(Data.GetRepository());
+        public static IClientService CreateClientService() => new ClientService(Data.Repository);
+        public static IEvidenceEntryService CreateEvidenceEntryService() => new EvidenceEntryService(Data.Repository);
+        public static IOrderService CreateOrderService() => new OrderService(Data.Repository);
+        public static IProductService CreateProductService() => new ProductService(Data.Repository);
 
         internal static void InvokeClientsChanged() => ClientsChanged?.Invoke();
         internal static void InvokeEvidenceEntryChanged() => EvidenceEntryChanged?.Invoke();
