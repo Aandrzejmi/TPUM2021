@@ -90,7 +90,7 @@ namespace UnitTests
             Assert.IsNotNull(repo.FindProductByID(2));
 
             // Modify existing client and check its adress
-            Client client1 = new Client() { ID = 0, Name = "Janusz Patena", Adress = "Zgierz, £ódzka 5" };
+            Server.DataAPI.Client client1 = new Server.DataAPI.Client() { ID = 0, Name = "Janusz Patena", Adress = "Zgierz, £ódzka 5" };
             repo.ModifyClient(client1);
             Assert.IsTrue(repo.FindClientByID(0).Adress == "Zgierz, £ódzka 5");
 
@@ -98,7 +98,7 @@ namespace UnitTests
             Assert.IsNull(repo.FindClientByID(4));
 
             // Create new product and try to add it
-            Client client2 = new Client() { ID = 4, Name = "Mateusz Zawiadowski", Adress = "Chrz¹szczy¿ewoszyce 5" };
+            Server.DataAPI.Client client2 = new Server.DataAPI.Client() { ID = 4, Name = "Mateusz Zawiadowski", Adress = "Chrz¹szczy¿ewoszyce 5" };
             repo.AddClient(client2);
             Assert.IsNotNull(repo.FindClientByID(4));
 

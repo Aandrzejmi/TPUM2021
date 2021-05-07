@@ -28,11 +28,11 @@ namespace UnitTests.LogicAPITests
             EvidenceEntry evidenceEntry = new EvidenceEntry() { ProductID = 0, ProductAmount = 0 };
             evidenceEntries.Add(evidenceEntry);
 
-            repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
-            repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Client);
+            repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Server.DataAPI.Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
+            repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Server.DataAPI.Client);
 
-            repositoryMock.Setup(p => p.FindClientByName("Temp Name")).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
-            repositoryMock.Setup(p => p.FindClientByName("")).Returns(null as Client);
+            repositoryMock.Setup(p => p.FindClientByName("Temp Name")).Returns(new Server.DataAPI.Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
+            repositoryMock.Setup(p => p.FindClientByName("")).Returns(null as Server.DataAPI.Client);
 
             repositoryMock.Setup(p => p.FindProductByID(0)).Returns(new Product() { ID = 0, Name = "Temp Product", Price = 1.0M });
             repositoryMock.Setup(p => p.FindProductByID(-1)).Returns(null as Product);
@@ -49,7 +49,7 @@ namespace UnitTests.LogicAPITests
             repositoryMock.Setup(p => p.FindOrdersByClientID(0)).Returns(new List<Order> { new Order() { Products = evidenceEntries, ClientID = 0 } });
             repositoryMock.Setup(p => p.FindOrdersByClientID(-1)).Returns(new List<Order>());
 
-            repositoryMock.Setup(p => p.GetAllClients()).Returns(new List<Client>() { new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" } });
+            repositoryMock.Setup(p => p.GetAllClients()).Returns(new List<Server.DataAPI.Client>() { new Server.DataAPI.Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" } });
             repositoryMock.Setup(p => p.GetAllEntries()).Returns(new List<EvidenceEntry>() { new EvidenceEntry() { ProductID = 0, ProductAmount = 0 } });
             repositoryMock.Setup(p => p.GetAllOrders()).Returns(new List<Order>() { new Order() { Products = evidenceEntries, ClientID = 0 } });
             repositoryMock.Setup(p => p.GetAllProducts()).Returns(new List<Product>() { new Product() { ID = 0, Name = "Temp Product", Price = 1.0M } });
@@ -137,7 +137,7 @@ namespace UnitTests.LogicAPITests
         public void GetClientDTOTests()
         {
             ClientDTO clientDTO1 = _clientService.GetClientDTOByID(0);
-            Client client1 = repositoryMock.Object.FindClientByID(0);
+            Server.DataAPI.Client client1 = repositoryMock.Object.FindClientByID(0);
             Assert.AreEqual(clientDTO1.ID, client1.ID);
             Assert.AreEqual(clientDTO1.Name, client1.Name);
             Assert.AreEqual(clientDTO1.Adress, client1.Adress);
@@ -145,7 +145,7 @@ namespace UnitTests.LogicAPITests
             Assert.That(() => _clientService.GetClientDTOByID(-1), Throws.TypeOf<ClientNotFoundException>());
 
             ClientDTO clientDTO2 = _clientService.GetClientDTOByName("Temp Name");
-            Client client2 = repositoryMock.Object.FindClientByName("Temp Name");
+            Server.DataAPI.Client client2 = repositoryMock.Object.FindClientByName("Temp Name");
             Assert.AreEqual(clientDTO2.ID, client2.ID);
             Assert.AreEqual(clientDTO2.Name, client2.Name);
             Assert.AreEqual(clientDTO2.Adress, client2.Adress);

@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LogicAPI\ServerLogicAPI.csproj" />
+    <ProjectReference Include="..\ClientLogicAPI\ClientLogicAPI.csproj" />
   </ItemGroup>
 
 </Project>

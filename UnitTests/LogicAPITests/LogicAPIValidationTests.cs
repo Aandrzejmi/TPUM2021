@@ -28,8 +28,8 @@ namespace UnitTests
             EvidenceEntry evidenceEntry = new EvidenceEntry() { ProductID = 0, ProductAmount = 0 };
             evidenceEntries.Add(evidenceEntry);
 
-            repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
-            repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Client);
+            repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Server.DataAPI.Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
+            repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Server.DataAPI.Client);
 
             repositoryMock.Setup(p => p.FindProductByID(0)).Returns(new Product() { ID = 0, Name = "Temp Product", Price = 1.0M });
             repositoryMock.Setup(p => p.FindProductByID(-1)).Returns(null as Product);
@@ -98,7 +98,7 @@ namespace UnitTests
             Assert.IsTrue(_productService.ValidateModel(product4));
 
             // try to validate model that is not product
-            Client client = repositoryMock.Object.FindClientByID(0);
+            Server.DataAPI.Client client = repositoryMock.Object.FindClientByID(0);
             Assert.That(() => _productService.ValidateModel(client), Throws.TypeOf<ModelIsNotProductException>());
         }
 
@@ -106,22 +106,22 @@ namespace UnitTests
         public void ClientServiceValidationTests()
         {
             // proper client, validate it
-            Client client1 = repositoryMock.Object.FindClientByID(0);
+            Server.DataAPI.Client client1 = repositoryMock.Object.FindClientByID(0);
             Assert.IsTrue(_clientService.ValidateModel(client1));
 
             // try to validate client with invalid id
-            Client client2 = new Client() { ID = -1, Adress = "Temporary Adress", Name = "Temporary Name" };
+            Server.DataAPI.Client client2 = new Server.DataAPI.Client() { ID = -1, Adress = "Temporary Adress", Name = "Temporary Name" };
             Assert.That(() => _clientService.ValidateModel(client2), Throws.TypeOf<ClientInvalidIDException>());
 
             // try to validate client with invalid name
-            Client client3 = repositoryMock.Object.FindClientByID(0);
+            Server.DataAPI.Client client3 = repositoryMock.Object.FindClientByID(0);
             client3.Name = "";
             Assert.That(() => _clientService.ValidateModel(client3), Throws.TypeOf<ClientInvalidNameException>());
             client3.Name = "Proper Name";
             Assert.IsTrue(_clientService.ValidateModel(client3));
 
             // try to validate client with invalid adress
-            Client client4 = repositoryMock.Object.FindClientByID(0);
+            Server.DataAPI.Client client4 = repositoryMock.Object.FindClientByID(0);
             client4.Adress = "";
             Assert.That(() => _clientService.ValidateModel(client4), Throws.TypeOf<ClientInvalidAdressException>());
             client4.Adress = "Proper Adress";

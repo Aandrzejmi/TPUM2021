@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "ServerApp\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDataAPI", "ClientDataAPI\ClientDataAPI.csproj", "{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientLogicAPI", "ClientLogicAPI\ClientLogicAPI.csproj", "{98D48E2B-EDB3-4227-86C4-3B5900989109}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98D48E2B-EDB3-4227-86C4-3B5900989109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98D48E2B-EDB3-4227-86C4-3B5900989109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98D48E2B-EDB3-4227-86C4-3B5900989109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98D48E2B-EDB3-4227-86C4-3B5900989109}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

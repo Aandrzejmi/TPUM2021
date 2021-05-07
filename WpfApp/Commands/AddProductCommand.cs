@@ -1,5 +1,5 @@
-﻿using Server.LogicAPI;
-using Server.LogicAPI.Interfaces;
+﻿using Client.LogicAPI;
+using Client.LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
