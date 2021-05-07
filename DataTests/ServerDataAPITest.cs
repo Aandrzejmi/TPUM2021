@@ -1,10 +1,9 @@
 using NUnit.Framework;
 using Server.DataAPI;
-using System.Collections;
 
-namespace UnitTests
+namespace Server.DataTests
 {
-    public class DataAPITests
+    public class ServerDataAPITests
     {
         IRepository repo;
         [SetUp]

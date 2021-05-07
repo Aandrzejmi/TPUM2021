@@ -7,7 +7,7 @@ using Server.LogicAPI.Services;
 using Server.LogicAPI.Exceptions;
 using Moq;
 
-namespace UnitTests
+namespace Server.LogicTests
 {
     public class LogicAPIValidationTests
     {

@@ -4,7 +4,6 @@ using Server.DataAPI;
 using Server.LogicAPI.DTOs;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
-using Server.LogicAPI.Services;
 
 namespace Server.LogicAPI.Services
 {
