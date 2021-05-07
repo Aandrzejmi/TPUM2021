@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAPI\ServerDataAPI.csproj" />
+    <ProjectReference Include="..\ServerDataAPI\ServerDataAPI.csproj" />
   </ItemGroup>
 
 </Project>
