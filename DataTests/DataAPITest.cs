@@ -11,7 +11,7 @@ namespace UnitTests
         public void Setup()
         {
             Data.ClearRepository();
-            repo = Data.GetRepository();           
+            repo = Data.Repository;           
         }
 
         [Test]

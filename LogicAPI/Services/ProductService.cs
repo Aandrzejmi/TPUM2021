@@ -8,7 +8,7 @@ using Server.LogicAPI.Exceptions;
 
 namespace Server.LogicAPI.Services
 {
-    public class ProductService : IProductService
+    internal class ProductService : IProductService
     {
         private readonly IRepository _repository;
 

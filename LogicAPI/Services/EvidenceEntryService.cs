@@ -9,7 +9,7 @@ using Server.LogicAPI.Services;
 
 namespace Server.LogicAPI.Services
 {
-    public class EvidenceEntryService : IEvidenceEntryService
+    internal class EvidenceEntryService : IEvidenceEntryService
     {
         
         private readonly IProductService _productService;

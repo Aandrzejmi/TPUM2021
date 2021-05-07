@@ -8,7 +8,7 @@ using Server.LogicAPI.Services;
 
 namespace Server.LogicAPI.Services
 {
-    public class OrderService : IOrderService
+    internal class OrderService : IOrderService
     {
         private readonly IRepository _repository;
         private readonly IEvidenceEntryService _evidenceEntryService;
