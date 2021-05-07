@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ServerLogicAPI</AssemblyName>
+    <RootNamespace>Server.LogicAPI</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAPI\DataAPI.csproj" />
+    <ProjectReference Include="..\DataAPI\ServerDataAPI.csproj" />
   </ItemGroup>
 
 </Project>

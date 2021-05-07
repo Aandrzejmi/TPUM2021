@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataAPI;
+using Server.DataAPI;
 
-namespace LogicAPI.Interfaces
+namespace Server.LogicAPI.Interfaces
 {
     public interface IService
     {

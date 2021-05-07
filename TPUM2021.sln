@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{11E14314-B36B-48CD-88E7-8ABF444A535E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{11E14314-B36B-48CD-88E7-8ABF444A535E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp", "WpfApp\WpfApp.csproj", "{85C4B967-3B16-4142-BDF6-261BA87C0A4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp", "WpfApp\WpfApp.csproj", "{85C4B967-3B16-4142-BDF6-261BA87C0A4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAPI", "DataAPI\DataAPI.csproj", "{4DDED583-9BA5-4FB5-8DF8-93C46491E746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerDataAPI", "DataAPI\ServerDataAPI.csproj", "{4DDED583-9BA5-4FB5-8DF8-93C46491E746}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicAPI", "LogicAPI\LogicAPI.csproj", "{F913E54F-C092-4E9E-B3BD-99AF8013D9EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerLogicAPI", "LogicAPI\ServerLogicAPI.csproj", "{F913E54F-C092-4E9E-B3BD-99AF8013D9EA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{250EAB83-18A5-4F68-8BEC-106EDFAC9BB6}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "ServerApp\ServerApp.csproj", "{25BBD3E2-141F-4D85-8EB1-02E4F90ACFFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDataAPI", "ClientDataAPI\ClientDataAPI.csproj", "{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +44,14 @@ Global
 		{F913E54F-C092-4E9E-B3BD-99AF8013D9EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F913E54F-C092-4E9E-B3BD-99AF8013D9EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F913E54F-C092-4E9E-B3BD-99AF8013D9EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25BBD3E2-141F-4D85-8EB1-02E4F90ACFFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25BBD3E2-141F-4D85-8EB1-02E4F90ACFFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25BBD3E2-141F-4D85-8EB1-02E4F90ACFFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25BBD3E2-141F-4D85-8EB1-02E4F90ACFFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataAPI
+namespace Server.DataAPI
 {
     public class Product : IModel
     {

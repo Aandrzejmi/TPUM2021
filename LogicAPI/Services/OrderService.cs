@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataAPI;
-using LogicAPI.DTOs;
-using LogicAPI.Interfaces;
-using LogicAPI.Exceptions;
-using LogicAPI.Services;
+using Server.DataAPI;
+using Server.LogicAPI.DTOs;
+using Server.LogicAPI.Interfaces;
+using Server.LogicAPI.Exceptions;
+using Server.LogicAPI.Services;
 
-namespace LogicAPI.Services
+namespace Server.LogicAPI.Services
 {
     public class OrderService : IOrderService
     {

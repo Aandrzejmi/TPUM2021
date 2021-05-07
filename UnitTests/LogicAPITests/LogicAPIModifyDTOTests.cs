@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
-using DataAPI;
-using LogicAPI.DTOs;
-using LogicAPI.Interfaces;
-using LogicAPI.Services;
-using LogicAPI.Exceptions;
+using Server.DataAPI;
+using Server.LogicAPI.DTOs;
+using Server.LogicAPI.Interfaces;
+using Server.LogicAPI.Services;
+using Server.LogicAPI.Exceptions;
 using Moq;
 
 namespace UnitTests.LogicAPITests

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAPI
+namespace Server.DataAPI
 {
     public class EvidenceEntry : IModel
     {

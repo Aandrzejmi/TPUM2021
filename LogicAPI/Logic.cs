@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LogicAPI.Interfaces;
-using LogicAPI.Services;
-using DataAPI;
+using Server.LogicAPI.Interfaces;
+using Server.LogicAPI.Services;
+using Server.DataAPI;
 
-namespace LogicAPI
+namespace Server.LogicAPI
 {
     public static class Logic
     {

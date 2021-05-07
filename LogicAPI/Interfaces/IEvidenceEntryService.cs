@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LogicAPI.DTOs;
+using Server.LogicAPI.DTOs;
 
-namespace LogicAPI.Interfaces
+namespace Server.LogicAPI.Interfaces
 {
     public interface IEvidenceEntryService : IService
     {

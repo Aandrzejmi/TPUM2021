@@ -1,6 +1,6 @@
-﻿using LogicAPI;
-using LogicAPI.DTOs;
-using LogicAPI.Interfaces;
+﻿using Server.LogicAPI;
+using Server.LogicAPI.DTOs;
+using Server.LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

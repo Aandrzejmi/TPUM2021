@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LogicAPI.Exceptions
+namespace Server.LogicAPI.Exceptions
 {
     public class ModelIsNotClientException : Exception
     {

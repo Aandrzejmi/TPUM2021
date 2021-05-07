@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LogicAPI.DTOs
+namespace Server.LogicAPI.DTOs
 {
     public class EvidenceEntryDTO
     {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DataAPI;
-using LogicAPI;
-using LogicAPI.Interfaces;
-using LogicAPI.Exceptions;
-using LogicAPI.DTOs;
+using Server.DataAPI;
+using Server.LogicAPI;
+using Server.LogicAPI.Interfaces;
+using Server.LogicAPI.Exceptions;
+using Server.LogicAPI.DTOs;
 
-namespace LogicAPI.Services
+namespace Server.LogicAPI.Services
 {
     public class ClientService : IClientService
     {
