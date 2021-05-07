@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Text;
 using Moq;
 
-namespace WpfApp.ViewModels
+namespace Client.App.ViewModels
 {
     class ClientsViewModel : INotifyPropertyChanged
     {

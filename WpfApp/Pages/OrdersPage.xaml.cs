@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApp.Pages
+namespace Client.App.Pages
 {
     /// <summary>
     /// Interaction logic for OrdersPage.xaml

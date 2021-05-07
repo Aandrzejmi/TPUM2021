@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 
-namespace WpfApp.ViewModels
+namespace Client.App.ViewModels
 {
     class ProductsViewModel : INotifyPropertyChanged
     {

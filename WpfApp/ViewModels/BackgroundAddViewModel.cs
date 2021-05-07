@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Input;
-using WpfApp.Commands;
+using Client.App.Commands;
 
-namespace WpfApp.ViewModels
+namespace Client.App.ViewModels
 {
     class BackgroundAddViewModel : INotifyPropertyChanged
     {

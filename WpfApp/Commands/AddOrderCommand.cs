@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
-using WpfApp.ViewModels;
+using Client.App.ViewModels;
 
-namespace WpfApp.Commands
+namespace Client.App.Commands
 {
     class AddOrderCommand : ICommand
     {

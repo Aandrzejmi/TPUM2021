@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Input;
 
-namespace WpfApp.Commands
+namespace Client.App.Commands
 {
     class AddOrderThreadCommand : ICommand
     {
