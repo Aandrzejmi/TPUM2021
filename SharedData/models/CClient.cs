@@ -1,9 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
-namespace SharedData.models
+namespace SharedData.Models
 {
     [DataContract]
-    class CClient
+    public class CClient
     {
         [DataMember(IsRequired = true)]
         public int ID { get; set; }
@@ -13,5 +14,18 @@ namespace SharedData.models
 
         [DataMember]
         public string Adress { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is CClient client &&
+                   ID == client.ID &&
+                   Name == client.Name &&
+                   Adress == client.Adress;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Name, Adress);
+        }
     }
 }

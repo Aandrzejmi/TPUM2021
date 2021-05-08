@@ -1,9 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
-namespace SharedData.models
+namespace SharedData.Models
 {
     [DataContract]
-    class CProduct
+    public class CProduct
     {
         [DataMember(IsRequired = true)]
         public int ID { get; set; }
@@ -13,5 +14,18 @@ namespace SharedData.models
 
         [DataMember]
         public decimal Price { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is CProduct product &&
+                   ID == product.ID &&
+                   Name == product.Name &&
+                   Price == product.Price;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ID, Name, Price);
+        }
     }
 }
