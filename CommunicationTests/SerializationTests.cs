@@ -1,9 +1,9 @@
 using NUnit.Framework;
-using static SharedData.Serialization;
-using SharedData.Models;
+using static CommunicationAPI.Serialization;
+using CommunicationAPI.Models;
 using System.Collections.Generic;
 
-namespace ComunicationDependeciesTests
+namespace CommunicationTests
 {
     public class Tests
     {

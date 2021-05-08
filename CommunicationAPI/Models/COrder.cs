@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace SharedData.Models
+namespace CommunicationAPI.Models
 {
     [DataContract]
     public class COrder

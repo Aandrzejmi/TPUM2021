@@ -26,7 +26,7 @@ namespace Server.App
             
         }
 
-        static void ConnectionHandler(SharedData.WebSocketConnection webSocketConnection)
+        static void ConnectionHandler(CommunicationAPI.WebSocketConnection webSocketConnection)
         {
             webSocketConnection.onMessage = Console.WriteLine;
             webSocketConnection.onClose = () => { Console.WriteLine("Connection closed"); };

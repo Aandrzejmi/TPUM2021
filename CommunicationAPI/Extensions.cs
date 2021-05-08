@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SharedData
+namespace CommunicationAPI
 {
     internal static class Extensions
     {

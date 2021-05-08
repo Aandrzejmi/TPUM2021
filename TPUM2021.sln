@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientDataAPI", "ClientData
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLogicAPI", "ClientLogicAPI\ClientLogicAPI.csproj", "{98D48E2B-EDB3-4227-86C4-3B5900989109}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedData", "SharedData\SharedData.csproj", "{E6069ACB-C251-45DC-9672-CE6A005DFD9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunicationAPI", "CommunicationAPI\CommunicationAPI.csproj", "{E6069ACB-C251-45DC-9672-CE6A005DFD9B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerLogicTests", "ServerLogicTests\ServerLogicTests.csproj", "{EE762009-FA3E-470A-B644-BC2BD382A5AB}"
 EndProject
@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientDataTests", "ClientDa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLogicTests", "ClientLogicTests\ClientLogicTests.csproj", "{C72A7A6B-3FA5-4A93-8690-1C98C4528B05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComunicationDependeciesTests", "ComunicationDependeciesTests\ComunicationDependeciesTests.csproj", "{6D6ADFB1-78DD-4D2A-87E6-B4B0E14AD863}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunicationTests", "CommunicationTests\CommunicationTests.csproj", "{6D6ADFB1-78DD-4D2A-87E6-B4B0E14AD863}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

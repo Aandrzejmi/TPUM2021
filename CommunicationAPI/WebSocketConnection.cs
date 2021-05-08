@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace SharedData
+namespace CommunicationAPI
 {
     public abstract class WebSocketConnection
     {

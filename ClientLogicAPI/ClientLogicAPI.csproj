@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientDataAPI\ClientDataAPI.csproj" />
-    <ProjectReference Include="..\SharedData\SharedData.csproj" />
+    <ProjectReference Include="..\SharedData\ComunicationAPI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace SharedData.Models
+namespace CommunicationAPI.Models
 {
     [DataContract]
     public class CProduct

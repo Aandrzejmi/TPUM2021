@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ServerLogicAPI\ServerLogicAPI.csproj" />
-    <ProjectReference Include="..\SharedData\SharedData.csproj" />
+    <ProjectReference Include="..\CommunicationAPI\CommunicationAPI.csproj" />
   </ItemGroup>
 
 </Project>

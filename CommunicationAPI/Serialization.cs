@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SharedData.Models;
+using CommunicationAPI.Models;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 
-namespace SharedData
+namespace CommunicationAPI
 {
     public static class Serialization
     {
