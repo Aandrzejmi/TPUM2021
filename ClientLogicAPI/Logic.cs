@@ -18,6 +18,7 @@ namespace Client.LogicAPI
         public static IEvidenceEntryService CreateEvidenceEntryService() => new EvidenceEntryService(Data.GetRepository());
         public static IOrderService CreateOrderService() => new OrderService(Data.GetRepository());
         public static IProductService CreateProductService() => new ProductService(Data.GetRepository());
+        public static IConnectionService CreateConnectionService() => new ConnectionService("ws://localhost:8081/");
 
         internal static void InvokeClientsChanged() => ClientsChanged?.Invoke();
         internal static void InvokeEvidenceEntryChanged() => EvidenceEntryChanged?.Invoke();

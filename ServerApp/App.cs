@@ -11,8 +11,19 @@ namespace Server.App
         {
             Action<string> consoleLogger = Console.WriteLine;
 
-            await SharedData.WebSocketServer.Server(8081, ConnectionHandler);
-
+            try
+            {
+                using (CommunicationManager node = new CommunicationManager(8081, consoleLogger))
+                {
+                    await node.InitServerAsync();
+                    Console.ReadLine();
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"Exception thrown: {e}");
+            }
+            
         }
 
         static void ConnectionHandler(SharedData.WebSocketConnection webSocketConnection)

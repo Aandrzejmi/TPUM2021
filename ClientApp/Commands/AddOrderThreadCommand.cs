@@ -3,8 +3,8 @@ using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Client.App.Commands
@@ -19,6 +19,7 @@ namespace Client.App.Commands
         private Thread _thread;
 
         public event EventHandler CanExecuteChanged;
+        private IConnectionService _connectionService = Logic.CreateConnectionService();
 
         public bool IsActive { get; set; } = false;
 
@@ -26,14 +27,15 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            if (_thread == null)
-            {
-                _thread = new Thread(AddOrdersLoop);
-                _thread.Start();
-            }
+            Task.Run(() => _connectionService.SendTask("AAAAAAAAAAAAAA"));
+            //if (_thread == null)
+            //{
+            //    _thread = new Thread(AddOrdersLoop);
+            //    _thread.Start();
+            //}
 
-            IsActive = !IsActive;
-            OnExecute?.Invoke();
+            //IsActive = !IsActive;
+            //OnExecute?.Invoke();
         }
 
         private EvidenceEntryDTO CreateEvidenceEntryDTO() => _evidenceEntryService.GetEvidenceEntryDTOByID(0);

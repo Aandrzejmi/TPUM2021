@@ -51,7 +51,7 @@ namespace SharedData
 
             #region WebSocketConnection
 
-            protected override Task SendTask(string message)
+            public override Task SendTask(string message)
             {
                 return m_WebSocket.SendAsync(message.GetArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None);
             }
