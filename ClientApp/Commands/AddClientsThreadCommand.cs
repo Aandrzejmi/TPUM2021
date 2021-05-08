@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading;
 using System.Windows.Input;
-using SharedData;
 using System.Diagnostics;
 
 namespace Client.App.Commands
@@ -22,7 +21,7 @@ namespace Client.App.Commands
         private IClientService _clientService = Logic.CreateClientService();
         private Thread _thread;
         private Action<string> connectionLogger = (x) => Debug.WriteLine(x);
-
+        private IConnectionService _connectionService = Logic.CreateConnectionService();
         public event EventHandler CanExecuteChanged;
         public bool IsActive { get; set; } = false;
 
@@ -30,7 +29,8 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            Task.Run(() => WebSocketClient.Connect(new Uri("ws://localhost:8081"), connectionLogger));
+            Task.Run(() => _connectionService.CreateConnection());
+            
             //if (_thread == null)
             //{
             //    _thread = new Thread(AddClientsLoop);

@@ -16,6 +16,6 @@ namespace SharedData
 
         public abstract Task DisconnectAsync();
 
-        protected abstract Task SendTask(string message);
+        public abstract Task SendTask(string message);
     }
 }

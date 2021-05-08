@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace SharedData
     public static class WebSocketClient
     {
         #region API
-        private static WebSocketConnection _socket;
+        public static WebSocketConnection _socket;
         public static async Task<WebSocketConnection> Connect(Uri peer, Action<string> log)
         {
             ClientWebSocket m_ClientWebSocket = new ClientWebSocket();
@@ -28,11 +29,15 @@ namespace SharedData
             }
         }
 
+        public static async Task<bool> SendTask(string newTask)
+        {
+            await _socket.SendTask(newTask);
+            return true;
+        }
+
         #endregion API
 
-        #region private
-
-        private class ClientWebSocketConnection : WebSocketConnection
+        public class ClientWebSocketConnection : WebSocketConnection
         {
             public ClientWebSocketConnection(ClientWebSocket clientWebSocket, Uri peer, Action<string> log)
             {
@@ -44,7 +49,7 @@ namespace SharedData
 
             #region WebSocketConnection
 
-            protected override Task SendTask(string message)
+            public override Task SendTask(string message)
             {
                 return m_ClientWebSocket.SendAsync(message.GetArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None); ;
             }
@@ -113,6 +118,5 @@ namespace SharedData
             #endregion private
         }
 
-        #endregion private
     }
 }
