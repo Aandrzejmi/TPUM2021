@@ -1,69 +1,72 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using CommunicationAPI.Models;
 
 namespace Client.DataAPI
 {
     public class Repository : IRepository
     {
-        private List<Client> clients = new List<Client>();
-        private List<Order> orders = new List<Order>();
-        private List<Product> products = new List<Product>();
-        private List<EvidenceEntry> productEvidency = new List<EvidenceEntry>();
+        private readonly DataContext dataContext;
 
         public Repository()
         {
-            
+            dataContext = DbContext.Instance;
+        }
+
+        public Repository(DataContext dataContext)
+        {
+            this.dataContext = dataContext;
         }
 
         // ADD
-        public bool AddProduct(Product product)
+        public bool AddProduct(CProduct product)
         {
             if (FindProductByID(product.ID) == null)
             {
-                products.Add(product.Clone() as Product);
-                return AddEvidenceEntry((new EvidenceEntry() { ProductID = product.ID, ProductAmount = 1 }));
+                dataContext.CProducts.Add(product);
+                return AddEvidenceEntry((new CEvidenceEntry() { Product = product, Amount = 1 }));
             }
             else
                 return false;
         }
         
-        public bool AddEvidenceEntry(EvidenceEntry evidenceEntry)
+        public bool AddEvidenceEntry(CEvidenceEntry evidenceEntry)
         {
-            if (FindEvidenceEntryByID(evidenceEntry.ID) == null)
+            if (FindEvidenceEntryByID(evidenceEntry.Product.ID) == null)
             {
-                if (FindProductByID(evidenceEntry.ProductID) == null)
+                if (FindProductByID(evidenceEntry.Product.ID) == null)
                     return false;
 
-                productEvidency.Add(evidenceEntry.Clone() as EvidenceEntry);
+                dataContext.CEvidenceEntries.Add(evidenceEntry);
                 return true;
             }
             return false;
         }
 
-        public bool AddOrder(Order order)
+        public bool AddOrder(COrder order)
         {
             if (FindOrderByID(order.ID) == null)
             {
-                orders.Add(order.Clone() as Order);
+                dataContext.COrders.Add(order);
                 return true;
             }
             else
                 return false;
                 
         }
-        public bool AddClient(Client client)
+        public bool AddClient(CClient client)
         {
             if (FindClientByID(client.ID) == null)
             {
-                clients.Add(client.Clone() as Client);
+                dataContext.CClients.Add(client);
                 return true;
             }
             return false;
         }
 
         // MODIFY
-        public bool ModifyProduct(Product product)
+        public bool ModifyProduct(CProduct product)
         {
-            foreach(Product pr in products)
+            foreach(CProduct pr in dataContext.CProducts)
             {
                 if (pr.ID == product.ID)
                 {
@@ -75,9 +78,9 @@ namespace Client.DataAPI
             return false;
         }
 
-        public bool ModifyClient(Client client)
+        public bool ModifyClient(CClient client)
         {
-            foreach (Client cl in clients)
+            foreach (CClient cl in dataContext.CClients)
             {
                 if (cl.ID == client.ID)
                 {
@@ -89,14 +92,14 @@ namespace Client.DataAPI
             return false;
         }
 
-        public bool ModifyOrder(Order order)
+        public bool ModifyOrder(COrder order)
         {
-            foreach (Order or in orders)
+            foreach (COrder or in dataContext.COrders)
             {
                 if (or.ID == order.ID)
                 {
-                    or.Products = new List<EvidenceEntry>(order.Products);
-                    or.ClientID = order.ClientID;
+                    or.Entries = new List<CEvidenceEntry>(order.Entries);
+                    or.Client = order.Client;
                     return true;
                 }
             }
@@ -105,83 +108,83 @@ namespace Client.DataAPI
 
         public bool ChangeProductAmount(int productID, int newAmount)
         {
-            foreach (EvidenceEntry ev in productEvidency)
+            foreach (CEvidenceEntry ev in dataContext.CEvidenceEntries)
             {
-                if (ev.ID == productID)
+                if (ev.Product.ID == productID)
                 {
-                    ev.ProductAmount = newAmount;
+                    ev.Amount = newAmount;
                     return true;
                 }
             }
             return false;
         }
         // FIND
-        public Product FindProductByName(string name)
+        public CProduct FindProductByName(string name)
         {
-            return products?.Find(x => x.Name == name)?.Clone() as Product;
+            return dataContext.CProducts?.Find(x => x.Name == name);
         }
 
-        public Product FindProductByID(int id)
+        public CProduct FindProductByID(int id)
         {
-            return products?.Find(x => x.ID == id)?.Clone() as Product;
+            return dataContext.CProducts?.Find(x => x.ID == id);
         }
 
-        public EvidenceEntry FindEvidenceEntryByID(int id)
+        public CEvidenceEntry FindEvidenceEntryByID(int id)
         {
-            return productEvidency?.Find(x => x.ID == id)?.Clone() as EvidenceEntry;
+            return dataContext.CEvidenceEntries?.Find(x => x.Product.ID == id);
         }
 
-        public Client FindClientByID(int id)
+        public CClient FindClientByID(int id)
         {
-            return clients?.Find(x => x.ID == id)?.Clone() as Client;
+            return dataContext.CClients?.Find(x => x.ID == id);
         }
 
-        public Client FindClientByName(string name)
+        public CClient FindClientByName(string name)
         {
-            return clients?.Find(x => x.Name == name)?.Clone() as Client;
+            return dataContext.CClients?.Find(x => x.Name == name);
         }
 
-        public Order FindOrderByID(int id)
+        public COrder FindOrderByID(int id)
         {
-            return orders?.Find(x => x.ID == id)?.Clone() as Order;
+            return dataContext.COrders?.Find(x => x.ID == id);
         }
 
-        public List<Order> FindOrdersByClientID(int clientID)
+        public List<COrder> FindOrdersByClientID(int clientID)
         {
-            List<Order> copy = new List<Order>();
-            foreach(Order order in orders.FindAll(x => x.ClientID == clientID))
+            List<COrder> copy = new List<COrder>();
+            foreach(COrder order in dataContext.COrders.FindAll(x => x.Client.ID == clientID))
             {
-                copy.Add(order.Clone() as Order);
+                copy.Add(order);
             }
             return copy;
         }
 
         // LIST GETTERS
-        public int CountProducts { get { return products.Count; } }
+        public int CountProducts { get { return dataContext.CProducts.Count; } }
 
-        public int CountOrders { get { return orders.Count; } }
+        public int CountOrders { get { return dataContext.COrders.Count; } }
 
-        public int CountClients { get { return clients.Count; } }
+        public int CountClients { get { return dataContext.CClients.Count; } }
 
-        public int CountProductEntries { get { return productEvidency.Count; } }
+        public int CountProductEntries { get { return dataContext.CProducts.Count; } }
 
-        public List<Product> GetAllProducts()
+        public List<CProduct> GetAllProducts()
         {
-            return new List<Product>(products);
+            return new List<CProduct>(dataContext.CProducts);
         }
 
-        public List<Client> GetAllClients()
+        public List<CClient> GetAllClients()
         {
-            return new List<Client>(clients);
+            return new List<CClient>(dataContext.CClients);
         }
-        public List<Order> GetAllOrders()
+        public List<COrder> GetAllOrders()
         {
-            return new List<Order>(orders);
+            return new List<COrder>(dataContext.COrders);
         }
 
-        public List<EvidenceEntry> GetAllEntries()
+        public List<CEvidenceEntry> GetAllEntries()
         {
-            return new List<EvidenceEntry>(productEvidency);
+            return new List<CEvidenceEntry>(dataContext.CEvidenceEntries);
         }
     }
 }

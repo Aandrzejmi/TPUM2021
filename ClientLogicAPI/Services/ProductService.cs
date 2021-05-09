@@ -3,6 +3,7 @@ using Client.DataAPI;
 using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
+using CommunicationAPI.Models;
 
 namespace Client.LogicAPI.Services
 {
@@ -14,9 +15,9 @@ namespace Client.LogicAPI.Services
         {
             _repository = repository;
         }
-        public bool ValidateModel(IModel _model)
+        public bool ValidateModel(CProduct _model)
         {
-            if (_model is Product product)
+            if (_model is CProduct product)
             {
                 if (product.ID < 0)
                     throw new ProductInvalidIDException();
@@ -54,7 +55,7 @@ namespace Client.LogicAPI.Services
         {
             var productDTO = new ProductDTO();
 
-            if (_repository.FindProductByID(id) is Product product)
+            if (_repository.FindProductByID(id) is CProduct product)
             {
                 productDTO.ID = product.ID;
                 productDTO.Name = product.Name;
@@ -69,7 +70,7 @@ namespace Client.LogicAPI.Services
         {
             var productDTO = new ProductDTO();
 
-            if (_repository.FindProductByName(name) is Product product)
+            if (_repository.FindProductByName(name) is CProduct product)
             {
                 productDTO.ID = product.ID;
                 productDTO.Name = product.Name;
@@ -83,7 +84,7 @@ namespace Client.LogicAPI.Services
         public List<ProductDTO> GetAllProductDTOs()
         {
             List<ProductDTO> productDTOs = new List<ProductDTO>();
-            foreach(Product product in _repository.GetAllProducts())
+            foreach(CProduct product in _repository.GetAllProducts())
             {
                 productDTOs.Add(GetProductDTOByID(product.ID));
             }
@@ -104,7 +105,7 @@ namespace Client.LogicAPI.Services
                         break;
                 }
 
-                var productModel = new Product();
+                var productModel = new CProduct();
                 productModel.ID = newID;
                 productModel.Name = product.Name;
                 productModel.Price = product.Price;
@@ -121,7 +122,7 @@ namespace Client.LogicAPI.Services
 
         public bool ChangeProductDTO(int productID, ProductDTO productDTO)
         {
-            if (_repository.FindProductByID(productID) is Product product)
+            if (_repository.FindProductByID(productID) is CProduct product)
             {
                 if (ValidateModel(productDTO))
                 {
