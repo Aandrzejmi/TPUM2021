@@ -62,6 +62,7 @@
         public static void ClearRepository()
         {
             repository = null;
+            DbContext.ClearContext();
         }
     }
 }
