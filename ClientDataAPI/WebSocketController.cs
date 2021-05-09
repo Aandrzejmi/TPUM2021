@@ -25,6 +25,11 @@ namespace Client.DataAPI
             return true;
         }
 
+        public async Task Disconnect()
+        {
+            await WebSocketClient.Disconnect();
+        }
+
         public async Task<bool> SendTask(string newTask)
         {
             await WebSocketClient.SendTask(newTask);

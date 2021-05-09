@@ -27,6 +27,11 @@ namespace CommunicationAPI
             }
         }
 
+        public static async Task Disconnect()
+        {
+            await _socket.DisconnectAsync();
+        }
+
         public static async Task<bool> SendTask(string newTask)
         {
             await _socket.SendTask(newTask);

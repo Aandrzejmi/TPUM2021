@@ -12,6 +12,7 @@
 
     <Page.Resources>
         <vm:BackgroundAddViewModel x:Key="vm"/>
+        <vm:ConnectionViewModel x:Key="cvm"/>
     </Page.Resources>
 
     <Grid DataContext="{StaticResource vm}">
@@ -22,9 +23,9 @@
                 TPUM 2021
         </TextBlock>
 
-        <Button x:Name="button1" Content="{Binding ClientsLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+        <Button x:Name="button1" DataContext="{StaticResource cvm}" Content="{Binding ButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,80" Width="80" Height="20"
-                        Command="{Binding AddClients}"/>
+                        Command="{Binding ConnectButtonCommand}"/>
         <Button x:Name="button2" Content="{Binding OrderssLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,56" Width="80" Height="20"
                         Command="{Binding AddOrders}"/>

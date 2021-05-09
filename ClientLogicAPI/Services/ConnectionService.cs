@@ -21,6 +21,11 @@ namespace Client.LogicAPI.Services
             return true;
         }
 
+        public async Task CloseConnection()
+        {
+            await socketController.Disconnect();
+        }
+
         public async Task<bool> SendTask(string newTask)
         {
             await socketController.SendTask(newTask);
