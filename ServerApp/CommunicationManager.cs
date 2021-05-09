@@ -13,6 +13,7 @@ namespace Server.App
         private List<WebSocketConnection> sockets = new List<WebSocketConnection>();
         private List<MessageHandler> handlers = new List<MessageHandler>();
         private List<SessionTimer> timers = new List<SessionTimer>();
+        private List<SessionTimeoutObserver> observers = new List<SessionTimeoutObserver>();
 
         public CommunicationManager(int webSocketPort, Action<string> log)
         {
@@ -74,8 +75,10 @@ namespace Server.App
         private void InitSessionTimer(WebSocketConnection ws)
         {
             var timer = new SessionTimer(5);
-            timer.OnTimeout += () => ws.DisconnectAsync();
+            var observer = new SessionTimeoutObserver(ws, Log);
+            observer.Subscribe(timer);
             timers.Add(timer);
+            observers.Add(observer);
             timer.Start();
         }
 
