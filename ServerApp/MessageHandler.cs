@@ -1,4 +1,5 @@
 ﻿using CommunicationAPI;
+using CommunicationAPI.Models;
 using Server.LogicAPI;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
@@ -37,14 +38,18 @@ namespace Server.App
                 switch (split[0])
                 {
                     case "send":
+                        // send [type] [id]
+                        // send [type] all
                         HandleSend(split, no);
                         break;
 
                     case "add":
+                        // add [type] [json]
                         HandleAdd(split, no);
                         break;
 
                     case "update":
+                        // update [type] [id] [json]
                         HandleUpdate(split, no);
                         break;
 
@@ -75,17 +80,35 @@ namespace Server.App
 
         private void HandleAdd(string[] split, uint no)
         {
-            int id;
-            bool all;
-
-            if (!parseId(split[1], out id, out all))
+            try
             {
-                HandleError(no);
-                return;
+                switch (split[1])
+                {
+                    case "client":
+                        _clientService.AddClient(Serialization.Deserialize<CClient>(split[2]));
+                        Log($"[{no} - Add request]: client added");
+                        break;
+
+                    case "product":
+                        _productService.AddProduct(Serialization.Deserialize<CProduct>(split[2]));
+                        Log($"[{no} - Add request]: product added");
+                        break;
+
+                    case "entry":
+                        _evidenceEntryService.AddEvidenceEntry(Serialization.Deserialize<CEvidenceEntry>(split[2]));
+                        Log($"[{no} - Add request]: evidence entry added");
+                        break;
+
+                    case "order":
+                        _orderService.AddOrder(Serialization.Deserialize<COrder>(split[2]));
+                        Log($"[{no} - Add request]: order added");
+                        break;
+                }
             }
-
-            Log($"[{no} - Add request]: bbb");
-
+            catch
+            {
+                Log($"[{no} - Add request]: exception caugth.");
+            }
         }
 
         private void HandleUpdate(string[] split, uint no)
@@ -107,6 +130,7 @@ namespace Server.App
         {
             Log($"[{no} - Message unknown]: no response");
         }
+
         private void RespondSend(string[] split, uint no, int id)
         {
             try
@@ -144,7 +168,7 @@ namespace Server.App
             }
             catch
             {
-                Log($"[{no} - Send request]: no response, exception couth.");
+                Log($"[{no} - Send request]: no response, exception caugth.");
             }
         }
 
@@ -165,8 +189,18 @@ namespace Server.App
             }
             catch
             {
-                Log($"[{no} - Send request]: no response, exception couth.");
+                Log($"[{no} - Send request]: no response, exception caugth.");
             }
+        }
+
+        private void RespondAdd(string[] split, uint no)
+        {
+
+        }
+
+        private void RespondUpdate(string[] split, uint no, int id)
+        {
+
         }
 
         private bool parseId(string str, out int id, out bool all)
