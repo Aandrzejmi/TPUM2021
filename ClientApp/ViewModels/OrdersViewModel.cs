@@ -20,7 +20,8 @@ namespace Client.App.ViewModels
         {
             _orderService = Logic.CreateOrderService();
             Logic.OrdersChanged += OnOrdersChanged;
-            Selected = Orders[0];
+            if (Orders.Count > 0)
+                Selected = Orders[0];
         }
 
         ~OrdersViewModel()
@@ -53,7 +54,8 @@ namespace Client.App.ViewModels
                 }
                 else
                 {
-                    _selected = _orders[^1];
+                    if (_orders.Count > 0)
+                        _selected = _orders[^1];
                 }
 
                 return _orders;
@@ -64,14 +66,14 @@ namespace Client.App.ViewModels
             }
         }
 
-        public string OrderHeader => $"Order № {Selected.ID}: {Selected.ClientName} - {Selected.ClientAdress}";
-        public string TotalPrice => $"Total price: {_orderService.GetPriceOfOrder(Selected)}";
+        public string OrderHeader => Selected != null ? $"Order № {Selected.ID}: {Selected.ClientName} - {Selected.ClientAdress}" : "No order selected";
+        public string TotalPrice => Selected != null ?  $"Total price: {_orderService.GetPriceOfOrder(Selected)}" : "No order selected";
 
         public OrderDTO Selected
         {
             get
             {
-                if (_selected == null)
+                if (_selected == null && _orders.Count > 0)
                     _selected = _orders[0];
 
                 return _selected;
