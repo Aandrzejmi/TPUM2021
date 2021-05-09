@@ -4,16 +4,20 @@ using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
 using Client.LogicAPI.DTOs;
 using CommunicationAPI.Models;
+using static CommunicationAPI.Serialization;
+using System;
+using System.Threading.Tasks;
 
 namespace Client.LogicAPI.Services
 {
     public class ClientService : IClientService
     {
         private readonly IRepository _repository;
-
+        private IConnectionService connectionService;
         public ClientService(IRepository repository)
         {
             _repository = repository;
+            connectionService = Logic.CreateConnectionService();
         }
         public bool ValidateModel(CClient _model)
         {
@@ -112,9 +116,12 @@ namespace Client.LogicAPI.Services
 
                 if (_repository.AddClient(clientModel))
                 {
+                    connectionService.SendTask("add#client#" + Serialize<CClient>(clientModel));
                     Logic.InvokeClientsChanged();
                     return true;
                 }
+
+               
             }
             return false;
         }
@@ -129,6 +136,7 @@ namespace Client.LogicAPI.Services
                     client.Name = clientDTO.Name;
                     if (_repository.ModifyClient(client))
                     {
+                        connectionService.SendTask($"update#client#{client.ID}#{Serialize<CClient>(client)}");
                         Logic.InvokeClientsChanged();
                         return true;
                     }

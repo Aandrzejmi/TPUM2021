@@ -64,9 +64,13 @@ namespace Server.App
 
         private void initMessageHandler(WebSocketConnection ws)
         {
-            var handler = new MessageHandler(ws, Log);
-            handlers.Add(handler);
-            ws.onMessage = handler.Handle;
+            ws.onMessage = async (data) =>
+            {
+                var handler = new MessageHandler(ws, Log);
+                handlers.Add(handler);
+                await ws.SendAsync(handler.Handle(data));
+            };
+            
         }
 
         public void Dispose()

@@ -4,6 +4,7 @@ using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
 using CommunicationAPI.Models;
+using static CommunicationAPI.Serialization;
 
 namespace Client.LogicAPI.Services
 {
@@ -12,12 +13,14 @@ namespace Client.LogicAPI.Services
         private readonly IRepository _repository;
         private readonly IEvidenceEntryService _evidenceEntryService;
         private readonly IClientService _clientService;
+        private readonly IConnectionService connectionService;
         
         public OrderService(IRepository repository)
         {
             _repository = repository;
             _evidenceEntryService = new EvidenceEntryService(repository);
             _clientService = new ClientService(repository);
+            connectionService = Logic.CreateConnectionService();
         }
 
         public bool ValidateModel(COrder _model)
@@ -51,9 +54,6 @@ namespace Client.LogicAPI.Services
                 // Maybe find client from repo and find if it actually exists
                 if (order.ID < 0)
                     throw new OrderInvalidIDException();
-
-                if (_repository.FindOrderByID(order.ID) is null)
-                    throw new OrderNotFoundException();
 
                 if (order.Client.ID < 0)
                     throw new OrderInvalidClientIDException();
@@ -133,10 +133,11 @@ namespace Client.LogicAPI.Services
             {
                 var orderModel = new COrder();
 
+                int newID = 0;
                 List<OrderDTO> orderDTOs = new List<OrderDTO>();
                 orderDTOs = GetAllOrderDTOs();
-                int newID = 0;
-                foreach(OrderDTO orderDTOListObject in orderDTOs)
+
+                foreach (OrderDTO orderDTOListObject in orderDTOs)
                 {
                     if (newID == orderDTOListObject.ID)
                         newID++;
@@ -145,6 +146,7 @@ namespace Client.LogicAPI.Services
                 }
 
                 orderModel.ID = newID;
+                orderModel.Client = new CClient();
                 orderModel.Client.ID = order.Client.ID;
                 orderModel.Client.Name = order.Client.Name;
                 orderModel.Client.Adress = order.Client.Adress;
@@ -153,6 +155,7 @@ namespace Client.LogicAPI.Services
                 foreach(EvidenceEntryDTO entryDTO in order.Products)
                 {
                     var evidenceEntryModel = new CEvidenceEntry();
+                    evidenceEntryModel.Product = new CProduct();
                     evidenceEntryModel.Product.ID = entryDTO.Product.ID;
                     evidenceEntryModel.Product.Name = entryDTO.Product.Name;
                     evidenceEntryModel.Product.Price = entryDTO.Product.Price;
@@ -166,6 +169,7 @@ namespace Client.LogicAPI.Services
                 }
                 if (_repository.AddOrder(orderModel))
                 {
+                    connectionService.SendTask($"add#order#{Serialize<COrder>(orderModel)}");
                     Logic.InvokeOrdersChanged();
                     return true;
                 }
@@ -199,6 +203,7 @@ namespace Client.LogicAPI.Services
                     }
                     if (_repository.ModifyOrder(order))
                     {
+                        connectionService.SendTask($"update#order#{orderID}#{Serialize<COrder>(order)}");
                         Logic.InvokeOrdersChanged();
                         return true;
                     }

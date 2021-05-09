@@ -4,16 +4,19 @@ using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
 using CommunicationAPI.Models;
+using static CommunicationAPI.Serialization;
 
 namespace Client.LogicAPI.Services
 {
     public class ProductService : IProductService
     {
         private readonly IRepository _repository;
+        private readonly IConnectionService connectionService;
 
         public ProductService(IRepository repository)
         {
             _repository = repository;
+            connectionService = Logic.CreateConnectionService();
         }
         public bool ValidateModel(CProduct _model)
         {
@@ -113,6 +116,7 @@ namespace Client.LogicAPI.Services
 
                 if (_repository.AddProduct(productModel))
                 {
+                    connectionService.SendTask($"add#product#{Serialize<CProduct>(productModel)}");
                     Logic.InvokeProductsChanged();
                     return true;
                 }
@@ -130,6 +134,7 @@ namespace Client.LogicAPI.Services
                     product.Price = productDTO.Price;
                     if (_repository.ModifyProduct(product))
                     {
+                        connectionService.SendTask($"update#product#{productID}#{Serialize<CProduct>(product)}");
                         Logic.InvokeProductsChanged();
                         return true;
                     }

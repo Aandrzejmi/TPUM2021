@@ -4,6 +4,7 @@ using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
 using CommunicationAPI.Models;
+using static CommunicationAPI.Serialization;
 
 namespace Client.LogicAPI.Services
 {
@@ -11,11 +12,13 @@ namespace Client.LogicAPI.Services
     {
         
         private readonly IProductService _productService;
+        private readonly IConnectionService connectionService;
         private readonly IRepository _repository;
         public EvidenceEntryService(IRepository repository)
         {
             _repository = repository;
             _productService = new ProductService(repository);
+            connectionService = Logic.CreateConnectionService();
         }
 
         public bool ValidateModel(CEvidenceEntry _model)
@@ -107,6 +110,7 @@ namespace Client.LogicAPI.Services
                 {
                     ValidateModel(evidenceEntryModel);
                     ChangeEvidenceEntryDTO(newID, evidenceEntry);
+                    connectionService.SendTask($"add#entry#{Serialize<CEvidenceEntry>(evidenceEntryModel)}");
                     Logic.InvokeEvidenceEntryChanged();
                     return true;
                 }
@@ -122,6 +126,7 @@ namespace Client.LogicAPI.Services
                 {
                     if (_repository.ChangeProductAmount(evidenceEntryID, evidenceEntryDTO.ProductAmount))
                     {
+                        connectionService.SendTask($"update#entry#{evidenceEntryID}#{Serialize<CEvidenceEntry>(evidenceEntry)}");
                         Logic.InvokeEvidenceEntryChanged();
                         return true;
                     }

@@ -23,41 +23,39 @@ namespace Server.App
             Log = logFinction;
         }
 
-        public void Handle(string data)
+        public string Handle(string data)
         {
-            Task.Run(() =>
+            uint no = counter++;
+            Log($"[Received message {no}]: {data}");
+
+            var split = data.Split("#");
+
+            switch (split[0])
             {
-                uint no = counter++;
-                Log($"[Received message {no}]: {data}");
+                case "send":
+                    // send [type] [id]
+                    // send [type] all
+                    return HandleSend(split, no);
 
-                var split = data.Split("#");
+                case "add":
+                    // add [type] [json]
+                    HandleAdd(split, no);
+                    break;
 
-                switch (split[0])
-                {
-                    case "send":
-                        // send [type] [id]
-                        // send [type] all
-                        HandleSend(split, no);
-                        break;
+                case "update":
+                    // update [type] [id] [json]
+                    HandleUpdate(split, no);
+                    break;
 
-                    case "add":
-                        // add [type] [json]
-                        HandleAdd(split, no);
-                        break;
+                default:
+                    HandleError(no);
+                    break;
+            }
+            return "Request done";
 
-                    case "update":
-                        // update [type] [id] [json]
-                        HandleUpdate(split, no);
-                        break;
-
-                    default:
-                        HandleError(no);
-                        break;
-                }
-            });
         }
 
-        private void HandleSend(string[] split, uint no)
+        private string HandleSend(string[] split, uint no)
         {
             int id;
             bool all;
@@ -65,13 +63,13 @@ namespace Server.App
             if (!ParseId(split[2], out id, out all))
             {
                 HandleError(no);
-                return;
+                return "Wrong request";
             }
 
             if (all)
-                RespondSendAll(split, no);
+                return RespondSendAll(split, no);
             else
-                RespondSend(split, no, id);
+                return RespondSend(split, no, id);
 
         }
 
@@ -144,12 +142,13 @@ namespace Server.App
 
         }
 
-        private void HandleError(uint no)
+        private string HandleError(uint no)
         {
             Log($"[{no} - Message unknown]: no response");
+            return "Wrong request";
         }
 
-        private void RespondSend(string[] split, uint no, int id)
+        private string RespondSend(string[] split, uint no, int id)
         {
             try
             {
@@ -158,39 +157,38 @@ namespace Server.App
                     case "client":
                         var client = _clientService.GetClientByID(id);
                         string msgC = "client#" + Serialization.Serialize(client);
-                        socket.SendTask(msgC);
                         Log($"[{no} - Send request]: responding - {msgC}");
-                        break;
+                        return msgC;
 
                     case "product":
                         var product = _productService.GetProductByID(id);
                         string msgP = "product#" + Serialization.Serialize(product);
-                        socket.SendTask(msgP);
                         Log($"[{no} - Send request]: responding - {msgP}");
-                        break;
+                        return msgP;
 
                     case "entry":
                         var evEntry = _evidenceEntryService.GetEvidenceEntryByID(id);
                         string msgE = "entry#" + Serialization.Serialize(evEntry);
-                        socket.SendTask(msgE);
                         Log($"[{no} - Send request]: responding - {msgE}");
-                        break;
+                        return msgE;
 
                     case "order":
                         var order = _clientService.GetClientByID(id);
                         string msgO = "order#" + Serialization.Serialize(order);
-                        socket.SendTask(msgO);
                         Log($"[{no} - Send request]: responding - {msgO}");
-                        break;
+                        return msgO;
+                    default:
+                        return "Wrong request";
                 }
             }
             catch
             {
                 Log($"[{no} - Send request]: no response, exception caugth.");
+                return "Wrong request";
             }
         }
 
-        private void RespondSendAll(string[] split, uint no)
+        private string RespondSendAll(string[] split, uint no)
         {
             try
             {
@@ -198,36 +196,35 @@ namespace Server.App
                 {
                     case "client":
                         var client = _clientService.GetAllClients();
-                        string msgC = "client#" + Serialization.Serialize(client);
-                        socket.SendTask(msgC);
+                        string msgC = "clientL#" + Serialization.Serialize(client);
                         Log($"[{no} - Send request]: responding - {msgC}");
-                        break;
+                        return msgC;
 
                     case "product":
                         var product = _productService.GetAllProducts();
-                        string msgP = "product#" + Serialization.Serialize(product);
-                        socket.SendTask(msgP);
+                        string msgP = "productL#" + Serialization.Serialize(product);
                         Log($"[{no} - Send request]: responding - {msgP}");
-                        break;
+                        return msgP;
 
                     case "entry":
                         var evEntry = _evidenceEntryService.GetAllEvidenceEntries();
-                        string msgE = "entry#" + Serialization.Serialize(evEntry);
-                        socket.SendTask(msgE);
+                        string msgE = "entryL#" + Serialization.Serialize(evEntry);
                         Log($"[{no} - Send request]: responding - {msgE}");
-                        break;
+                        return msgE;
 
                     case "order":
-                        var order = _clientService.GetAllClients();
-                        string msgO = "order#" + Serialization.Serialize(order);
-                        socket.SendTask(msgO);
+                        var order = _orderService.GetAllOrders();
+                        string msgO = "orderL#" + Serialization.Serialize(order);
                         Log($"[{no} - Send request]: responding - {msgO}");
-                        break;
+                        return msgO;
+                    default:
+                        return "Wrong request";
                 }
             }
             catch
             {
                 Log($"[{no} - Send request]: no response, exception caugth.");
+                return "Wrong request";
             }
         }
 
