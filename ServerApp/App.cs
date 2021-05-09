@@ -23,12 +23,5 @@ namespace Server.App
             }
             
         }
-
-        static void ConnectionHandler(CommunicationAPI.WebSocketConnection webSocketConnection)
-        {
-            webSocketConnection.onMessage = Console.WriteLine;
-            webSocketConnection.onClose = () => { Console.WriteLine("Connection closed"); };
-            webSocketConnection.onError = () => { Console.WriteLine("Connection error has happened"); };
-        }
     }
 }

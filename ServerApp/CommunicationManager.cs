@@ -12,6 +12,7 @@ namespace Server.App
         private int webSocketPort = 8081;
         private List<WebSocketConnection> sockets = new List<WebSocketConnection>();
         private List<MessageHandler> handlers = new List<MessageHandler>();
+        private List<SessionTimer> timers = new List<SessionTimer>();
 
         public CommunicationManager(int webSocketPort, Action<string> log)
         {
@@ -31,18 +32,19 @@ namespace Server.App
         private async Task InitConnectionAsync(WebSocketConnection ws)
         {
             sockets.Add(ws);
-            initMessageHandler(ws);
-            initErrorHandler(ws);
+            InitMessageHandler(ws);
+            InitErrorHandler(ws);
+            InitSessionTimer(ws);
             await WriteAsync(ws, "Connected");
         }
 
-        private void initErrorHandler(WebSocketConnection ws)
+        private void InitErrorHandler(WebSocketConnection ws)
         {
-            ws.onClose = () => closeConnection(ws);
-            ws.onError = () => closeConnection(ws);
+            ws.onClose = () => CloseConnection(ws);
+            ws.onError = () => CloseConnection(ws);
         }
 
-        private void closeConnection(WebSocketConnection ws)
+        private void CloseConnection(WebSocketConnection ws)
         {
             Log($"Closing connection to peer: {ws}");
             sockets.Remove(ws);
@@ -62,11 +64,19 @@ namespace Server.App
             }
         }
 
-        private void initMessageHandler(WebSocketConnection ws)
+        private void InitMessageHandler(WebSocketConnection ws)
         {
             var handler = new MessageHandler(ws, Log);
             handlers.Add(handler);
             ws.onMessage = handler.Handle;
+        }
+
+        private void InitSessionTimer(WebSocketConnection ws)
+        {
+            var timer = new SessionTimer(5);
+            timer.OnTimeout += () => ws.DisconnectAsync();
+            timers.Add(timer);
+            timer.Start();
         }
 
         public void Dispose()
