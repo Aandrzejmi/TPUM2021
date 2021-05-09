@@ -27,7 +27,7 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            Task.Run(() => _connectionService.SendTask("add#product#{\"ID\":1,\"Name\":\"Cement (10kg)\",\"Price\":123.45}"));
+            Task.Run(() => _connectionService.SendTask("update#product#1#{\"ID\":999,\"Name\":\"Cement (10kg)\",\"Price\":123.45}"));
             //if (_thread == null)
             //{
             //    _thread = new Thread(AddOrdersLoop);

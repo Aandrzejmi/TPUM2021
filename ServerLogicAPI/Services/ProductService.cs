@@ -125,8 +125,8 @@ namespace Server.LogicAPI.Services
             {
                 if (ValidateModel(cProduct))
                 {
-                    product.Name = product.Name;
-                    product.Price = product.Price;
+                    product.Name = cProduct.Name;
+                    product.Price = cProduct.Price;
                     if (_repository.ModifyProduct(product))
                     {
                         Logic.InvokeProductsChanged();

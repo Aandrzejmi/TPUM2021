@@ -25,7 +25,7 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            Task.Run(() => _connectionService.SendTask("send#client#1"));
+            Task.Run(() => _connectionService.SendTask("send#client#all"));
 
         //    if (_thread == null)
         //    {

@@ -25,7 +25,7 @@ namespace Server.App
 
         public void Handle(string data)
         {
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 uint no = counter++;
                 Log($"[Received message {no}]: {data}");
@@ -62,7 +62,7 @@ namespace Server.App
             int id;
             bool all;
             
-            if (!parseId(split[2], out id, out all))
+            if (!ParseId(split[2], out id, out all))
             {
                 HandleError(no);
                 return;
@@ -110,16 +110,37 @@ namespace Server.App
 
         private void HandleUpdate(string[] split, uint no)
         {
-            int id;
-            bool all;
-
-            if (!parseId(split[1], out id, out all))
+            try
             {
-                HandleError(no);
-                return;
-            }
+                int id = int.Parse(split[2]);
 
-            Log($"[{no} - Update request]: ccc");
+                switch (split[1])
+                {
+                    case "client":
+                        _clientService.ChangeClient(id, Serialization.Deserialize<CClient>(split[3]));
+                        Log($"[{no} - Update request]: client updated");
+                        break;
+
+                    case "product":
+                        _productService.ChangeProduct(id, Serialization.Deserialize<CProduct>(split[3]));
+                        Log($"[{no} - Update request]: product updated");
+                        break;
+
+                    case "entry":
+                        _evidenceEntryService.ChangeEvidenceEntry(id, Serialization.Deserialize<CEvidenceEntry>(split[3]));
+                        Log($"[{no} - Update request]: evidence entry updated");
+                        break;
+
+                    case "order":
+                        _orderService.ChangeOrder(id, Serialization.Deserialize<COrder>(split[3]));
+                        Log($"[{no} - Update request]: order updated");
+                        break;
+                }
+            }
+            catch
+            {
+                Log($"[{no} - Update request]: exception caugth.");
+            }
 
         }
 
@@ -176,11 +197,31 @@ namespace Server.App
                 switch (split[1])
                 {
                     case "client":
-                        var clients = _clientService.GetAllClients();
-                        if (clients.Count == 0)
-                        {
-                            Log($"[{no} - Send request]: no response, clients repository is empty.");
-                        }
+                        var client = _clientService.GetAllClients();
+                        string msgC = "client#" + Serialization.Serialize(client);
+                        socket.SendTask(msgC);
+                        Log($"[{no} - Send request]: responding - {msgC}");
+                        break;
+
+                    case "product":
+                        var product = _productService.GetAllProducts();
+                        string msgP = "product#" + Serialization.Serialize(product);
+                        socket.SendTask(msgP);
+                        Log($"[{no} - Send request]: responding - {msgP}");
+                        break;
+
+                    case "entry":
+                        var evEntry = _evidenceEntryService.GetAllEvidenceEntries();
+                        string msgE = "entry#" + Serialization.Serialize(evEntry);
+                        socket.SendTask(msgE);
+                        Log($"[{no} - Send request]: responding - {msgE}");
+                        break;
+
+                    case "order":
+                        var order = _clientService.GetAllClients();
+                        string msgO = "order#" + Serialization.Serialize(order);
+                        socket.SendTask(msgO);
+                        Log($"[{no} - Send request]: responding - {msgO}");
                         break;
                 }
             }
@@ -190,17 +231,7 @@ namespace Server.App
             }
         }
 
-        private void RespondAdd(string[] split, uint no)
-        {
-
-        }
-
-        private void RespondUpdate(string[] split, uint no, int id)
-        {
-
-        }
-
-        private bool parseId(string str, out int id, out bool all)
+        private bool ParseId(string str, out int id, out bool all)
         {
             all = false;
 
