@@ -9,10 +9,11 @@ namespace Server.App
 {
     public class CommunicationManager : IDisposable
     {
-        static uint msgCounter = 0;
         private Action<string> Log { get; }
         private int webSocketPort = 8081;
-        private List<WebSocketConnection> Sockets { get; set; } = new List<WebSocketConnection>();
+        private List<WebSocketConnection> sockets = new List<WebSocketConnection>();
+        private List<MessageHandler> handlers = new List<MessageHandler>();
+
         public CommunicationManager(int webSocketPort, Action<string> log)
         {
             Log = log;
@@ -30,7 +31,7 @@ namespace Server.App
 
         private async Task InitConnectionAsync(WebSocketConnection ws)
         {
-            Sockets.Add(ws);
+            sockets.Add(ws);
             initMessageHandler(ws);
             initErrorHandler(ws);
             await WriteAsync(ws, "Connected");
@@ -45,7 +46,7 @@ namespace Server.App
         private void closeConnection(WebSocketConnection ws)
         {
             Log($"Closing connection to peer: {ws}");
-            Sockets.Remove(ws);
+            sockets.Remove(ws);
         }
 
         private async Task WriteAsync(WebSocketConnection ws, string message)
@@ -56,7 +57,7 @@ namespace Server.App
 
         private async Task SendAll(string message)
         {
-            foreach (WebSocketConnection ws in Sockets)
+            foreach (WebSocketConnection ws in sockets)
             {
                 await ws.SendAsync(message);
             }
@@ -64,42 +65,16 @@ namespace Server.App
 
         private void initMessageHandler(WebSocketConnection ws)
         {
-
-            ws.onMessage = async (data) =>
-            {
-                uint no = msgCounter++;
-                Log($"[Received message {no}]: {data}");
-
-                var split = data.Split();
-
-                switch (split[0])
-                {
-                    case "send":
-                        Log($"[{no} - Send request]: aaa");
-                        //Resolve message
-                        await ws.SendAsync("HEEEEEEEEEEEEELLLOOOOOO THERE");
-                        break;
-
-                    case "add":
-                        Log($"[{no} - Add request]: bbb");
-                        break;
-
-                    case "update":
-                        Log($"[{no} - Update request]: ccc");
-                        break;
-
-                    default:
-                        Log($"[{no} - Message unknown]: no response");
-                        break;
-                }
-            };
+            var handler = new MessageHandler(ws, Log);
+            handlers.Add(handler);
+            ws.onMessage = handler.Handle;
         }
 
         public void Dispose()
         {
             Log($"Shuting down the communication manager");
             List<Task> _disconnectionTasks = new List<Task>();
-            foreach (WebSocketConnection _item in Sockets)
+            foreach (WebSocketConnection _item in sockets)
                 _disconnectionTasks.Add(_item.DisconnectAsync());
             Task.WaitAll(_disconnectionTasks.ToArray());
         }
