@@ -4,7 +4,6 @@ using Server.DataAPI;
 using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Services;
-using Server.LogicAPI.Exceptions;
 using Moq;
 
 namespace Server.LogicTests

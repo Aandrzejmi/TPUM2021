@@ -2,11 +2,7 @@
 using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using System;
-using System.Net;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using System.Threading;
 using System.Windows.Input;
 using System.Diagnostics;

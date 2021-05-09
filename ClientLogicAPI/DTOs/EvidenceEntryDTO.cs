@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Client.LogicAPI.DTOs
+﻿namespace Client.LogicAPI.DTOs
 {
     public class EvidenceEntryDTO
     {

@@ -2,10 +2,7 @@
 using CommunicationAPI.Models;
 using Server.LogicAPI;
 using Server.LogicAPI.Interfaces;
-using Server.LogicAPI.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Server.App

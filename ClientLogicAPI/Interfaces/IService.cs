@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Client.DataAPI;
+﻿using Client.DataAPI;
 
 namespace Client.LogicAPI.Interfaces
 {

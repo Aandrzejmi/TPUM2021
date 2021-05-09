@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Server.DataAPI;
-using CommunicationAPI.Models   ;
+using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
-using Server.LogicAPI.Services;
 
 namespace Server.LogicAPI.Services
 {

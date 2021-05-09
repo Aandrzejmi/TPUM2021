@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Server.DataAPI;
 using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;

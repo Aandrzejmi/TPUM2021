@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Client.DataAPI
+﻿namespace Client.DataAPI
 {
     public class Product : IModel
     {
