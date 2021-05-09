@@ -25,16 +25,18 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            Task.Run(() => _connectionService.CreateConnection());
-            
-            //if (_thread == null)
-            //{
-            //    _thread = new Thread(AddClientsLoop);
-            //    _thread.Start();
-            //}
-
-            //IsActive = !IsActive;
-            //OnExecute?.Invoke();
+            var task = Task.Run(async () =>
+            {
+                await _connectionService.CreateConnection();
+                var task1 = _connectionService.SendTask("send#product#all");
+                var task2 = _connectionService.SendTask("send#client#all");
+                var task3 = _connectionService.SendTask("send#entry#all");
+                var task4 = _connectionService.SendTask("send#order#all");
+                await task1;
+                await task2;
+                await task3;
+                await task4;
+            } );
         }
 
 

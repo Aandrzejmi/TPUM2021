@@ -68,8 +68,11 @@ namespace Server.App
 
         private void InitMessageHandler(Connection con)
         {
-            con.handler = new MessageHandler(con, Log);
-            con.ws.onMessage = con.handler.Handle;
+            con.ws.onMessage = async (data) =>
+            {
+                con.handler = new MessageHandler(con, Log);
+                await con.ws.SendAsync(con.handler.Handle(data));
+            };
         }
 
         private void InitSessionTimer(Connection con)

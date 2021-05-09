@@ -28,7 +28,7 @@ namespace Client.LogicAPI.Services
 
         public async Task<bool> SendTask(string newTask)
         {
-            await socketController.SendTask(newTask);
+            await socketController.SendTask(newTask);            
             return true;
         }
     }

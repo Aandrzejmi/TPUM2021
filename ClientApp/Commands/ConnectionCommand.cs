@@ -39,7 +39,18 @@ namespace Client.App.Commands
             }
             else
             {
-                Task.Run(async () => _vm.Connected = await _connectionService.CreateConnection());
+                var task = Task.Run(async () =>
+                {
+                    await _connectionService.CreateConnection();
+                    var task1 = _connectionService.SendTask("send#product#all");
+                    var task2 = _connectionService.SendTask("send#client#all");
+                    var task3 = _connectionService.SendTask("send#entry#all");
+                    var task4 = _connectionService.SendTask("send#order#all");
+                    await task1;
+                    await task2;
+                    await task3;
+                    await task4;
+                });
             }
         }
     }
