@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using Server.DataAPI;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Services;
 using Server.LogicAPI.Exceptions;
@@ -9,7 +9,7 @@ using Moq;
 
 namespace Server.LogicTests
 {
-    public class LogicAPIGetDTOTests
+    public class LogicAPIGetTests
     {
         Mock<IRepository> repositoryMock;
         IOrderService _orderService;
@@ -61,30 +61,30 @@ namespace Server.LogicTests
         }
 
         [Test]
-        public void GetOrderDTOTests()
+        public void GetOrderTests()
         {
             // Find order by ID
-            OrderDTO orderDTO = _orderService.GetOrderDTOByID(0);
+            COrder cOrder = _orderService.GetOrderByID(0);
             Order order = repositoryMock.Object.FindOrderByID(0);
-            Assert.AreEqual(orderDTO.ID, order.ID);
-            Assert.AreEqual(orderDTO.Client.ID, order.ClientID);
-            Assert.AreEqual(orderDTO.Products.Count, order.Products.Count);
-            foreach (EvidenceEntryDTO evidenceEntryDTO in orderDTO.Products)
+            Assert.AreEqual(cOrder.ID, order.ID);
+            Assert.AreEqual(cOrder.Client.ID, order.ClientID);
+            Assert.AreEqual(cOrder.Entries.Count, order.Products.Count);
+            foreach (var cEvEntry in cOrder.Entries)
             {
                 foreach(EvidenceEntry evidenceEntry in order.Products)
                 {
-                    if (evidenceEntryDTO.ID == evidenceEntry.ID)
+                    if (cEvEntry.Product.ID == evidenceEntry.ID)
                     {
-                        Assert.AreEqual(evidenceEntryDTO.Product.ID, evidenceEntry.ProductID);
-                        Assert.AreEqual(evidenceEntryDTO.ProductAmount, evidenceEntry.ProductAmount);
+                        Assert.AreEqual(cEvEntry.Product.ID, evidenceEntry.ProductID);
+                        Assert.AreEqual(cEvEntry.Amount, evidenceEntry.ProductAmount);
                     }
                 }               
             }
 
-            Assert.That(() => _orderService.GetOrderDTOByID(-1), Throws.TypeOf<OrderNotFoundException>());
+            Assert.That(() => _orderService.GetOrderByID(-1), Throws.TypeOf<OrderNotFoundException>());
 
             // Find order by ClientID
-            List<OrderDTO> orderDTOs = _orderService.GetOrderDTOsByClientID(0);
+            List<COrder> cOrders = _orderService.GetOrdersByClientID(0);
             List<Order> orders = repositoryMock.Object.FindOrdersByClientID(0);
 
             Assert.AreEqual(orders.Count, orders.Count);
@@ -92,78 +92,78 @@ namespace Server.LogicTests
         }
 
         [Test]
-        public void GetAllModelDTOsTest()
+        public void GetAllModelsTest()
         {
-            // OrderDTO
-            Assert.AreEqual(_orderService.GetAllOrderDTOs().Count, 1);
-            Assert.AreEqual(_orderService.GetAllOrderDTOs()[0].ID, 0);
+            // COrder
+            Assert.AreEqual(_orderService.GetAllOrders().Count, 1);
+            Assert.AreEqual(_orderService.GetAllOrders()[0].ID, 0);
 
-            // ClientDTO
-            Assert.AreEqual(_clientService.GetAllClientDTOs().Count, 1);
-            Assert.AreEqual(_clientService.GetAllClientDTOs()[0].ID, 0);
+            // CClient
+            Assert.AreEqual(_clientService.GetAllClients().Count, 1);
+            Assert.AreEqual(_clientService.GetAllClients()[0].ID, 0);
 
-            // ProductDTO
-            Assert.AreEqual(_productService.GetAllProductDTOs().Count, 1);
-            Assert.AreEqual(_productService.GetAllProductDTOs()[0].ID, 0);
+            // CProduct
+            Assert.AreEqual(_productService.GetAllProducts().Count, 1);
+            Assert.AreEqual(_productService.GetAllProducts()[0].ID, 0);
 
-            // EvidenceEntryDTO
-            Assert.AreEqual(_evidenceEntryService.GetAllEvidenceEntryDTOs().Count, 1);
-            Assert.AreEqual(_evidenceEntryService.GetAllEvidenceEntryDTOs()[0].ID, 0);
+            // CEvidenceEntry
+            Assert.AreEqual(_evidenceEntryService.GetAllEvidenceEntries().Count, 1);
+            Assert.AreEqual(_evidenceEntryService.GetAllEvidenceEntries()[0].Product.ID, 0);
         }
 
         [Test]
-        public void GetProductDTOTests()
+        public void GetProductTests()
         {
             // Find Product by ID
-            ProductDTO productDTO1 = _productService.GetProductDTOByID(0);
+            CProduct cProduct1 = _productService.GetProductByID(0);
             Product product1 = repositoryMock.Object.FindProductByID(0);
-            Assert.AreEqual(productDTO1.ID, product1.ID);
-            Assert.AreEqual(productDTO1.Name, product1.Name);
-            Assert.AreEqual(productDTO1.Price, product1.Price);
+            Assert.AreEqual(cProduct1.ID, product1.ID);
+            Assert.AreEqual(cProduct1.Name, product1.Name);
+            Assert.AreEqual(cProduct1.Price, product1.Price);
 
-            Assert.That(() => _productService.GetProductDTOByID(-1), Throws.TypeOf<ProductNotFoundException>());
+            Assert.That(() => _productService.GetProductByID(-1), Throws.TypeOf<ProductNotFoundException>());
 
             // Find Product by name
-            ProductDTO productDTO2 = _productService.GetProductDTOByName("Temp Product");
+            CProduct cProduct2 = _productService.GetProductByName("Temp Product");
             Product product2 = repositoryMock.Object.FindProductByName("Temp Product");
-            Assert.AreEqual(productDTO2.ID, product2.ID);
-            Assert.AreEqual(productDTO2.Name, product2.Name);
-            Assert.AreEqual(productDTO2.Price, product2.Price);
+            Assert.AreEqual(cProduct2.ID, product2.ID);
+            Assert.AreEqual(cProduct2.Name, product2.Name);
+            Assert.AreEqual(cProduct2.Price, product2.Price);
 
-            Assert.That(() => _productService.GetProductDTOByName(""), Throws.TypeOf<ProductNotFoundException>());
+            Assert.That(() => _productService.GetProductByName(""), Throws.TypeOf<ProductNotFoundException>());
         }
 
         [Test]
-        public void GetClientDTOTests()
+        public void GetClientTests()
         {
-            ClientDTO clientDTO1 = _clientService.GetClientDTOByID(0);
+            CClient cClient1 = _clientService.GetClientByID(0);
             Server.DataAPI.Client client1 = repositoryMock.Object.FindClientByID(0);
-            Assert.AreEqual(clientDTO1.ID, client1.ID);
-            Assert.AreEqual(clientDTO1.Name, client1.Name);
-            Assert.AreEqual(clientDTO1.Adress, client1.Adress);
+            Assert.AreEqual(cClient1.ID, client1.ID);
+            Assert.AreEqual(cClient1.Name, client1.Name);
+            Assert.AreEqual(cClient1.Adress, client1.Adress);
 
-            Assert.That(() => _clientService.GetClientDTOByID(-1), Throws.TypeOf<ClientNotFoundException>());
+            Assert.That(() => _clientService.GetClientByID(-1), Throws.TypeOf<ClientNotFoundException>());
 
-            ClientDTO clientDTO2 = _clientService.GetClientDTOByName("Temp Name");
+            CClient cClient2 = _clientService.GetClientByName("Temp Name");
             Server.DataAPI.Client client2 = repositoryMock.Object.FindClientByName("Temp Name");
-            Assert.AreEqual(clientDTO2.ID, client2.ID);
-            Assert.AreEqual(clientDTO2.Name, client2.Name);
-            Assert.AreEqual(clientDTO2.Adress, client2.Adress);
+            Assert.AreEqual(cClient2.ID, client2.ID);
+            Assert.AreEqual(cClient2.Name, client2.Name);
+            Assert.AreEqual(cClient2.Adress, client2.Adress);
 
-            Assert.That(() => _clientService.GetClientDTOByName(""), Throws.TypeOf<ClientNotFoundException>());
+            Assert.That(() => _clientService.GetClientByName(""), Throws.TypeOf<ClientNotFoundException>());
         }
 
         [Test]
-        public void GetEvidenceEntryDTOTests()
+        public void GetEvidenceEntryTests()
         {
-            EvidenceEntryDTO evidenceEntryDTO1 = _evidenceEntryService.GetEvidenceEntryDTOByID(0);
+            CEvidenceEntry cEvEntry1 = _evidenceEntryService.GetEvidenceEntryByID(0);
             EvidenceEntry evidenceEntry1 = repositoryMock.Object.FindEvidenceEntryByID(0);
 
-            Assert.AreEqual(evidenceEntryDTO1.ID, evidenceEntry1.ID);
-            Assert.AreEqual(evidenceEntryDTO1.ProductAmount, evidenceEntry1.ProductAmount);
-            Assert.AreEqual(evidenceEntryDTO1.Product.ID, evidenceEntry1.ProductID);
+            Assert.AreEqual(cEvEntry1.Product.ID, evidenceEntry1.ID);
+            Assert.AreEqual(cEvEntry1.Amount, evidenceEntry1.ProductAmount);
+            Assert.AreEqual(cEvEntry1.Product.ID, evidenceEntry1.ProductID);
 
-            Assert.That(() => _evidenceEntryService.GetEvidenceEntryDTOByID(-1), Throws.TypeOf<EvidenceEntryNotFoundException>());
+            Assert.That(() => _evidenceEntryService.GetEvidenceEntryByID(-1), Throws.TypeOf<EvidenceEntryNotFoundException>());
         }
     }    
 }

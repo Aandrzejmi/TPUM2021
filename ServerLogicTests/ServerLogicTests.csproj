@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommunicationAPI\CommunicationAPI.csproj" />
     <ProjectReference Include="..\ServerLogicAPI\ServerLogicAPI.csproj" />
   </ItemGroup>
 

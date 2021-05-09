@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using Server.DataAPI;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Services;
 using Server.LogicAPI.Exceptions;
@@ -9,7 +9,7 @@ using Moq;
 
 namespace Server.LogicTests
 {
-    public class LogicAPIAddDTOTests
+    public class LogicAPIAddTests
     {
         Mock<IRepository> repositoryMock;
         IOrderService _orderService;
@@ -28,7 +28,7 @@ namespace Server.LogicTests
             EvidenceEntry evidenceEntry = new EvidenceEntry() { ProductID = 0, ProductAmount = 0 };
             evidenceEntries.Add(evidenceEntry);
 
-            ProductDTO productDTO1 = new ProductDTO() { ID = 1, Name = "Temporary Product", Price = 1.0M };
+            CProduct CProduct1 = new CProduct() { ID = 1, Name = "Temporary Product", Price = 1.0M };
 
             repositoryMock.Setup(p => p.FindClientByID(0)).Returns(new Server.DataAPI.Client() { ID = 0, Adress = "Temp Adress", Name = "Temp Name" });
             repositoryMock.Setup(p => p.FindClientByID(-1)).Returns(null as Server.DataAPI.Client);
@@ -74,83 +74,83 @@ namespace Server.LogicTests
         }
 
         [Test]
-        public void AddProductDTOTests()
+        public void AddProductTests()
         {
             // Try to add new product
-            ProductDTO productDTO1 = new ProductDTO() { ID = 1, Name = "Temporary Product", Price = 1.0M };
-            Assert.IsTrue(_productService.AddProductDTO(productDTO1));
+            CProduct CProduct1 = new CProduct() { ID = 1, Name = "Temporary Product", Price = 1.0M };
+            Assert.IsTrue(_productService.AddProduct(CProduct1));
 
             // Try to add product with invalid ID
-            ProductDTO productDTO3 = new ProductDTO() { ID = -1, Name = "Temporary Product", Price = 1.0M };
-            Assert.Throws<ProductInvalidIDException>(() => _productService.AddProductDTO(productDTO3));
+            CProduct CProduct3 = new CProduct() { ID = -1, Name = "Temporary Product", Price = 1.0M };
+            Assert.Throws<ProductInvalidIDException>(() => _productService.AddProduct(CProduct3));
 
             // Try to add product with invalid Name
-            ProductDTO productDTO4 = new ProductDTO() { ID = 2, Name = "", Price = 1.0M };
-            Assert.Throws<ProductInvalidNameException>(() => _productService.AddProductDTO(productDTO4));
+            CProduct CProduct4 = new CProduct() { ID = 2, Name = "", Price = 1.0M };
+            Assert.Throws<ProductInvalidNameException>(() => _productService.AddProduct(CProduct4));
 
             // Try to add product with invalid Price
-            ProductDTO productDTO5 = new ProductDTO() { ID = 2, Name = "Temporary Product", Price = -1.0M };
-            Assert.Throws<ProductInvalidPriceException>(() => _productService.AddProductDTO(productDTO5));
+            CProduct CProduct5 = new CProduct() { ID = 2, Name = "Temporary Product", Price = -1.0M };
+            Assert.Throws<ProductInvalidPriceException>(() => _productService.AddProduct(CProduct5));
         }
 
         [Test]
-        public void AddClientDTOTests()
+        public void AddClientTests()
         {
             // Try to add new client
-            ClientDTO clientDTO1 = new ClientDTO() { ID = 1, Name = "Temporary Name", Adress = "Temporary Adress"};
-            Assert.IsTrue(_clientService.AddClientDTO(clientDTO1));
+            CClient cClient1 = new CClient() { ID = 1, Name = "Temporary Name", Adress = "Temporary Adress"};
+            Assert.IsTrue(_clientService.AddClient(cClient1));
 
             // Try to add new client with invalid ID
-            ClientDTO clientDTO2 = new ClientDTO() { ID = -1, Name = "Temporary Name", Adress = "Temporary Adress" };
-            Assert.Throws<ClientInvalidIDException>(() => _clientService.AddClientDTO(clientDTO2));
+            CClient cClient2 = new CClient() { ID = -1, Name = "Temporary Name", Adress = "Temporary Adress" };
+            Assert.Throws<ClientInvalidIDException>(() => _clientService.AddClient(cClient2));
 
             // Try to add new client with invalid Name
-            ClientDTO clientDTO3 = new ClientDTO() { ID = 1, Name = "", Adress = "Temporary Adress" };
-            Assert.Throws<ClientInvalidNameException>(() => _clientService.AddClientDTO(clientDTO3));
+            CClient cClient3 = new CClient() { ID = 1, Name = "", Adress = "Temporary Adress" };
+            Assert.Throws<ClientInvalidNameException>(() => _clientService.AddClient(cClient3));
 
             // Try to add new client with invalid Adress
-            ClientDTO clientDTO4 = new ClientDTO() { ID = 1, Name = "Temporary Name", Adress = "" };
-            Assert.Throws<ClientInvalidAdressException>(() => _clientService.AddClientDTO(clientDTO4));
+            CClient cClient4 = new CClient() { ID = 1, Name = "Temporary Name", Adress = "" };
+            Assert.Throws<ClientInvalidAdressException>(() => _clientService.AddClient(cClient4));
         }
 
         [Test]
-        public void AddEvidenceEntryDTOTests()
+        public void AddEvidenceEntryTests()
         {
-            EvidenceEntryDTO evidenceEntryDTO1 = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = 0, Name = "Temporary Product", Price = 1.0M }, ProductAmount = 1 };
-            Assert.IsTrue(_evidenceEntryService.AddEvidenceEntryDTO(evidenceEntryDTO1));
+            CEvidenceEntry cEvEntry1 = new CEvidenceEntry() { Product = new CProduct() { ID = 0, Name = "Temporary Product", Price = 1.0M }, Amount = 1 };
+            Assert.IsTrue(_evidenceEntryService.AddEvidenceEntry(cEvEntry1));
 
-            EvidenceEntryDTO evidenceEntryDTO2 = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = -1, Name = "Temporary Product", Price = 1.0M }, ProductAmount = 1 };
-            Assert.Throws<EvidenceEntryInvalidIDException>(() => _evidenceEntryService.AddEvidenceEntryDTO(evidenceEntryDTO2));
+            CEvidenceEntry cEvEntry2 = new CEvidenceEntry() { Product = new CProduct() { ID = -1, Name = "Temporary Product", Price = 1.0M }, Amount = 1 };
+            Assert.Throws<EvidenceEntryInvalidIDException>(() => _evidenceEntryService.AddEvidenceEntry(cEvEntry2));
 
-            EvidenceEntryDTO evidenceEntryDTO3 = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = 1, Name = "", Price = 1.0M }, ProductAmount = 1 };
-            Assert.Throws<ProductInvalidNameException>(() => _evidenceEntryService.AddEvidenceEntryDTO(evidenceEntryDTO3));
+            CEvidenceEntry cEvEntry3 = new CEvidenceEntry() { Product = new CProduct() { ID = 1, Name = "", Price = 1.0M }, Amount = 1 };
+            Assert.Throws<ProductInvalidNameException>(() => _evidenceEntryService.AddEvidenceEntry(cEvEntry3));
 
-            EvidenceEntryDTO evidenceEntryDTO4 = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = 1, Name = "Temporary Product", Price = 0.0M }, ProductAmount = 1 };
-            Assert.Throws<ProductInvalidPriceException>(() => _evidenceEntryService.AddEvidenceEntryDTO(evidenceEntryDTO4));
+            CEvidenceEntry cEvEntry4 = new CEvidenceEntry() { Product = new CProduct() { ID = 1, Name = "Temporary Product", Price = 0.0M }, Amount = 1 };
+            Assert.Throws<ProductInvalidPriceException>(() => _evidenceEntryService.AddEvidenceEntry(cEvEntry4));
 
-            EvidenceEntryDTO evidenceEntryDTO5 = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = 1, Name = "Temporary Product", Price = 1.0M }, ProductAmount = -1 };
-            Assert.Throws<EvidenceEntryInvalidProductAmountException>(() => _evidenceEntryService.AddEvidenceEntryDTO(evidenceEntryDTO5));
+            CEvidenceEntry cEvEntry5 = new CEvidenceEntry() { Product = new CProduct() { ID = 1, Name = "Temporary Product", Price = 1.0M }, Amount = -1 };
+            Assert.Throws<EvidenceEntryInvalidProductAmountException>(() => _evidenceEntryService.AddEvidenceEntry(cEvEntry5));
         }
 
         [Test]
-        public void AddOrderDTOTests()
+        public void AddOrderTests()
         {
-            ClientDTO clientDTO = new ClientDTO() { ID = 0, Name = "Temporary Name", Adress = "Temporary Adress" };
-            EvidenceEntryDTO evidenceEntryDTO = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = 0, Name = "Temporary Product", Price = 1.0M }, ProductAmount = 1 };
-            List<EvidenceEntryDTO> evidenceEntryDTOs = new List<EvidenceEntryDTO>();
-            evidenceEntryDTOs.Add(evidenceEntryDTO);
-            OrderDTO orderDTO1 = new OrderDTO() { ID = 0, Products = evidenceEntryDTOs, Client = clientDTO };
-            Assert.IsTrue(_orderService.AddOrderDTO(orderDTO1));
+            CClient cClient = new CClient() { ID = 0, Name = "Temporary Name", Adress = "Temporary Adress" };
+            CEvidenceEntry cEvEntry = new CEvidenceEntry() { Product = new CProduct() { ID = 0, Name = "Temporary Product", Price = 1.0M }, Amount = 1 };
+            List<CEvidenceEntry> cEvEntrys = new List<CEvidenceEntry>();
+            cEvEntrys.Add(cEvEntry);
+            COrder cOrder1 = new COrder() { ID = 0, Entries = cEvEntrys, Client = cClient };
+            Assert.IsTrue(_orderService.AddOrder(cOrder1));
 
-            OrderDTO orderDTO2 = new OrderDTO() { ID = -1, Products = evidenceEntryDTOs, Client = clientDTO };
-            Assert.Throws<OrderInvalidIDException>(() => _orderService.AddOrderDTO(orderDTO2));
+            COrder cOrder2 = new COrder() { ID = -1, Entries = cEvEntrys, Client = cClient };
+            Assert.Throws<OrderInvalidIDException>(() => _orderService.AddOrder(cOrder2));
 
-            ClientDTO clientDTO2 = new ClientDTO() { ID = -1, Name = "Temporary Name", Adress = "Temporary Adress" };
-            List<EvidenceEntryDTO> evidenceEntryDTOs2 = new List<EvidenceEntryDTO>();
-            EvidenceEntryDTO evidenceEntryDTO2 = new EvidenceEntryDTO() { Product = new ProductDTO() { ID = 0, Name = "Temporary Product", Price = 1.0M }, ProductAmount = 1 };
-            evidenceEntryDTOs2.Add(evidenceEntryDTO2);
-            OrderDTO orderDTO3 = new OrderDTO() { ID = 0, Products = evidenceEntryDTOs2, Client = clientDTO2 };
-            Assert.Throws<OrderInvalidClientIDException>(() => _orderService.AddOrderDTO(orderDTO3));
+            CClient cClient2 = new CClient() { ID = -1, Name = "Temporary Name", Adress = "Temporary Adress" };
+            List<CEvidenceEntry> cEvEntrys2 = new List<CEvidenceEntry>();
+            CEvidenceEntry cEvEntry2 = new CEvidenceEntry() { Product = new CProduct() { ID = 0, Name = "Temporary Product", Price = 1.0M }, Amount = 1 };
+            cEvEntrys2.Add(cEvEntry2);
+            COrder cOrder3 = new COrder() { ID = 0, Entries = cEvEntrys2, Client = cClient2 };
+            Assert.Throws<OrderInvalidClientIDException>(() => _orderService.AddOrder(cOrder3));
         }
     }
 }

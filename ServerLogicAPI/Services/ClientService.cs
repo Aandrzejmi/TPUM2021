@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Server.DataAPI;
-using Server.LogicAPI;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 
 namespace Server.LogicAPI.Services
 {
@@ -35,9 +32,9 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotClientException();
         }
 
-        public bool ValidateModel(ClientDTO client)
+        public bool ValidateModel(CClient client)
         {
-            if (client is ClientDTO)
+            if (client is CClient)
             {
                 if (client.ID < 0)
                     throw new ClientInvalidIDException();
@@ -53,55 +50,55 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotClientException();
         }
 
-        public ClientDTO GetClientDTOByID(int id)
+        public CClient GetClientByID(int id)
         {
-            var clientDTO = new ClientDTO();
+            var cClient = new CClient();
 
             if (_repository.FindClientByID(id) is Client client)
             {
-                clientDTO.ID = client.ID;
-                clientDTO.Name = client.Name;
-                clientDTO.Adress = client.Adress;
+                cClient.ID = client.ID;
+                cClient.Name = client.Name;
+                cClient.Adress = client.Adress;
 
-                return clientDTO;
+                return cClient;
             }
             throw new ClientNotFoundException();
         }
 
-        public ClientDTO GetClientDTOByName(string name)
+        public CClient GetClientByName(string name)
         {
-            var clientDTO = new ClientDTO();
+            var cClient = new CClient();
 
             if (_repository.FindClientByName(name) is Client client)
             {
-                clientDTO.ID = client.ID;
-                clientDTO.Name = client.Name;
-                clientDTO.Adress = client.Adress;
+                cClient.ID = client.ID;
+                cClient.Name = client.Name;
+                cClient.Adress = client.Adress;
 
-                return clientDTO;
+                return cClient;
             }
             throw new ClientNotFoundException();
         }
 
-        public List<ClientDTO> GetAllClientDTOs()
+        public List<CClient> GetAllClients()
         {
-            List<ClientDTO> clientDTOs = new List<ClientDTO>();
+            List<CClient> cClients = new List<CClient>();
             foreach(Client client in _repository.GetAllClients())
             {
-                clientDTOs.Add(GetClientDTOByID(client.ID));
+                cClients.Add(GetClientByID(client.ID));
             }
-            return clientDTOs;
+            return cClients;
         }
 
-        public bool AddClientDTO(ClientDTO client)
+        public bool AddClient(CClient client)
         {
             if(ValidateModel(client))
             {
-                List<ClientDTO> clientDTOs = GetAllClientDTOs();
+                List<CClient> cClients = GetAllClients();
                 int newID = 0;
-                foreach (ClientDTO clientDTOListObject in clientDTOs)
+                foreach (CClient cClientListObject in cClients)
                 {
-                    if (newID == clientDTOListObject.ID)
+                    if (newID == cClientListObject.ID)
                         newID++;
                     else
                         break;
@@ -121,14 +118,14 @@ namespace Server.LogicAPI.Services
             return false;
         }
 
-        public bool ChangeClientDTO(int clientID, ClientDTO clientDTO)
+        public bool ChangeClient(int clientID, CClient cClient)
         {
             if (_repository.FindClientByID(clientID) is Client client)
             {   
-                if (ValidateModel(clientDTO))
+                if (ValidateModel(cClient))
                 {
-                    client.Adress = clientDTO.Adress;
-                    client.Name = clientDTO.Name;
+                    client.Adress = cClient.Adress;
+                    client.Name = cClient.Name;
                     if (_repository.ModifyClient(client))
                     {
                         Logic.InvokeClientsChanged();

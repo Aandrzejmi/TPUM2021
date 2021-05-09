@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Client.DataAPI;
 using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
-using Client.LogicAPI.Services;
 using CommunicationAPI.Models;
 
 namespace Client.LogicAPI.Services
@@ -26,11 +23,11 @@ namespace Client.LogicAPI.Services
             // it actually is
             if (_model is CEvidenceEntry evidenceEntry)
             {
-                if (evidenceEntry.ProductID < 0)
+                if (evidenceEntry.Product.ID < 0)
                     throw new EvidenceEntryInvalidIDException();
 
                 // it should be at least 0
-                if (evidenceEntry.ProductAmount < 0)
+                if (evidenceEntry.Amount < 0)
                     throw new EvidenceEntryInvalidProductAmountException();
 
                 return true;
@@ -64,8 +61,8 @@ namespace Client.LogicAPI.Services
 
             if (_repository.FindEvidenceEntryByID(id) is CEvidenceEntry evidenceEntry)
             {
-                evidenceEntryDTO.Product = _productService.GetProductDTOByID(evidenceEntry.ProductID);
-                evidenceEntryDTO.ProductAmount = evidenceEntry.ProductAmount;
+                evidenceEntryDTO.Product = _productService.GetProductDTOByID(evidenceEntry.Product.ID);
+                evidenceEntryDTO.ProductAmount = evidenceEntry.Amount;
 
                 return evidenceEntryDTO;
             }
@@ -77,7 +74,7 @@ namespace Client.LogicAPI.Services
             List<EvidenceEntryDTO> evidenceEntryDTOs = new List<EvidenceEntryDTO>();
             foreach(CEvidenceEntry evidenceEntry in _repository.GetAllEntries())
             {
-                evidenceEntryDTOs.Add(GetEvidenceEntryDTOByID(evidenceEntry.ProductID));
+                evidenceEntryDTOs.Add(GetEvidenceEntryDTOByID(evidenceEntry.Product.ID));
             }
             return evidenceEntryDTOs;
         }
@@ -96,7 +93,16 @@ namespace Client.LogicAPI.Services
                         break;
                 }
 
-                var evidenceEntryModel = new CEvidenceEntry() { ProductID = newID, ProductAmount = evidenceEntry.ProductAmount };
+                var evidenceEntryModel = new CEvidenceEntry() 
+                { 
+                    Product = new CProduct 
+                    { 
+                        ID = newID,
+                        Name = evidenceEntry.Product.Name,
+                        Price = evidenceEntry.Product.Price,
+                    }, 
+                    Amount = evidenceEntry.ProductAmount 
+                };
                 if (_productService.AddProductDTO(evidenceEntry.Product))
                 {
                     ValidateModel(evidenceEntryModel);

@@ -1,13 +1,8 @@
 ﻿using Client.LogicAPI;
 using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
-using System.Windows.Input;
-using Client.App.Commands;
 
 
 namespace Client.App.ViewModels

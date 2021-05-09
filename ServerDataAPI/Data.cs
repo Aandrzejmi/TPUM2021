@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-
-namespace Server.DataAPI
+﻿namespace Server.DataAPI
 {
     public static class Data
     {
@@ -67,6 +62,7 @@ namespace Server.DataAPI
         public static void ClearRepository()
         {
             repository = null;
+            DbContext.ClearContext();
         }
     }
 }

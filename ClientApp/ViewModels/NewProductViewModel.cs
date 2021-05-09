@@ -1,10 +1,5 @@
-﻿using Client.LogicAPI;
-using Client.LogicAPI.DTOs;
-using Client.LogicAPI.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using Client.LogicAPI.DTOs;
 using System.ComponentModel;
-using System.Text;
 using System.Windows.Input;
 using Client.App.Commands;
 

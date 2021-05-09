@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Server.LogicAPI.DTOs;
+﻿using System.Collections.Generic;
+using CommunicationAPI.Models;
 
 namespace Server.LogicAPI.Interfaces
 {
     public interface IOrderService : IService
     {
-        public bool ValidateModel(OrderDTO order);
-        public List<OrderDTO> GetAllOrderDTOs();
-        public bool AddOrderDTO(OrderDTO order);
-        public bool ChangeOrderDTO(int orderID, OrderDTO orderDTO);
-        public OrderDTO GetOrderDTOByID(int id);
-        public List<OrderDTO> GetOrderDTOsByClientID(int clientID);
-        public decimal GetPriceOfOrder(OrderDTO order);
+        public bool ValidateModel(COrder order);
+        public List<COrder> GetAllOrders();
+        public bool AddOrder(COrder order);
+        public bool ChangeOrder(int orderID, COrder orderDTO);
+        public COrder GetOrderByID(int id);
+        public List<COrder> GetOrdersByClientID(int clientID);
+        public decimal GetPriceOfOrder(COrder order);
     }
 }

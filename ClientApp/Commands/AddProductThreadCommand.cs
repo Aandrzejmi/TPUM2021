@@ -2,9 +2,8 @@
 using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Client.App.Commands
@@ -15,6 +14,7 @@ namespace Client.App.Commands
 
         private static int index = 0;
         private IEvidenceEntryService _productService = Logic.CreateEvidenceEntryService();
+        private IConnectionService _connectionService = Logic.CreateConnectionService();
         private Thread _thread;
         private Random _random = new Random();
 
@@ -25,14 +25,16 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            if (_thread == null)
-            {
-                _thread = new Thread(AddProductsLoop);
-                _thread.Start();
-            }
+            Task.Run(() => _connectionService.SendTask("send#client#all"));
 
-            IsActive = !IsActive;
-            OnExecute?.Invoke();
+        //    if (_thread == null)
+        //    {
+        //        _thread = new Thread(AddProductsLoop);
+        //        _thread.Start();
+        //    }
+
+        //    IsActive = !IsActive;
+        //    OnExecute?.Invoke();
         }
 
         private ProductDTO CreateDTO() => new ProductDTO() { Price = 2.0M, Name = $"New product {index++}" };

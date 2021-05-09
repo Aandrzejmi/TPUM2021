@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Server.LogicAPI.DTOs;
+﻿using System.Collections.Generic;
+using CommunicationAPI.Models;
 
 namespace Server.LogicAPI.Interfaces
 {
     public interface IClientService : IService
     {
-        public bool ValidateModel(ClientDTO client);
-        public bool AddClientDTO(ClientDTO client);
-        public bool ChangeClientDTO(int clientID, ClientDTO clientDTO);
-        public List<ClientDTO> GetAllClientDTOs();
-        public ClientDTO GetClientDTOByID(int id);
-        public ClientDTO GetClientDTOByName(string name);
+        public bool ValidateModel(CClient client);
+        public bool AddClient(CClient client);
+        public bool ChangeClient(int clientID, CClient clientDTO);
+        public List<CClient> GetAllClients();
+        public CClient GetClientByID(int id);
+        public CClient GetClientByName(string name);
     }
 }

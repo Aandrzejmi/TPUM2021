@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using CommunicationAPI.Models;
 
@@ -24,7 +23,7 @@ namespace Client.DataAPI
             if (FindProductByID(product.ID) == null)
             {
                 dataContext.CProducts.Add(product);
-                return AddEvidenceEntry((new CEvidenceEntry() { ProductID = product.ID, ProductAmount = 1 }));
+                return AddEvidenceEntry((new CEvidenceEntry() { Product = product, Amount = 1 }));
             }
             else
                 return false;
@@ -32,9 +31,9 @@ namespace Client.DataAPI
         
         public bool AddEvidenceEntry(CEvidenceEntry evidenceEntry)
         {
-            if (FindEvidenceEntryByID(evidenceEntry.ProductID) == null)
+            if (FindEvidenceEntryByID(evidenceEntry.Product.ID) == null)
             {
-                if (FindProductByID(evidenceEntry.ProductID) == null)
+                if (FindProductByID(evidenceEntry.Product.ID) == null)
                     return false;
 
                 dataContext.CEvidenceEntries.Add(evidenceEntry);
@@ -99,8 +98,8 @@ namespace Client.DataAPI
             {
                 if (or.ID == order.ID)
                 {
-                    or.Products = new List<CEvidenceEntry>(order.Products);
-                    or.ClientID = order.ClientID;
+                    or.Entries = new List<CEvidenceEntry>(order.Entries);
+                    or.Client = order.Client;
                     return true;
                 }
             }
@@ -111,9 +110,9 @@ namespace Client.DataAPI
         {
             foreach (CEvidenceEntry ev in dataContext.CEvidenceEntries)
             {
-                if (ev.ProductID == productID)
+                if (ev.Product.ID == productID)
                 {
-                    ev.ProductAmount = newAmount;
+                    ev.Amount = newAmount;
                     return true;
                 }
             }
@@ -132,7 +131,7 @@ namespace Client.DataAPI
 
         public CEvidenceEntry FindEvidenceEntryByID(int id)
         {
-            return dataContext.CEvidenceEntries?.Find(x => x.ProductID == id);
+            return dataContext.CEvidenceEntries?.Find(x => x.Product.ID == id);
         }
 
         public CClient FindClientByID(int id)
@@ -153,7 +152,7 @@ namespace Client.DataAPI
         public List<COrder> FindOrdersByClientID(int clientID)
         {
             List<COrder> copy = new List<COrder>();
-            foreach(COrder order in dataContext.COrders.FindAll(x => x.ClientID == clientID))
+            foreach(COrder order in dataContext.COrders.FindAll(x => x.Client.ID == clientID))
             {
                 copy.Add(order);
             }

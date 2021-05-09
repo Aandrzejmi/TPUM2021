@@ -6,4 +6,8 @@
     <AssemblyName>ServerDataAPI</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CommunicationAPI\CommunicationAPI.csproj" />
+  </ItemGroup>
+
 </Project>

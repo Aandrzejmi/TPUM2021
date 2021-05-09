@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Server.LogicAPI.DTOs;
+﻿using System.Collections.Generic;
+using CommunicationAPI.Models;
 
 namespace Server.LogicAPI.Interfaces
 {
     public interface IEvidenceEntryService : IService
     {
-        public bool ValidateModel(EvidenceEntryDTO evidenceEntry);
-        public bool AddEvidenceEntryDTO(EvidenceEntryDTO evidenceEntry);
-        public bool ChangeEvidenceEntryDTO(int evidenceEntryID, EvidenceEntryDTO evidenceEntryDTO);
-        public List<EvidenceEntryDTO> GetAllEvidenceEntryDTOs();
-        public EvidenceEntryDTO GetEvidenceEntryDTOByID(int id);
+        public bool ValidateModel(CEvidenceEntry evidenceEntry);
+        public bool AddEvidenceEntry(CEvidenceEntry evidenceEntry);
+        public bool ChangeEvidenceEntry(int evidenceEntryID, CEvidenceEntry evidenceEntryDTO);
+        public List<CEvidenceEntry> GetAllEvidenceEntries();
+        public CEvidenceEntry GetEvidenceEntryByID(int id);
     }
 }

@@ -26,24 +26,24 @@ namespace Client.DataTests
             Assert.IsNotNull(repo.FindEvidenceEntryByID(0));
 
             // Check if it has 1 product
-            Assert.AreEqual(repo.FindEvidenceEntryByID(1).ProductAmount, 1);
+            Assert.AreEqual(repo.FindEvidenceEntryByID(1).Amount, 1);
 
             // Check if you can change product amount to 2
             Assert.IsTrue(repo.ChangeProductAmount(1, 2));
 
             // Check if it changed
-            Assert.AreEqual(repo.FindEvidenceEntryByID(1).ProductAmount, 2);
+            Assert.AreEqual(repo.FindEvidenceEntryByID(1).Amount, 2);
 
             // Add new product with new ID, check if it created new evidence entry with 1 as amount
             CProduct product2 = new CProduct() { ID = 4, Name = "Boring Product", Price = 25.0M };
             repo.AddProduct(product2);
             Assert.IsNotNull(repo.FindEvidenceEntryByID(4));
-            Assert.AreEqual(repo.FindEvidenceEntryByID(4).ProductAmount, 1);
+            Assert.AreEqual(repo.FindEvidenceEntryByID(4).Amount, 1);
             // Size of the list of Entries
             Assert.AreEqual(repo.CountProductEntries, 5);
 
             // Try to add new evidence entry with product that already exists
-            Assert.IsFalse(repo.AddEvidenceEntry(new CEvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 }));
+            Assert.IsFalse(repo.AddEvidenceEntry(new CEvidenceEntry() { Product = product2, Amount = 1 }));
             // Size of the list of Entries
             Assert.AreEqual(repo.CountProductEntries, 5);
         }
@@ -114,31 +114,31 @@ namespace Client.DataTests
         public void RepositoryOrders()
         {
             // Size of the list of Clients
-            Assert.AreEqual(repo.CountOrders, 4);
+            Assert.AreEqual(4, repo.CountOrders);
 
             // Find order by ID
             Assert.IsNotNull(repo.FindOrderByID(0));
 
             // Find all orders by clients, 0 products, 1 product, more then 1 product
-            Assert.AreEqual(repo.FindOrdersByClientID(1).Count, 2);
+            Assert.AreEqual(3, repo.FindOrdersByClientID(1).Count);
 
             repo.FindOrdersByClientID(1)[0].ID = 555;
             Assert.IsNotNull(repo.FindOrderByID(555));
 
-            Assert.AreEqual(repo.FindOrdersByClientID(2).Count, 1);
-            Assert.AreEqual(repo.FindOrdersByClientID(0).Count, 0);
+            Assert.AreEqual(1, repo.FindOrdersByClientID(2).Count);
+            Assert.AreEqual(0, repo.FindOrdersByClientID(0).Count);
 
             // Modify existing order and check its clientID
             COrder order1 = repo.FindOrderByID(3);
-            order1.ClientID = 0;
+            order1.Client = repo.FindClientByID(0);
             repo.ModifyOrder(order1);
-            Assert.IsTrue(repo.FindOrderByID(3).ClientID == 0);
+            Assert.IsTrue(repo.FindOrderByID(3).Client.ID == 0);
 
             // Try to find non existing order by ID
             Assert.IsNull(repo.FindOrderByID(4));
 
             // Create new order and try to add it
-            COrder order2 = new COrder() { ID = 4, ClientID = 0 };
+            COrder order2 = new COrder() { ID = 4, Client = repo.FindClientByID(0) };
             repo.AddOrder(order2);
             Assert.IsNotNull(repo.FindOrderByID(4));
 
@@ -164,27 +164,27 @@ namespace Client.DataTests
             repo.AddClient(new CClient() { ID = 2, Name = "Hrabia Tyczyñski", Adress = "£ódŸ, Wólczañska 160" });
             repo.AddClient(new CClient() { ID = 3, Name = "Jan Jer", Adress = "£ódŸ, Pomorska 45" });
 
-            var order0 = new COrder() { ID = 0, ClientID = 3 };
-            order0.Products.Add(new CEvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
-            order0.Products.Add(new CEvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
-            order0.Products.Add(new CEvidenceEntry() { ProductID = product3.ID, ProductAmount = 1 });
-            order0.Products.Add(new CEvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
+            var order0 = new COrder() { ID = 0, Client = repo.FindClientByID(1) };
+            order0.Entries.Add(new CEvidenceEntry() { Product = product1, Amount = 1 });
+            order0.Entries.Add(new CEvidenceEntry() { Product = product2, Amount = 1 });
+            order0.Entries.Add(new CEvidenceEntry() { Product = product3, Amount = 1 });
+            order0.Entries.Add(new CEvidenceEntry() { Product = product4, Amount = 1 });
             repo.AddOrder(order0);
 
-            var order1 = new COrder() { ID = 1, ClientID = 2 };
-            order1.Products.Add(new CEvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
-            order1.Products.Add(new CEvidenceEntry() { ProductID = product3.ID, ProductAmount = 1 });
+            var order1 = new COrder() { ID = 1, Client = repo.FindClientByID(2) };
+            order1.Entries.Add(new CEvidenceEntry() { Product = product1, Amount = 1 });
+            order1.Entries.Add(new CEvidenceEntry() { Product = product3, Amount = 1 });
             repo.AddOrder(order1);
 
-            var order2 = new COrder() { ID = 2, ClientID = 1 };
-            order2.Products.Add(new CEvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
-            order2.Products.Add(new CEvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
+            var order2 = new COrder() { ID = 2, Client = repo.FindClientByID(1) };
+            order2.Entries.Add(new CEvidenceEntry() { Product = product2, Amount = 1 });
+            order2.Entries.Add(new CEvidenceEntry() { Product = product4, Amount = 1 });
             repo.AddOrder(order2);
 
-            var order3 = new COrder() { ID = 3, ClientID = 1 };
-            order3.Products.Add(new CEvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
-            order3.Products.Add(new CEvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
-            order3.Products.Add(new CEvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
+            var order3 = new COrder() { ID = 3, Client = repo.FindClientByID(1) };
+            order3.Entries.Add(new CEvidenceEntry() { Product = product1, Amount = 1 });
+            order3.Entries.Add(new CEvidenceEntry() { Product = product2, Amount = 1 });
+            order3.Entries.Add(new CEvidenceEntry() { Product = product4, Amount = 1 });
             repo.AddOrder(order3);
         }
     }
