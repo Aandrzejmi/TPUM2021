@@ -6,6 +6,7 @@ using Client.LogicAPI;
 using Client.LogicAPI.Interfaces;
 using Client.LogicAPI.Exceptions;
 using Client.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 
 namespace Client.LogicAPI.Services
 {
@@ -17,9 +18,9 @@ namespace Client.LogicAPI.Services
         {
             _repository = repository;
         }
-        public bool ValidateModel(IModel _model)
+        public bool ValidateModel(CClient _model)
         {
-            if (_model is Client.DataAPI.Client client)
+            if (_model is CClient client)
             {
                 if (client.ID < 0)
                     throw new ClientInvalidIDException();
@@ -57,7 +58,7 @@ namespace Client.LogicAPI.Services
         {
             var clientDTO = new ClientDTO();
 
-            if (_repository.FindClientByID(id) is Client.DataAPI.Client client)
+            if (_repository.FindClientByID(id) is CClient client)
             {
                 clientDTO.ID = client.ID;
                 clientDTO.Name = client.Name;
@@ -72,7 +73,7 @@ namespace Client.LogicAPI.Services
         {
             var clientDTO = new ClientDTO();
 
-            if (_repository.FindClientByName(name) is Client.DataAPI.Client client)
+            if (_repository.FindClientByName(name) is CClient client)
             {
                 clientDTO.ID = client.ID;
                 clientDTO.Name = client.Name;
@@ -86,7 +87,7 @@ namespace Client.LogicAPI.Services
         public List<ClientDTO> GetAllClientDTOs()
         {
             List<ClientDTO> clientDTOs = new List<ClientDTO>();
-            foreach(Client.DataAPI.Client client in _repository.GetAllClients())
+            foreach(CClient client in _repository.GetAllClients())
             {
                 clientDTOs.Add(GetClientDTOByID(client.ID));
             }
@@ -107,7 +108,7 @@ namespace Client.LogicAPI.Services
                         break;
                 }
 
-                var clientModel = new Client.DataAPI.Client();
+                var clientModel = new CClient();
                 clientModel.ID = newID;
                 clientModel.Name = client.Name;
                 clientModel.Adress = client.Adress;
@@ -123,7 +124,7 @@ namespace Client.LogicAPI.Services
 
         public bool ChangeClientDTO(int clientID, ClientDTO clientDTO)
         {
-            if (_repository.FindClientByID(clientID) is Client.DataAPI.Client client)
+            if (_repository.FindClientByID(clientID) is CClient client)
             {   
                 if (ValidateModel(clientDTO))
                 {
