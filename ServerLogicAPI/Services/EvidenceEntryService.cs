@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Server.DataAPI;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models   ;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
 using Server.LogicAPI.Services;
@@ -37,19 +37,19 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotEvidenceEntryException();
         }
 
-        public bool ValidateModel(EvidenceEntryDTO evidenceEntry)
+        public bool ValidateModel(CEvidenceEntry evidenceEntry)
         {
             // it actually is
-            if (evidenceEntry is EvidenceEntryDTO)
+            if (evidenceEntry is CEvidenceEntry)
             {
-                if (evidenceEntry.ID < 0)
+                if (evidenceEntry.Product.ID < 0)
                     throw new EvidenceEntryInvalidIDException();
 
                 if (!_productService.ValidateModel(evidenceEntry.Product))
                     return false;
 
                 // it should be at least 0
-                if (evidenceEntry.ProductAmount < 0)
+                if (evidenceEntry.Amount < 0)
                     throw new EvidenceEntryInvalidProductAmountException();
 
                 return true;
@@ -57,49 +57,49 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotEvidenceEntryException();
         }
 
-        public EvidenceEntryDTO GetEvidenceEntryDTOByID(int id)
+        public CEvidenceEntry GetEvidenceEntryByID(int id)
         {
-            var evidenceEntryDTO = new EvidenceEntryDTO();
+            var cEvidenceEntry = new CEvidenceEntry();
 
             if (_repository.FindEvidenceEntryByID(id) is EvidenceEntry evidenceEntry)
             {
-                evidenceEntryDTO.Product = _productService.GetProductDTOByID(evidenceEntry.ID);
-                evidenceEntryDTO.ProductAmount = evidenceEntry.ProductAmount;
+                cEvidenceEntry.Product = _productService.GetProductByID(evidenceEntry.ID);
+                cEvidenceEntry.Amount = evidenceEntry.ProductAmount;
 
-                return evidenceEntryDTO;
+                return cEvidenceEntry;
             }
             throw new EvidenceEntryNotFoundException();
         }
 
-        public List<EvidenceEntryDTO> GetAllEvidenceEntryDTOs()
+        public List<CEvidenceEntry> GetAllEvidenceEntries()
         {
-            List<EvidenceEntryDTO> evidenceEntryDTOs = new List<EvidenceEntryDTO>();
+            List<CEvidenceEntry> cEvidenceEntrys = new List<CEvidenceEntry>();
             foreach(EvidenceEntry evidenceEntry in _repository.GetAllEntries())
             {
-                evidenceEntryDTOs.Add(GetEvidenceEntryDTOByID(evidenceEntry.ID));
+                cEvidenceEntrys.Add(GetEvidenceEntryByID(evidenceEntry.ID));
             }
-            return evidenceEntryDTOs;
+            return cEvidenceEntrys;
         }
 
-        public bool AddEvidenceEntryDTO(EvidenceEntryDTO evidenceEntry)
+        public bool AddEvidenceEntry(CEvidenceEntry evidenceEntry)
         {
             if (ValidateModel(evidenceEntry))
             {
-                List<EvidenceEntryDTO> evidenceEntryDTOs = GetAllEvidenceEntryDTOs();
+                List<CEvidenceEntry> cEvidenceEntrys = GetAllEvidenceEntries();
                 int newID = 0;
-                foreach (EvidenceEntryDTO evidenceEntryDTOInList in evidenceEntryDTOs)
+                foreach (CEvidenceEntry cEvidenceEntryInList in cEvidenceEntrys)
                 {
-                    if (newID == evidenceEntryDTOInList.ID)
+                    if (newID == cEvidenceEntryInList.Product.ID)
                         newID++;
                     else
                         break;
                 }
 
-                var evidenceEntryModel = new EvidenceEntry() { ProductID = newID, ProductAmount = evidenceEntry.ProductAmount };
-                if (_productService.AddProductDTO(evidenceEntry.Product))
+                var evidenceEntryModel = new EvidenceEntry() { ProductID = newID, ProductAmount = evidenceEntry.Amount };
+                if (_productService.AddProduct(evidenceEntry.Product))
                 {
                     ValidateModel(evidenceEntryModel);
-                    ChangeEvidenceEntryDTO(newID, evidenceEntry);
+                    ChangeEvidenceEntry(newID, evidenceEntry);
                     Logic.InvokeEvidenceEntryChanged();
                     return true;
                 }
@@ -107,13 +107,13 @@ namespace Server.LogicAPI.Services
             return false;
         }
 
-        public bool ChangeEvidenceEntryDTO(int evidenceEntryID, EvidenceEntryDTO evidenceEntryDTO)
+        public bool ChangeEvidenceEntry(int evidenceEntryID, CEvidenceEntry cEvidenceEntry)
         {
             if (_repository.FindEvidenceEntryByID(evidenceEntryID) is EvidenceEntry evidenceEntry)
             {
-                if (ValidateModel(evidenceEntryDTO))
+                if (ValidateModel(cEvidenceEntry))
                 {
-                    if (_repository.ChangeProductAmount(evidenceEntryID, evidenceEntryDTO.ProductAmount))
+                    if (_repository.ChangeProductAmount(evidenceEntryID, cEvidenceEntry.Amount))
                     {
                         Logic.InvokeEvidenceEntryChanged();
                         return true;

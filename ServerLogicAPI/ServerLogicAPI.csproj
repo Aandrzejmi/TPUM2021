@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommunicationAPI\CommunicationAPI.csproj" />
     <ProjectReference Include="..\ServerDataAPI\ServerDataAPI.csproj" />
   </ItemGroup>
 

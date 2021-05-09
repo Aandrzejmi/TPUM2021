@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using Server.DataAPI;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Services;
 using Server.LogicAPI.Exceptions;
@@ -9,7 +9,7 @@ using Moq;
 
 namespace Server.LogicTests
 {
-    public class LogicAPIModifyDTOTests
+    public class LogicAPIModifyTests
     {
         Mock<IRepository> repositoryMock;
         IOrderService _orderService;
@@ -70,42 +70,42 @@ namespace Server.LogicTests
         }
 
         [Test]
-        public void ModifyProductDTOTests()
+        public void ModifyProductTests()
         {
-            ProductDTO productDTO = _productService.GetProductDTOByID(0);
-            productDTO.Name = "Something else";
-            Assert.IsTrue(_productService.ValidateModel(productDTO));
-            Assert.IsTrue(_productService.ChangeProductDTO(productDTO.ID, productDTO));
+            CProduct cProduct = _productService.GetProductByID(0);
+            cProduct.Name = "Something else";
+            Assert.IsTrue(_productService.ValidateModel(cProduct));
+            Assert.IsTrue(_productService.ChangeProduct(cProduct.ID, cProduct));
         }
 
         [Test]
-        public void ModifyOrderDTOTests()
+        public void ModifyOrderTests()
         {
-            List<EvidenceEntryDTO> evidenceEntryDTOs = new List<EvidenceEntryDTO>();
-            EvidenceEntryDTO evidenceEntryDTO = new EvidenceEntryDTO() {Product = new ProductDTO() { ID = 0, Name = "Temp", Price = 1.0M }, ProductAmount = 1};
-            evidenceEntryDTOs.Add(evidenceEntryDTO);
-            OrderDTO orderDTO = new OrderDTO() { Products = evidenceEntryDTOs, Client = new ClientDTO() {ID = 0, Name = "Temp name", Adress = "Temp Adress" } };
-            orderDTO.Products[0].ProductAmount = 2;
-            Assert.IsTrue(_orderService.ValidateModel(orderDTO));
-            Assert.IsTrue(_orderService.ChangeOrderDTO(orderDTO.ID, orderDTO));
+            List<CEvidenceEntry> cEvEntries = new List<CEvidenceEntry>();
+            CEvidenceEntry cEvEntry = new CEvidenceEntry() {Product = new CProduct() { ID = 0, Name = "Temp", Price = 1.0M }, Amount = 1};
+            cEvEntries.Add(cEvEntry);
+            COrder cOrder = new COrder() { Entries = cEvEntries, Client = new CClient() {ID = 0, Name = "Temp name", Adress = "Temp Adress" } };
+            cOrder.Entries[0].Amount = 2;
+            Assert.IsTrue(_orderService.ValidateModel(cOrder));
+            Assert.IsTrue(_orderService.ChangeOrder(cOrder.ID, cOrder));
         }
 
         [Test]
-        public void ModifyClientDTOTests()
+        public void ModifyClientTests()
         {
-            ClientDTO clientDTO = _clientService.GetClientDTOByID(0);
-            clientDTO.Name = "Something else";
-            Assert.IsTrue(_clientService.ValidateModel(clientDTO));
-            Assert.IsTrue(_clientService.ChangeClientDTO(clientDTO.ID, clientDTO));
+            CClient cClient = _clientService.GetClientByID(0);
+            cClient.Name = "Something else";
+            Assert.IsTrue(_clientService.ValidateModel(cClient));
+            Assert.IsTrue(_clientService.ChangeClient(cClient.ID, cClient));
         }
 
         [Test]
-        public void ChangeProductDTOAmountTest()
+        public void ChangeProductAmountTest()
         {
-            EvidenceEntryDTO evidenceEntryDTO = _evidenceEntryService.GetEvidenceEntryDTOByID(0);
-            evidenceEntryDTO.ProductAmount = 2;
-            Assert.IsTrue(_evidenceEntryService.ValidateModel(evidenceEntryDTO));
-            Assert.IsTrue(_evidenceEntryService.ChangeEvidenceEntryDTO(evidenceEntryDTO.ID, evidenceEntryDTO));
+            CEvidenceEntry cEvEntry = _evidenceEntryService.GetEvidenceEntryByID(0);
+            cEvEntry.Amount = 2;
+            Assert.IsTrue(_evidenceEntryService.ValidateModel(cEvEntry));
+            Assert.IsTrue(_evidenceEntryService.ChangeEvidenceEntry(cEvEntry.Product.ID, cEvEntry));
         }
     }
 }

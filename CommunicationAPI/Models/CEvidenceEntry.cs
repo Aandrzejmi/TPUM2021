@@ -7,21 +7,21 @@ namespace CommunicationAPI.Models
     public class CEvidenceEntry
     {
         [DataMember]
-        public int ProductID { get; set; }
+        public CProduct Product { get; set; }
         
         [DataMember]
-        public int ProductAmount { get; set; }
+        public int Amount { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is CEvidenceEntry entry &&
-                   ProductID == entry.ProductID &&
-                   ProductAmount == entry.ProductAmount;
+                   Product.Equals(entry.Product) &&
+                   Amount == entry.Amount;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ProductID, ProductAmount);
+            return HashCode.Combine(Product, Amount);
         }
     }
 }

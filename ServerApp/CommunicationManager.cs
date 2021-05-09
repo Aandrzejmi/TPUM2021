@@ -9,6 +9,7 @@ namespace Server.App
 {
     public class CommunicationManager : IDisposable
     {
+        static uint msgCounter = 0;
         private Action<string> Log { get; }
         private int webSocketPort = 8081;
         private List<WebSocketConnection> Sockets { get; set; } = new List<WebSocketConnection>();
@@ -63,13 +64,34 @@ namespace Server.App
 
         private void initMessageHandler(WebSocketConnection ws)
         {
+
             ws.onMessage = async (data) =>
             {
-                Log($"[Received message]: {data}");
+                uint no = msgCounter++;
+                Log($"[Received message {no}]: {data}");
 
+                var split = data.Split();
 
-                //Resolve message
-                await ws.SendAsync("HEEEEEEEEEEEEELLLOOOOOO THERE");
+                switch (split[0])
+                {
+                    case "send":
+                        Log($"[{no} - Send request]: aaa");
+                        //Resolve message
+                        await ws.SendAsync("HEEEEEEEEEEEEELLLOOOOOO THERE");
+                        break;
+
+                    case "add":
+                        Log($"[{no} - Add request]: bbb");
+                        break;
+
+                    case "update":
+                        Log($"[{no} - Update request]: ccc");
+                        break;
+
+                    default:
+                        Log($"[{no} - Message unknown]: no response");
+                        break;
+                }
             };
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Server.DataAPI;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
 
@@ -44,9 +44,9 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotOrderException();
         }
 
-        public bool ValidateModel(OrderDTO order)
+        public bool ValidateModel(COrder order)
         {
-            if (order is OrderDTO)
+            if (order is COrder)
             {
                 // Maybe find client from repo and find if it actually exists
                 if (order.ID < 0)
@@ -58,12 +58,12 @@ namespace Server.LogicAPI.Services
                 if (order.Client.ID < 0)
                     throw new OrderInvalidClientIDException();
 
-                if (order.Client is ClientDTO client)
+                if (order.Client is CClient client)
                     _clientService.ValidateModel(client);
                 else
                     throw new OrderClientNotFoundException();
 
-                foreach (EvidenceEntryDTO product in order.Products)
+                foreach (CEvidenceEntry product in order.Entries)
                 {
                     if (!_evidenceEntryService.ValidateModel(product))
                         return false;
@@ -73,72 +73,72 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotOrderException();
         }
 
-        public List<OrderDTO> GetAllOrderDTOs()
+        public List<COrder> GetAllOrders()
         {
-            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+            List<COrder> cOrders = new List<COrder>();
             foreach(Order order in _repository.GetAllOrders())
             {
-                orderDTOs.Add(GetOrderDTOByID(order.ID));
+                cOrders.Add(GetOrderByID(order.ID));
             }
-            return orderDTOs;
+            return cOrders;
         }
 
-        public OrderDTO GetOrderDTOByID(int id)
+        public COrder GetOrderByID(int id)
         {
-            var orderDTO = new OrderDTO();
+            var cOrder = new COrder();
 
             if (_repository.FindOrderByID(id) is Order order)
             {
-                orderDTO.ID = order.ID;
-                orderDTO.Client = _clientService.GetClientDTOByID(order.ClientID);
-                List<EvidenceEntryDTO> evidenceEntriesDTO = new List<EvidenceEntryDTO>();
+                cOrder.ID = order.ID;
+                cOrder.Client = _clientService.GetClientByID(order.ClientID);
+                List<CEvidenceEntry> cEvEntries = new List<CEvidenceEntry>();
                 foreach(EvidenceEntry product in order.Products )
                 {
-                    evidenceEntriesDTO.Add(_evidenceEntryService.GetEvidenceEntryDTOByID(product.ID));
+                    cEvEntries.Add(_evidenceEntryService.GetEvidenceEntryByID(product.ID));
                 }
-                orderDTO.Products = new List<EvidenceEntryDTO>(evidenceEntriesDTO);
-                return orderDTO;
+                cOrder.Entries = new List<CEvidenceEntry>(cEvEntries);
+                return cOrder;
             }
             throw new OrderNotFoundException();
         }
-        public List<OrderDTO> GetOrderDTOsByClientID(int clientID)
+        public List<COrder> GetOrdersByClientID(int clientID)
         {
-            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+            List<COrder> cOrders = new List<COrder>();
 
             if (_repository.FindOrdersByClientID(clientID) is List<Order> orders && orders.Count > 0)
             {
                 foreach(Order order in orders)
                 {
-                    orderDTOs.Add(GetOrderDTOByID(order.ID));
+                    cOrders.Add(GetOrderByID(order.ID));
                 }
-                return orderDTOs;
+                return cOrders;
             }
             throw new OrderNotFoundException();
         }
 
-        public decimal GetPriceOfOrder(OrderDTO order)
+        public decimal GetPriceOfOrder(COrder order)
         {
             decimal sum = 0.0M;
-            foreach (var item in order.Products)
+            foreach (var item in order.Entries)
             {
-                int itemCount = item.ProductAmount;
+                int itemCount = item.Amount;
                 sum += (itemCount * item.Product.Price);
             }
             return sum;
         }
 
-        public bool AddOrderDTO(OrderDTO order)
+        public bool AddOrder(COrder order)
         {
             if (ValidateModel(order))
             {
                 var orderModel = new Order();
 
-                List<OrderDTO> orderDTOs = new List<OrderDTO>();
-                orderDTOs = GetAllOrderDTOs();
+                List<COrder> cOrders = new List<COrder>();
+                cOrders = GetAllOrders();
                 int newID = 0;
-                foreach(OrderDTO orderDTOListObject in orderDTOs)
+                foreach(COrder cOrderListObject in cOrders)
                 {
-                    if (newID == orderDTOListObject.ID)
+                    if (newID == cOrderListObject.ID)
                         newID++;
                     else
                         break;
@@ -148,11 +148,11 @@ namespace Server.LogicAPI.Services
                 orderModel.ClientID = order.Client.ID;
                 orderModel.Products = new List<EvidenceEntry>();
 
-                foreach(EvidenceEntryDTO entryDTO in order.Products)
+                foreach(CEvidenceEntry cEvEntries in order.Entries)
                 {
                     var evidenceEntryModel = new EvidenceEntry();
-                    evidenceEntryModel.ProductID = entryDTO.Product.ID;
-                    evidenceEntryModel.ProductAmount = entryDTO.ProductAmount;
+                    evidenceEntryModel.ProductID = cEvEntries.Product.ID;
+                    evidenceEntryModel.ProductAmount = cEvEntries.Amount;
 
                     _evidenceEntryService.ValidateModel(evidenceEntryModel);
                     if (_repository.FindProductByID(evidenceEntryModel.ProductID) is null)
@@ -170,17 +170,17 @@ namespace Server.LogicAPI.Services
             return false;
         }
 
-        public bool ChangeOrderDTO(int orderID, OrderDTO orderDTO)
+        public bool ChangeOrder(int orderID, COrder cOrder)
         {
             if (_repository.FindOrderByID(orderID) is Order order)
             {
-                if (ValidateModel(orderDTO))
+                if (ValidateModel(cOrder))
                 {
-                    order.ClientID = orderDTO.Client.ID;
+                    order.ClientID = cOrder.Client.ID;
                     order.Products = new List<EvidenceEntry>();
-                    foreach(EvidenceEntryDTO evidenceEntryDTO in orderDTO.Products)
+                    foreach(CEvidenceEntry cEvEntry in cOrder.Entries)
                     {
-                        order.Products.Add(new EvidenceEntry() { ProductID = evidenceEntryDTO.Product.ID, ProductAmount = evidenceEntryDTO.ProductAmount });
+                        order.Products.Add(new EvidenceEntry() { ProductID = cEvEntry.Product.ID, ProductAmount = cEvEntry.Amount });
                     }
                     if (_repository.ModifyOrder(order))
                     {

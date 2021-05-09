@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Server.DataAPI;
-using Server.LogicAPI.DTOs;
+using CommunicationAPI.Models;
 using Server.LogicAPI.Interfaces;
 using Server.LogicAPI.Exceptions;
 
@@ -34,9 +34,9 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotProductException();
         }
 
-        public bool ValidateModel(ProductDTO product)
+        public bool ValidateModel(CProduct product)
         {
-            if (product is ProductDTO)
+            if (product is CProduct)
             {
                 if (product.ID < 0)
                     throw new ProductInvalidIDException();
@@ -52,55 +52,55 @@ namespace Server.LogicAPI.Services
             throw new ModelIsNotProductException();
         }
 
-        public ProductDTO GetProductDTOByID(int id)
+        public CProduct GetProductByID(int id)
         {
-            var productDTO = new ProductDTO();
+            var cProduct = new CProduct();
 
             if (_repository.FindProductByID(id) is Product product)
             {
-                productDTO.ID = product.ID;
-                productDTO.Name = product.Name;
-                productDTO.Price = product.Price;
+                cProduct.ID = product.ID;
+                cProduct.Name = product.Name;
+                cProduct.Price = product.Price;
 
-                return productDTO;
+                return cProduct;
             }
             throw new ProductNotFoundException();
         }
 
-        public ProductDTO GetProductDTOByName(string name)
+        public CProduct GetProductByName(string name)
         {
-            var productDTO = new ProductDTO();
+            var cProduct = new CProduct();
 
             if (_repository.FindProductByName(name) is Product product)
             {
-                productDTO.ID = product.ID;
-                productDTO.Name = product.Name;
-                productDTO.Price = product.Price;
+                cProduct.ID = product.ID;
+                cProduct.Name = product.Name;
+                cProduct.Price = product.Price;
 
-                return productDTO;
+                return cProduct;
             }
             throw new ProductNotFoundException();
         }
 
-        public List<ProductDTO> GetAllProductDTOs()
+        public List<CProduct> GetAllProducts()
         {
-            List<ProductDTO> productDTOs = new List<ProductDTO>();
+            List<CProduct> cProducts = new List<CProduct>();
             foreach(Product product in _repository.GetAllProducts())
             {
-                productDTOs.Add(GetProductDTOByID(product.ID));
+                cProducts.Add(GetProductByID(product.ID));
             }
-            return productDTOs;
+            return cProducts;
         }
 
-        public bool AddProductDTO(ProductDTO product)
+        public bool AddProduct(CProduct product)
         {
             if (ValidateModel(product))
             {
-                List<ProductDTO> productDTOs = GetAllProductDTOs();
+                List<CProduct> cProducts = GetAllProducts();
                 int newID = 0;
-                foreach (ProductDTO productDTOListObject in productDTOs)
+                foreach (CProduct cProductListObject in cProducts)
                 {
-                    if (newID == productDTOListObject.ID)
+                    if (newID == cProductListObject.ID)
                         newID++;
                     else
                         break;
@@ -121,11 +121,11 @@ namespace Server.LogicAPI.Services
             return false;
         }
 
-        public bool ChangeProductDTO(int productID, ProductDTO productDTO)
+        public bool ChangeProduct(int productID, CProduct cProduct)
         {
             if (_repository.FindProductByID(productID) is Product product)
             {
-                if (ValidateModel(productDTO))
+                if (ValidateModel(cProduct))
                 {
                     product.Name = product.Name;
                     product.Price = product.Price;

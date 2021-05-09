@@ -11,18 +11,18 @@ namespace CommunicationAPI.Models
         public int ID { get; set; }
 
         [DataMember]
-        public List<CEvidenceEntry> Products { get; set; } = new List<CEvidenceEntry>();
+        public List<CEvidenceEntry> Entries { get; set; } = new List<CEvidenceEntry>();
 
         [DataMember]
-        public int ClientID { get; set; }
+        public CClient Client { get; set; }
 
         public override bool Equals(object obj)
         {
-            if (obj is COrder order && ID == order.ID && ClientID == order.ClientID && Products.Count == order.Products.Count)
+            if (obj is COrder order && ID == order.ID && Client.Equals(order.Client) && Entries.Count == order.Entries.Count)
             {
-                for (int i = 0; i < Products.Count; i++)
+                for (int i = 0; i < Entries.Count; i++)
                 {
-                    if (!order.Products[i].Equals(Products[i]))
+                    if (!order.Entries[i].Equals(Entries[i]))
                         return false;
                 }
                 return true;
@@ -32,7 +32,7 @@ namespace CommunicationAPI.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ID, Products, ClientID);
+            return HashCode.Combine(ID, Entries, Client);
         }
     }
 }
