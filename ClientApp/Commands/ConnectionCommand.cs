@@ -33,8 +33,8 @@ namespace Client.App.Commands
             {
                 Task.Run(async () =>
                 {
-                    await _connectionService.CloseConnection();
                     _vm.Connected = false;
+                    await _connectionService.CloseConnection();
                 });
             }
             else

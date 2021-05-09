@@ -10,10 +10,7 @@ namespace Server.App
     {
         private Action<string> Log { get; }
         private int webSocketPort = 8081;
-        private List<WebSocketConnection> sockets = new List<WebSocketConnection>();
-        private List<MessageHandler> handlers = new List<MessageHandler>();
-        private List<SessionTimer> timers = new List<SessionTimer>();
-        private List<SessionTimeoutObserver> observers = new List<SessionTimeoutObserver>();
+        private List<Connection> connections = new List<Connection>();
 
         public CommunicationManager(int webSocketPort, Action<string> log)
         {
@@ -32,23 +29,27 @@ namespace Server.App
 
         private async Task InitConnectionAsync(WebSocketConnection ws)
         {
-            sockets.Add(ws);
-            InitMessageHandler(ws);
-            InitErrorHandler(ws);
-            InitSessionTimer(ws);
-            await WriteAsync(ws, "Connected");
+            var con = new Connection();
+
+            connections.Add(con);
+
+            con.ws = ws;
+            InitMessageHandler(con);
+            InitErrorHandler(con);
+            InitSessionTimer(con);
+            await WriteAsync(con.ws, "Connected");
         }
 
-        private void InitErrorHandler(WebSocketConnection ws)
+        private void InitErrorHandler(Connection con)
         {
-            ws.onClose = () => CloseConnection(ws);
-            ws.onError = () => CloseConnection(ws);
+            con.ws.onClose = () => CloseConnection(con);
+            con.ws.onError = () => CloseConnection(con);
         }
 
-        private void CloseConnection(WebSocketConnection ws)
+        private void CloseConnection(Connection con)
         {
-            Log($"Closing connection to peer: {ws}");
-            sockets.Remove(ws);
+            Log($"Closing connection to peer: {con.ws}");
+            connections.Remove(con);
         }
 
         private async Task WriteAsync(WebSocketConnection ws, string message)
@@ -59,35 +60,32 @@ namespace Server.App
 
         private async Task SendAll(string message)
         {
-            foreach (WebSocketConnection ws in sockets)
+            foreach (var con in connections)
             {
-                await ws.SendAsync(message);
+                await con.ws.SendAsync(message);
             }
         }
 
-        private void InitMessageHandler(WebSocketConnection ws)
+        private void InitMessageHandler(Connection con)
         {
-            var handler = new MessageHandler(ws, Log);
-            handlers.Add(handler);
-            ws.onMessage = handler.Handle;
+            con.handler = new MessageHandler(con, Log);
+            con.ws.onMessage = con.handler.Handle;
         }
 
-        private void InitSessionTimer(WebSocketConnection ws)
+        private void InitSessionTimer(Connection con)
         {
-            var timer = new SessionTimer(5);
-            var observer = new SessionTimeoutObserver(ws, Log);
-            observer.Subscribe(timer);
-            timers.Add(timer);
-            observers.Add(observer);
-            timer.Start();
+            con.timer = new SessionTimer(60);
+            con.observer = new SessionTimeoutObserver(con.ws, Log);
+            con.observer.Subscribe(con.timer);
+            con.timer.Start();
         }
 
         public void Dispose()
         {
             Log($"Shuting down the communication manager");
             List<Task> _disconnectionTasks = new List<Task>();
-            foreach (WebSocketConnection _item in sockets)
-                _disconnectionTasks.Add(_item.DisconnectAsync());
+            foreach (var con in connections)
+                _disconnectionTasks.Add(con.ws.DisconnectAsync());
             Task.WaitAll(_disconnectionTasks.ToArray());
         }
     }

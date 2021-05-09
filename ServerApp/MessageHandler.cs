@@ -13,13 +13,13 @@ namespace Server.App
         private readonly IProductService _productService = Logic.CreateProductService();
         private readonly IEvidenceEntryService _evidenceEntryService = Logic.CreateEvidenceEntryService();
         private readonly IOrderService _orderService = Logic.CreateOrderService();
-        private readonly WebSocketConnection socket;
+        private readonly Connection _con;
         private readonly Action<string> Log;
         private uint counter = 0;
 
-        public MessageHandler(WebSocketConnection ws, Action<string> logFinction)
+        public MessageHandler(Connection con, Action<string> logFinction)
         {
-            socket = ws;
+            _con = con;
             Log = logFinction;
         }
 
@@ -27,6 +27,8 @@ namespace Server.App
         {
             Task.Run(() =>
             {
+                _con.timer.Reset();
+
                 uint no = counter++;
                 Log($"[Received message {no}]: {data}");
 
@@ -158,28 +160,28 @@ namespace Server.App
                     case "client":
                         var client = _clientService.GetClientByID(id);
                         string msgC = "client#" + Serialization.Serialize(client);
-                        socket.SendTask(msgC);
+                        _con.ws.SendTask(msgC);
                         Log($"[{no} - Send request]: responding - {msgC}");
                         break;
 
                     case "product":
                         var product = _productService.GetProductByID(id);
                         string msgP = "product#" + Serialization.Serialize(product);
-                        socket.SendTask(msgP);
+                        _con.ws.SendTask(msgP);
                         Log($"[{no} - Send request]: responding - {msgP}");
                         break;
 
                     case "entry":
                         var evEntry = _evidenceEntryService.GetEvidenceEntryByID(id);
                         string msgE = "entry#" + Serialization.Serialize(evEntry);
-                        socket.SendTask(msgE);
+                        _con.ws.SendTask(msgE);
                         Log($"[{no} - Send request]: responding - {msgE}");
                         break;
 
                     case "order":
                         var order = _clientService.GetClientByID(id);
                         string msgO = "order#" + Serialization.Serialize(order);
-                        socket.SendTask(msgO);
+                        _con.ws.SendTask(msgO);
                         Log($"[{no} - Send request]: responding - {msgO}");
                         break;
                 }
@@ -199,28 +201,28 @@ namespace Server.App
                     case "client":
                         var client = _clientService.GetAllClients();
                         string msgC = "client#" + Serialization.Serialize(client);
-                        socket.SendTask(msgC);
+                        _con.ws.SendTask(msgC);
                         Log($"[{no} - Send request]: responding - {msgC}");
                         break;
 
                     case "product":
                         var product = _productService.GetAllProducts();
                         string msgP = "product#" + Serialization.Serialize(product);
-                        socket.SendTask(msgP);
+                        _con.ws.SendTask(msgP);
                         Log($"[{no} - Send request]: responding - {msgP}");
                         break;
 
                     case "entry":
                         var evEntry = _evidenceEntryService.GetAllEvidenceEntries();
                         string msgE = "entry#" + Serialization.Serialize(evEntry);
-                        socket.SendTask(msgE);
+                        _con.ws.SendTask(msgE);
                         Log($"[{no} - Send request]: responding - {msgE}");
                         break;
 
                     case "order":
                         var order = _clientService.GetAllClients();
                         string msgO = "order#" + Serialization.Serialize(order);
-                        socket.SendTask(msgO);
+                        _con.ws.SendTask(msgO);
                         Log($"[{no} - Send request]: responding - {msgO}");
                         break;
                 }
