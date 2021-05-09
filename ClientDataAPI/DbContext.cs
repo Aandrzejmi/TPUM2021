@@ -33,5 +33,13 @@ namespace Client.DataAPI
             }
         }
 
+        public static void ClearContext()
+        {
+            Instance.CClients.Clear();
+            Instance.COrders.Clear();
+            Instance.CProducts.Clear();
+            Instance.CEvidenceEntries.Clear();
+        }
+
     }
 }
