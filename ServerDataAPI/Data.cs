@@ -28,21 +28,21 @@
             order0.Products.Add(new EvidenceEntry() { ProductID = product4.ID, ProductAmount = 1});
             repository.AddOrder(order0);
 
-            var order1 = new Order() { ID = 1, ClientID = 2 };
-            order1.Products.Add(new EvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
-            order1.Products.Add(new EvidenceEntry() { ProductID = product3.ID, ProductAmount = 1 });
-            repository.AddOrder(order1);
+            //var order1 = new Order() { ID = 1, ClientID = 2 };
+            //order1.Products.Add(new EvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
+            //order1.Products.Add(new EvidenceEntry() { ProductID = product3.ID, ProductAmount = 1 });
+            //repository.AddOrder(order1);
 
-            var order2 = new Order() { ID = 2, ClientID = 1 };
-            order2.Products.Add(new EvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
-            order2.Products.Add(new EvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
-            repository.AddOrder(order2);
+            //var order2 = new Order() { ID = 2, ClientID = 1 };
+            //order2.Products.Add(new EvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
+            //order2.Products.Add(new EvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
+            //repository.AddOrder(order2);
 
-            var order3 = new Order() { ID = 3, ClientID = 1 };
-            order3.Products.Add(new EvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
-            order3.Products.Add(new EvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
-            order3.Products.Add(new EvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
-            repository.AddOrder(order3);
+            //var order3 = new Order() { ID = 3, ClientID = 1 };
+            //order3.Products.Add(new EvidenceEntry() { ProductID = product1.ID, ProductAmount = 1 });
+            //order3.Products.Add(new EvidenceEntry() { ProductID = product2.ID, ProductAmount = 1 });
+            //order3.Products.Add(new EvidenceEntry() { ProductID = product4.ID, ProductAmount = 1 });
+            //repository.AddOrder(order3);
 
             return repository;
         }
