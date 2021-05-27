@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="OPCUAModelDesign.xslt"?>
+<ModelDesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TargetNamespace="http://gm.com/shop/opc/" xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
+  <Namespaces>
+    <Namespace Name="TPUM_OPC" Prefix="TPUM.OPC">http://gm.com/shop/opc/</Namespace>
+    <Namespace Name="OpcUa" Prefix="Opc.Ua" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd">http://opcfoundation.org/UA/</Namespace>
+  </Namespaces>
+  <ObjectType xmlns:q1="http://gm.com/shop/opc/" SymbolicName="q1:CClient">
+    <Children>
+      <Variable SymbolicName="q1:ID" xmlns:q2="http://opcfoundation.org/UA/" DataType="q2:Integer" />
+      <Variable SymbolicName="q1:Name" xmlns:q3="http://opcfoundation.org/UA/" DataType="q3:String" />
+      <Variable SymbolicName="q1:Adress" xmlns:q4="http://opcfoundation.org/UA/" DataType="q4:String" />
+    </Children>
+    <ClassName>CClient</ClassName>
+  </ObjectType>
+  <ObjectType xmlns:q5="http://gm.com/shop/opc/" SymbolicName="q5:CEvidenceEntry">
+    <Children>
+      <Variable SymbolicName="q5:Amount" xmlns:q6="http://opcfoundation.org/UA/" DataType="q6:Integer" />
+      <Object SymbolicName="q5:Product" TypeDefinition="q5:CProduct" />
+    </Children>
+    <ClassName>CEvidenceEntry</ClassName>
+  </ObjectType>
+  <ObjectType xmlns:q7="http://gm.com/shop/opc/" SymbolicName="q7:CProduct">
+    <Children>
+      <Variable SymbolicName="q7:ID" xmlns:q8="http://opcfoundation.org/UA/" DataType="q8:Integer" />
+      <Variable SymbolicName="q7:Name" xmlns:q9="http://opcfoundation.org/UA/" DataType="q9:String" />
+      <Variable SymbolicName="q7:Price" xmlns:q10="http://opcfoundation.org/UA/" DataType="q10:Decimal" />
+    </Children>
+    <ClassName>CProduct</ClassName>
+  </ObjectType>
+  <ObjectType xmlns:q11="http://gm.com/shop/opc/" SymbolicName="q11:COrder">
+    <Children>
+      <Variable SymbolicName="q11:ID" xmlns:q12="http://opcfoundation.org/UA/" DataType="q12:Integer" />
+      <Object SymbolicName="q11:Client" TypeDefinition="q11:CClient" />
+      <Object SymbolicName="q11:Entries" TypeDefinition="q11:CEvidenceEntry" />
+    </Children>
+    <ClassName>COrder</ClassName>
+  </ObjectType>
+</ModelDesign>
