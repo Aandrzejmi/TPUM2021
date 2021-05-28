@@ -25,6 +25,8 @@ namespace Server.App
 
         public string Handle(string data)
         {
+            _con.timer.Reset();
+
             uint no = counter++;
             Log($"[Received message {no}]: {data}");
 
