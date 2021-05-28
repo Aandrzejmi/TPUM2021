@@ -34,12 +34,12 @@ namespace CommunicationTests
 
             list = new List<CEvidenceEntry>() { evEntry1, evEntry2, evEntry1 };
 
-            clientJSON = "{\"Adress\":\"Chrz¹szczyrzew¹szczyce 21\",\"ID\":1,\"Name\":\"Grzegorz Brzêczyszczykiewicz\"}";
-            productJSON = "{\"ID\":1,\"Name\":\"Cement (10kg)\",\"Price\":123.45}";
+            clientJSON = "{\"__type\":\"CClient:#CommunicationAPI.Models\",\"Adress\":\"Chrz¹szczyrzew¹szczyce 21\",\"ID\":1,\"Name\":\"Grzegorz Brzêczyszczykiewicz\"}";
+            productJSON = "{\"__type\":\"CProduct:#CommunicationAPI.Models\",\"ID\":1,\"Name\":\"Cement (10kg)\",\"Price\":123.45}";
 
-            evEntry1JSON = "{\"Amount\":7,\"Product\":" + productJSON + "}";
-            evEntry2JSON = "{\"Amount\":8,\"Product\":" + productJSON + "}";
-            orderJSON = "{\"Client\":" + clientJSON + ",\"Entries\":[" + evEntry1JSON + "," + evEntry2JSON + "],\"ID\":1}";
+            evEntry1JSON = "{\"__type\":\"CEvidenceEntry:#CommunicationAPI.Models\",\"Amount\":7,\"Product\":" + productJSON + "}";
+            evEntry2JSON = "{\"__type\":\"CEvidenceEntry:#CommunicationAPI.Models\",\"Amount\":8,\"Product\":" + productJSON + "}";
+            orderJSON = "{\"__type\":\"COrder:#CommunicationAPI.Models\",\"Client\":" + clientJSON + ",\"Entries\":[" + evEntry1JSON + "," + evEntry2JSON + "],\"ID\":1}";
 
             listJSON = $"[{evEntry1JSON},{evEntry2JSON},{evEntry1JSON}]";
 

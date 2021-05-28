@@ -8,7 +8,7 @@ namespace CommunicationAPI
     {
         private static DataContractJsonSerializerSettings _settings = new DataContractJsonSerializerSettings()
         {
-            
+            EmitTypeInformation = System.Runtime.Serialization.EmitTypeInformation.Always,
         };
 
 
