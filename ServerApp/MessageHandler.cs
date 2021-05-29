@@ -86,9 +86,9 @@ namespace Server.App
                     Log($"[{no} - Update request]: client updated");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Add request]: exception caugth.");
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
             }
         }
 
@@ -108,9 +108,9 @@ namespace Server.App
                     Log($"[{no} - Update request]: client updated");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Add request]: exception caugth.");
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
             }
         }
 
@@ -130,9 +130,9 @@ namespace Server.App
                     Log($"[{no} - Update request]: client updated");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Add request]: exception caugth.");
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
             }
         }
 
@@ -152,9 +152,9 @@ namespace Server.App
                     Log($"[{no} - Update request]: client updated");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Add request]: exception caugth.");
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
             }
         }
 
@@ -198,13 +198,13 @@ namespace Server.App
                 }
                 else
                 {
-                    Log($"[{no} - Send request]: no response, exception caugth.");
+                    Log($"[{no} - Send request]: no response, Unknown type: {typename}");
                     return "Wrong request";
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Send request]: no response, exception caugth.");
+                Log($"[{no} - Send request]: no response, exception caugth : {e}");
                 return "Wrong request";
             }
         }
@@ -213,51 +213,43 @@ namespace Server.App
         {
             try
             {
-                try
+                if (typeof(CClient).ToString().Equals(typename))
                 {
-                    if (typeof(CClient).ToString().Equals(typename))
-                    {
-                        var client = _clientService.GetAllClients();
-                        string msgC = "clientL#" + Serialize(client);
-                        Log($"[{no} - Send request]: responding - {msgC}");
-                        return msgC;
-                    }
-                    else if (typeof(CProduct).ToString().Equals(typename))
-                    {
-                        var product = _productService.GetAllProducts();
-                        string msgP = "productL#" + Serialize(product);
-                        Log($"[{no} - Send request]: responding - {msgP}");
-                        return msgP;
-                    }
-                    else if (typeof(CEvidenceEntry).ToString().Equals(typename))
-                    {
-                        var evEntry = _evidenceEntryService.GetAllEvidenceEntries();
-                        string msgE = "entryL#" + Serialize(evEntry);
-                        Log($"[{no} - Send request]: responding - {msgE}");
-                        return msgE;
-                    }
-                    else if (typeof(COrder).ToString().Equals(typename))
-                    {
-                        var order = _orderService.GetAllOrders();
-                        string msgO = "orderL#" + Serialize(order);
-                        Log($"[{no} - Send request]: responding - {msgO}");
-                        return msgO;
-                    }
-                    else
-                    {
-                        Log($"[{no} - Send request]: no response, exception caugth.");
-                        return "Wrong request";
-                    }
+                    var clients = _clientService.GetAllClients();
+                    string msgC = Serialize(clients);
+                    Log($"[{no} - Send request]: responding - {msgC}");
+                    return msgC;
                 }
-                catch
+                else if (typeof(CProduct).ToString().Equals(typename))
                 {
-                    Log($"[{no} - Send request]: no response, exception caugth.");
+                    var products = _productService.GetAllProducts();
+                    string msgP = Serialize(products);
+                    Log($"[{no} - Send request]: responding - {msgP}");
+                    return msgP;
+                }
+                else if (typeof(CEvidenceEntry).ToString().Equals(typename))
+                {
+                    var evEntries = _evidenceEntryService.GetAllEvidenceEntries();
+                    string msgE = Serialize(evEntries);
+                    Log($"[{no} - Send request]: responding - {msgE}");
+                    return msgE;
+                }
+                else if (typeof(COrder).ToString().Equals(typename))
+                {
+                    var orders = _orderService.GetAllOrders();
+                    string msgO = Serialize(orders);
+                    Log($"[{no} - Send request]: responding - {msgO}");
+                    return msgO;
+                }
+                else
+                {
+                    Log($"[{no} - Send request]: no response, Unknown type: {typename}");
                     return "Wrong request";
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Send request]: no response, exception caugth.");
+                Log($"[{no} - Send request]: no response, exception caugth : {e}");
                 return "Wrong request";
             }
         }
