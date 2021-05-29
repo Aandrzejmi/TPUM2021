@@ -28,8 +28,8 @@ namespace Client.DataAPI
                     {
                         instance = new DbContext();
                     }
-                }
-                return instance;
+                    return instance;
+                }                
             }
         }
 
