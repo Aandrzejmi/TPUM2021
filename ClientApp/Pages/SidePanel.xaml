@@ -26,12 +26,12 @@
         <Button x:Name="button1" DataContext="{StaticResource cvm}" Content="{Binding ButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,80" Width="80" Height="20"
                         Command="{Binding ConnectButtonCommand}"/>
-        <Button x:Name="button2" Content="{Binding OrderssLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+        <Button x:Name="button2" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,56" Width="80" Height="20"
-                        Command="{Binding AddOrders}"/>
-        <Button x:Name="button3" Content="{Binding ProductsLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        Command="{Binding Refresh}"/>
+        <Button x:Name="button3" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,31" Width="80" Height="20"
-                        Command="{Binding AddProducts}"/>
+                        Command="{Binding Disconnect}"/>
         <Label Content="Auto add:" HorizontalAlignment="Left" Margin="58,0,0,105" VerticalAlignment="Bottom" Foreground="White"/>
     </Grid>
 </Page>

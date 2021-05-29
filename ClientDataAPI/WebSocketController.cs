@@ -49,53 +49,50 @@ namespace Client.DataAPI
         }
 
         private void ParseMessage(string message)
-        {         
-            var split = message.Split("#");
-            switch (split[0])
+        {
+            if (message.StartsWith("{\"__type\":\"CClient"))
             {
-                case "clientL":
-                    List<CClient> clients = Deserialize<List<CClient>>(split[1]);
-                    foreach (CClient c in clients)
-                        repository.AddClient(c);
-                    break;
-
-                case "orderL":
-                    List<COrder> orders = Deserialize<List<COrder>>(split[1]);
-                    foreach (COrder o in orders)
-                        repository.AddOrder(o);
-                    break;
-
-                case "productL":
-                    List<CProduct> products = Deserialize<List<CProduct>>(split[1]);
-                    foreach (CProduct p in products)
-                        repository.AddProduct(p);
-                    break;
-
-                case "entryL":
-                    List<CEvidenceEntry> evidenceEntries = Deserialize<List<CEvidenceEntry>>(split[1]);
-                    foreach (CEvidenceEntry e in evidenceEntries)
-                        repository.AddEvidenceEntry(e);
-                    break;
-
-                case "client":
-                    CClient client = Deserialize<CClient>(split[1]);
-                    repository.AddClient(client);
-                    break;
-
-                case "order":
-                    COrder order = Deserialize<COrder>(split[1]);
-                    repository.AddOrder(order);
-                    break;
-
-                case "product":
-                    CProduct product = Deserialize<CProduct>(split[1]);
-                    repository.AddProduct(product);
-                    break;
-
-                case "entry":
-                    CEvidenceEntry entry = Deserialize<CEvidenceEntry>(split[1]);
-                    repository.AddEvidenceEntry(entry);
-                    break;
+                CClient client = Deserialize<CClient>(message);
+                repository.AddClient(client);
+            }
+            else if (message.StartsWith("[{\"__type\":\"CClient"))
+            {
+                List<CClient> clients = Deserialize<List<CClient>>(message);
+                foreach (CClient c in clients)
+                    repository.AddClient(c);
+            }
+            else if (message.StartsWith("{\"__type\":\"COrder"))
+            {
+                COrder order = Deserialize<COrder>(message);
+                repository.AddOrder(order);
+            }
+            else if (message.StartsWith("[{\"__type\":\"COrder"))
+            {
+                List<COrder> orders = Deserialize<List<COrder>>(message);
+                foreach (COrder o in orders)
+                    repository.AddOrder(o);
+            }
+            else if (message.StartsWith("{\"__type\":\"CProduct"))
+            {
+                CProduct product = Deserialize<CProduct>(message);
+                repository.AddProduct(product);
+            }
+            else if (message.StartsWith("[{\"__type\":\"CProduct"))
+            {
+                List<CProduct> products = Deserialize<List<CProduct>>(message);
+                foreach (CProduct p in products)
+                    repository.AddProduct(p);
+            }
+            else if (message.StartsWith("{\"__type\":\"CEvidenceEntry"))
+            {
+                CEvidenceEntry entry = Deserialize<CEvidenceEntry>(message);
+                repository.AddEvidenceEntry(entry);
+            }
+            else if (message.StartsWith("[{\"__type\":\"CEvidenceEntry"))
+            {
+                List<CEvidenceEntry> evidenceEntries = Deserialize<List<CEvidenceEntry>>(message);
+                foreach (CEvidenceEntry e in evidenceEntries)
+                    repository.AddEvidenceEntry(e);
             }
         }
     }

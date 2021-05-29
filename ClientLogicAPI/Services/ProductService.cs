@@ -116,7 +116,8 @@ namespace Client.LogicAPI.Services
 
                 if (_repository.AddProduct(productModel))
                 {
-                    connectionService.SendTask($"add#product#{Serialize<CProduct>(productModel)}");
+                    productModel.ID = -1;
+                    connectionService.SendTask(Serialize<CProduct>(productModel));
                     Logic.InvokeProductsChanged();
                     return true;
                 }
@@ -134,7 +135,7 @@ namespace Client.LogicAPI.Services
                     product.Price = productDTO.Price;
                     if (_repository.ModifyProduct(product))
                     {
-                        connectionService.SendTask($"update#product#{productID}#{Serialize<CProduct>(product)}");
+                        connectionService.SendTask(Serialize<CProduct>(product));
                         Logic.InvokeProductsChanged();
                         return true;
                     }

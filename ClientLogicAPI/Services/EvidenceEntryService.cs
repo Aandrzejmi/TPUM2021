@@ -110,7 +110,9 @@ namespace Client.LogicAPI.Services
                 {
                     ValidateModel(evidenceEntryModel);
                     ChangeEvidenceEntryDTO(newID, evidenceEntry);
-                    connectionService.SendTask($"add#entry#{Serialize<CEvidenceEntry>(evidenceEntryModel)}");
+
+                    evidenceEntryModel.Product.ID = -1;
+                    connectionService.SendTask(Serialize<CEvidenceEntry>(evidenceEntryModel));
                     Logic.InvokeEvidenceEntryChanged();
                     return true;
                 }
@@ -126,7 +128,7 @@ namespace Client.LogicAPI.Services
                 {
                     if (_repository.ChangeProductAmount(evidenceEntryID, evidenceEntryDTO.ProductAmount))
                     {
-                        connectionService.SendTask($"update#entry#{evidenceEntryID}#{Serialize<CEvidenceEntry>(evidenceEntry)}");
+                        connectionService.SendTask(Serialize<CEvidenceEntry>(evidenceEntry));
                         Logic.InvokeEvidenceEntryChanged();
                         return true;
                     }
