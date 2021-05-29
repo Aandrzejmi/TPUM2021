@@ -113,6 +113,7 @@ namespace Client.LogicAPI.Services
 
                     evidenceEntryModel.Product.ID = -1;
                     connectionService.SendTask(Serialize<CEvidenceEntry>(evidenceEntryModel));
+                    evidenceEntryModel.Product.ID = newID;
                     Logic.InvokeEvidenceEntryChanged();
                     return true;
                 }

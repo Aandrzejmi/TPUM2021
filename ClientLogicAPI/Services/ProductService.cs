@@ -118,6 +118,7 @@ namespace Client.LogicAPI.Services
                 {
                     productModel.ID = -1;
                     connectionService.SendTask(Serialize<CProduct>(productModel));
+                    productModel.ID = newID;
                     Logic.InvokeProductsChanged();
                     return true;
                 }
