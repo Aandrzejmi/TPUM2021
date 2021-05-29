@@ -111,38 +111,35 @@ namespace Server.DataTests
         public void RepositoryOrders()
         {
             // Size of the list of Clients
-            Assert.AreEqual(repo.CountOrders, 4);
+            Assert.AreEqual(repo.CountOrders, 1);
 
             // Find order by ID
             Assert.IsNotNull(repo.FindOrderByID(0));
 
             // Find all orders by clients, 0 products, 1 product, more then 1 product
-            Assert.AreEqual(repo.FindOrdersByClientID(1).Count, 2);
+            Assert.AreEqual(repo.FindOrdersByClientID(3).Count, 1);
 
-            repo.FindOrdersByClientID(1)[0].ID = 555;
+            repo.FindOrdersByClientID(3)[0].ID = 555;
             Assert.IsNull(repo.FindOrderByID(555));
 
-            Assert.AreEqual(repo.FindOrdersByClientID(2).Count, 1);
-            Assert.AreEqual(repo.FindOrdersByClientID(0).Count, 0);
-
             // Modify existing order and check its clientID
-            Order order1 = repo.FindOrderByID(3);
+            Order order1 = repo.FindOrderByID(0);
             order1.ClientID = 0;            
             repo.ModifyOrder(order1);
-            Assert.IsTrue(repo.FindOrderByID(3).ClientID == 0);
+            Assert.IsTrue(repo.FindOrderByID(0).ClientID == 0);
 
             // Try to find non existing order by ID
-            Assert.IsNull(repo.FindOrderByID(4));
+            Assert.IsNull(repo.FindOrderByID(1));
 
             // Create new order and try to add it
-            Order order2 = new Order() { ID = 4, ClientID = 0 };
+            Order order2 = new Order() { ID = 1, ClientID = 0 };
             repo.AddOrder(order2);
-            Assert.IsNotNull(repo.FindOrderByID(4));
+            Assert.IsNotNull(repo.FindOrderByID(1));
 
             // Check if you can add order with existing ID, you shouldn't be able to do that
-            Assert.AreEqual(repo.CountOrders, 5);
+            Assert.AreEqual(repo.CountOrders, 2);
             repo.AddOrder(order2);
-            Assert.AreEqual(repo.CountOrders, 5);
+            Assert.AreEqual(repo.CountOrders, 2);
         }
     }
 }
