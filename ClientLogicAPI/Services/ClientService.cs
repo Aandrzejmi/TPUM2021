@@ -116,7 +116,8 @@ namespace Client.LogicAPI.Services
 
                 if (_repository.AddClient(clientModel))
                 {
-                    connectionService.SendTask("add#client#" + Serialize<CClient>(clientModel));
+                    clientModel.ID = -1;
+                    connectionService.SendTask(Serialize<CClient>(clientModel));
                     Logic.InvokeClientsChanged();
                     return true;
                 }
@@ -136,7 +137,7 @@ namespace Client.LogicAPI.Services
                     client.Name = clientDTO.Name;
                     if (_repository.ModifyClient(client))
                     {
-                        connectionService.SendTask($"update#client#{client.ID}#{Serialize<CClient>(client)}");
+                        connectionService.SendTask(Serialize<CClient>(client));
                         Logic.InvokeClientsChanged();
                         return true;
                     }

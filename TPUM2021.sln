@@ -34,8 +34,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLogicTests", "ClientL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunicationTests", "CommunicationTests\CommunicationTests.csproj", "{6D6ADFB1-78DD-4D2A-87E6-B4B0E14AD863}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{9F459EA7-8A0E-4A6D-85B2-C6C3FFD7E551}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,13 +91,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{85C4B967-3B16-4142-BDF6-261BA87C0A4E} = {9F459EA7-8A0E-4A6D-85B2-C6C3FFD7E551}
-		{212FD045-6CF4-4F43-A1A1-40FDEE8A2431} = {9F459EA7-8A0E-4A6D-85B2-C6C3FFD7E551}
-		{98D48E2B-EDB3-4227-86C4-3B5900989109} = {9F459EA7-8A0E-4A6D-85B2-C6C3FFD7E551}
-		{83C31AC8-E72F-4915-9B0F-9B390EADCD8A} = {9F459EA7-8A0E-4A6D-85B2-C6C3FFD7E551}
-		{C72A7A6B-3FA5-4A93-8690-1C98C4528B05} = {9F459EA7-8A0E-4A6D-85B2-C6C3FFD7E551}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F6BF3E4-A694-4376-A92C-912DC87C2F5A}

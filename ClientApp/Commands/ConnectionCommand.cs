@@ -4,6 +4,8 @@ using Client.LogicAPI.Interfaces;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunicationAPI.Models;
+using static CommunicationAPI.Serialization;
 
 namespace Client.App.Commands
 {
@@ -42,10 +44,14 @@ namespace Client.App.Commands
                 var task = Task.Run(async () =>
                 {
                     await _connectionService.CreateConnection();
-                    var task1 = _connectionService.SendTask("send#product#all");
-                    var task2 = _connectionService.SendTask("send#client#all");
-                    var task3 = _connectionService.SendTask("send#entry#all");
-                    var task4 = _connectionService.SendTask("send#order#all");
+                    var task1 = _connectionService.SendTask(Serialize(new CSendRequest()
+                        { Type = typeof(CProduct).ToString(), RequestedID = null }));
+                    var task2 = _connectionService.SendTask(Serialize(new CSendRequest()
+                        { Type = typeof(COrder).ToString(), RequestedID = null }));
+                    var task3 = _connectionService.SendTask(Serialize(new CSendRequest()
+                        { Type = typeof(CEvidenceEntry).ToString(), RequestedID = null }));
+                    var task4 = _connectionService.SendTask(Serialize(new CSendRequest()
+                        { Type = typeof(CClient).ToString(), RequestedID = null }));
                     await task1;
                     await task2;
                     await task3;
