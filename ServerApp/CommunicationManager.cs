@@ -12,13 +12,21 @@ namespace Server.App
         private int webSocketPort = 8081;
         private List<Connection> connections = new List<Connection>();
 
+        private SessionTimer serverTimer;
+        private PingObserver pingObserver;
+
+        private Action<string> GetConnectionLog(Connection con) => (x) => Log($"[Con {con.id}] {x}");
+
         public CommunicationManager(int webSocketPort, Action<string> log)
         {
             Log = log;
+
             if (IPEndPoint.MaxPort > webSocketPort && IPEndPoint.MinPort < webSocketPort)
                 this.webSocketPort = webSocketPort;
             else
                 Log("Wrong port number, using default port");
+
+            InitServerTimer();
         }
 
         public async Task InitServerAsync()
@@ -70,7 +78,7 @@ namespace Server.App
         {
             con.ws.onMessage = async (data) =>
             {
-                con.handler = new MessageHandler(con, Log);
+                con.handler = new MessageHandler(con, GetConnectionLog(con));
                 await con.ws.SendAsync(con.handler.Handle(data));
             };
         }
@@ -78,14 +86,16 @@ namespace Server.App
         private void InitSessionTimer(Connection con)
         {
             con.timer = new SessionTimer(60);
-            con.observer = new SessionTimeoutObserver(con.ws, Log);
+            con.observer = new SessionTimeoutObserver(con.ws, GetConnectionLog(con));
             con.observer.Subscribe(con.timer);
             con.timer.Start();
         }
-
-        private void PingLoop()
+        private void InitServerTimer()
         {
-
+            serverTimer = new SessionTimer(int.MaxValue);
+            pingObserver = new PingObserver(this, 15);
+            serverTimer.Subscribe(pingObserver);
+            serverTimer.Start();
         }
 
         public void Dispose()
@@ -95,6 +105,38 @@ namespace Server.App
             foreach (var con in connections)
                 _disconnectionTasks.Add(con.ws.DisconnectAsync());
             Task.WaitAll(_disconnectionTasks.ToArray());
+        }
+
+
+        private class PingObserver : IObserver<SessionTimer.State>
+        {
+            private CommunicationManager _comManager;
+            private readonly int seconds;
+
+            public PingObserver(CommunicationManager comManager, int seconds)
+            {
+                this._comManager = comManager;
+                this.seconds = seconds;
+            }
+
+            public void OnCompleted()
+            {
+                _comManager.InitServerTimer();
+            }
+
+            public void OnError(Exception error)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnNext(SessionTimer.State value)
+            {
+                if (value.counter % seconds == 0)
+                {
+                    _comManager.SendAll("ping");
+                    _comManager.Log("Pinging all clients");
+                }
+            }
         }
     }
 }

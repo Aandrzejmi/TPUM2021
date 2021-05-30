@@ -7,8 +7,16 @@ using CommunicationAPI;
 
 namespace Server.App
 {
-    class SessionTimer : IObservable<(int, int)>
+    class SessionTimer : IObservable<SessionTimer.State>
     {
+        public struct State
+        {
+            public int counter;
+            public int limit;
+        }
+
+        private State CurrentState => new State() { counter = Counter, limit = Limit };
+
         public readonly int timeout;
 
         public int Counter { get; private set; }
@@ -69,7 +77,7 @@ namespace Server.App
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext((Counter, Limit));
+                observer.OnNext(CurrentState);
             }
         }
 
@@ -81,9 +89,9 @@ namespace Server.App
             }
         }
 
-        private List<IObserver<(int, int)>> _observers = new List<IObserver<(int, int)>>();
+        private List<IObserver<SessionTimer.State>> _observers = new List<IObserver<SessionTimer.State>>();
 
-        public IDisposable Subscribe(IObserver<(int, int)> observer)
+        public IDisposable Subscribe(IObserver<SessionTimer.State> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -93,9 +101,9 @@ namespace Server.App
         private class Unsubscriber : IDisposable
         {
             private SessionTimer _observable;
-            private IObserver<(int, int)> _observer;
+            private IObserver<SessionTimer.State> _observer;
 
-            public Unsubscriber(SessionTimer observable, IObserver<(int, int)> observer)
+            public Unsubscriber(SessionTimer observable, IObserver<SessionTimer.State> observer)
             {
                 _observable = observable;
                 _observer = observer;

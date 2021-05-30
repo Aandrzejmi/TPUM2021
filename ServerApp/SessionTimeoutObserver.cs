@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server.App
 {
-    class SessionTimeoutObserver : IObserver<(int, int)>
+    class SessionTimeoutObserver : IObserver<SessionTimer.State>
     {
         private readonly Action<string> Log;
         private IDisposable _unsubscriber;
@@ -18,7 +18,7 @@ namespace Server.App
             Log = logger;
         }
 
-        public void Subscribe(IObservable<(int, int)> provider)
+        public void Subscribe(IObservable<SessionTimer.State> provider)
         {
             _unsubscriber = provider.Subscribe(this);
         }
@@ -44,9 +44,9 @@ namespace Server.App
             throw new NotImplementedException();
         }
 
-        public void OnNext((int, int) value)
+        public void OnNext(SessionTimer.State value)
         {
-            Log($"{value.Item2 - value.Item1} seconds to timeout");
+            Log($"{value.limit - value.counter} seconds to timeout");
         }
     }
 }

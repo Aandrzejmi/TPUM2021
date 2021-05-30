@@ -18,10 +18,10 @@ namespace Server.App
         private readonly Action<string> Log;
         private uint counter = 0;
 
-        public MessageHandler(Connection con, Action<string> logFinction)
+        public MessageHandler(Connection con, Action<string> logFunction)
         {
             _con = con;
-            Log = logFinction;
+            Log = logFunction;
         }
 
         public string Handle(string data)
