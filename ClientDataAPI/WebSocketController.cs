@@ -16,6 +16,8 @@ namespace Client.DataAPI
 
         string _result = "";
 
+        public event Action<Type> DataUpdate;
+
         public WebSocketController()
         {
             connectionLogger = message => _result = message;
@@ -54,45 +56,53 @@ namespace Client.DataAPI
             {
                 CClient client = Deserialize<CClient>(message);
                 repository.AddClient(client);
+                DataUpdate?.Invoke(typeof(CClient));
             }
             else if (message.StartsWith("[{\"__type\":\"CClient"))
             {
                 List<CClient> clients = Deserialize<List<CClient>>(message);
                 foreach (CClient c in clients)
                     repository.AddClient(c);
+                DataUpdate?.Invoke(typeof(CClient));
             }
             else if (message.StartsWith("{\"__type\":\"COrder"))
             {
                 COrder order = Deserialize<COrder>(message);
                 repository.AddOrder(order);
+                DataUpdate?.Invoke(typeof(COrder));
             }
             else if (message.StartsWith("[{\"__type\":\"COrder"))
             {
                 List<COrder> orders = Deserialize<List<COrder>>(message);
                 foreach (COrder o in orders)
                     repository.AddOrder(o);
+                DataUpdate?.Invoke(typeof(COrder));
             }
             else if (message.StartsWith("{\"__type\":\"CProduct"))
             {
                 CProduct product = Deserialize<CProduct>(message);
                 repository.AddProduct(product);
+                DataUpdate?.Invoke(typeof(CProduct));
             }
             else if (message.StartsWith("[{\"__type\":\"CProduct"))
             {
                 List<CProduct> products = Deserialize<List<CProduct>>(message);
                 foreach (CProduct p in products)
                     repository.AddProduct(p);
+                DataUpdate?.Invoke(typeof(CProduct));
             }
             else if (message.StartsWith("{\"__type\":\"CEvidenceEntry"))
             {
                 CEvidenceEntry entry = Deserialize<CEvidenceEntry>(message);
                 repository.AddEvidenceEntry(entry);
+                DataUpdate?.Invoke(typeof(CEvidenceEntry));
             }
             else if (message.StartsWith("[{\"__type\":\"CEvidenceEntry"))
             {
                 List<CEvidenceEntry> evidenceEntries = Deserialize<List<CEvidenceEntry>>(message);
                 foreach (CEvidenceEntry e in evidenceEntries)
                     repository.AddEvidenceEntry(e);
+                DataUpdate?.Invoke(typeof(CEvidenceEntry));
             }
         }
     }
