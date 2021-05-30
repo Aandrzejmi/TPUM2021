@@ -267,4 +267,52 @@
       <Reference ReferenceType="HasComponent" IsForward="false">ns=1;i=33</Reference>
     </References>
   </UAVariable>
+  <UAObjectType NodeId="ns=1;i=37" BrowseName="1:CSendRequest">
+    <DisplayName>CSendRequest</DisplayName>
+    <References>
+      <Reference ReferenceType="HasComponent">ns=1;i=38</Reference>
+      <Reference ReferenceType="HasComponent">ns=1;i=39</Reference>
+      <Reference ReferenceType="HasSubtype" IsForward="false">i=58</Reference>
+    </References>
+  </UAObjectType>
+  <UAVariable NodeId="ns=1;i=38" BrowseName="1:Type" ParentNodeId="ns=1;i=37" DataType="String">
+    <DisplayName>Type</DisplayName>
+    <References>
+      <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+      <Reference ReferenceType="HasModellingRule">i=78</Reference>
+      <Reference ReferenceType="HasComponent" IsForward="false">ns=1;i=37</Reference>
+    </References>
+  </UAVariable>
+  <UAVariable NodeId="ns=1;i=39" BrowseName="1:RequestedID" ParentNodeId="ns=1;i=37" DataType="Integer">
+    <DisplayName>RequestedID</DisplayName>
+    <References>
+      <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+      <Reference ReferenceType="HasModellingRule">i=78</Reference>
+      <Reference ReferenceType="HasComponent" IsForward="false">ns=1;i=37</Reference>
+    </References>
+  </UAVariable>
+  <UAObjectType NodeId="ns=1;i=40" BrowseName="1:CSubscribeUpdates">
+    <DisplayName>CSubscribeUpdates</DisplayName>
+    <References>
+      <Reference ReferenceType="HasComponent">ns=1;i=41</Reference>
+      <Reference ReferenceType="HasComponent">ns=1;i=42</Reference>
+      <Reference ReferenceType="HasSubtype" IsForward="false">i=58</Reference>
+    </References>
+  </UAObjectType>
+  <UAVariable NodeId="ns=1;i=41" BrowseName="1:Subscribe" ParentNodeId="ns=1;i=40" DataType="Boolean">
+    <DisplayName>Subscribe</DisplayName>
+    <References>
+      <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+      <Reference ReferenceType="HasModellingRule">i=78</Reference>
+      <Reference ReferenceType="HasComponent" IsForward="false">ns=1;i=40</Reference>
+    </References>
+  </UAVariable>
+  <UAVariable NodeId="ns=1;i=42" BrowseName="1:CycleInSeconds" ParentNodeId="ns=1;i=40" DataType="Integer">
+    <DisplayName>CycleInSeconds</DisplayName>
+    <References>
+      <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+      <Reference ReferenceType="HasModellingRule">i=78</Reference>
+      <Reference ReferenceType="HasComponent" IsForward="false">ns=1;i=40</Reference>
+    </References>
+  </UAVariable>
 </UANodeSet>

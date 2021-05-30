@@ -36,4 +36,18 @@
     </Children>
     <ClassName>COrder</ClassName>
   </ObjectType>
+  <ObjectType xmlns:q13="http://gm.com/shop/opc/" SymbolicName="q13:CSendRequest">
+    <Children>
+      <Variable SymbolicName="q13:Type" xmlns:q14="http://opcfoundation.org/UA/" DataType="q14:String" />
+      <Variable SymbolicName="q13:RequestedID" xmlns:q15="http://opcfoundation.org/UA/" DataType="q15:Integer" />
+    </Children>
+    <ClassName>CSendRequest</ClassName>
+  </ObjectType>
+  <ObjectType xmlns:q16="http://gm.com/shop/opc/" SymbolicName="q16:CSubscribeUpdates">
+    <Children>
+      <Variable SymbolicName="q16:Subscribe" xmlns:q17="http://opcfoundation.org/UA/" DataType="q17:Boolean" />
+      <Variable SymbolicName="q16:CycleInSeconds" xmlns:q18="http://opcfoundation.org/UA/" DataType="q18:Integer" />
+    </Children>
+    <ClassName>CSubscribeUpdates</ClassName>
+  </ObjectType>
 </ModelDesign>

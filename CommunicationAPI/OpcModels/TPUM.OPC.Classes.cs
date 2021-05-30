@@ -93,6 +93,16 @@ namespace TPUM.OPC
         /// The identifier for the COrder ObjectType.
         /// </summary>
         public const uint COrder = 22;
+
+        /// <summary>
+        /// The identifier for the CSendRequest ObjectType.
+        /// </summary>
+        public const uint CSendRequest = 37;
+
+        /// <summary>
+        /// The identifier for the CSubscribeUpdates ObjectType.
+        /// </summary>
+        public const uint CSubscribeUpdates = 40;
     }
     #endregion
 
@@ -193,6 +203,26 @@ namespace TPUM.OPC
         /// The identifier for the COrder_Entries_Product_Price Variable.
         /// </summary>
         public const uint COrder_Entries_Product_Price = 36;
+
+        /// <summary>
+        /// The identifier for the CSendRequest_Type Variable.
+        /// </summary>
+        public const uint CSendRequest_Type = 38;
+
+        /// <summary>
+        /// The identifier for the CSendRequest_RequestedID Variable.
+        /// </summary>
+        public const uint CSendRequest_RequestedID = 39;
+
+        /// <summary>
+        /// The identifier for the CSubscribeUpdates_Subscribe Variable.
+        /// </summary>
+        public const uint CSubscribeUpdates_Subscribe = 41;
+
+        /// <summary>
+        /// The identifier for the CSubscribeUpdates_CycleInSeconds Variable.
+        /// </summary>
+        public const uint CSubscribeUpdates_CycleInSeconds = 42;
     }
     #endregion
 
@@ -253,6 +283,16 @@ namespace TPUM.OPC
         /// The identifier for the COrder ObjectType.
         /// </summary>
         public static readonly ExpandedNodeId COrder = new ExpandedNodeId(TPUM.OPC.ObjectTypes.COrder, TPUM.OPC.Namespaces.TPUM_OPC);
+
+        /// <summary>
+        /// The identifier for the CSendRequest ObjectType.
+        /// </summary>
+        public static readonly ExpandedNodeId CSendRequest = new ExpandedNodeId(TPUM.OPC.ObjectTypes.CSendRequest, TPUM.OPC.Namespaces.TPUM_OPC);
+
+        /// <summary>
+        /// The identifier for the CSubscribeUpdates ObjectType.
+        /// </summary>
+        public static readonly ExpandedNodeId CSubscribeUpdates = new ExpandedNodeId(TPUM.OPC.ObjectTypes.CSubscribeUpdates, TPUM.OPC.Namespaces.TPUM_OPC);
     }
     #endregion
 
@@ -353,6 +393,26 @@ namespace TPUM.OPC
         /// The identifier for the COrder_Entries_Product_Price Variable.
         /// </summary>
         public static readonly ExpandedNodeId COrder_Entries_Product_Price = new ExpandedNodeId(TPUM.OPC.Variables.COrder_Entries_Product_Price, TPUM.OPC.Namespaces.TPUM_OPC);
+
+        /// <summary>
+        /// The identifier for the CSendRequest_Type Variable.
+        /// </summary>
+        public static readonly ExpandedNodeId CSendRequest_Type = new ExpandedNodeId(TPUM.OPC.Variables.CSendRequest_Type, TPUM.OPC.Namespaces.TPUM_OPC);
+
+        /// <summary>
+        /// The identifier for the CSendRequest_RequestedID Variable.
+        /// </summary>
+        public static readonly ExpandedNodeId CSendRequest_RequestedID = new ExpandedNodeId(TPUM.OPC.Variables.CSendRequest_RequestedID, TPUM.OPC.Namespaces.TPUM_OPC);
+
+        /// <summary>
+        /// The identifier for the CSubscribeUpdates_Subscribe Variable.
+        /// </summary>
+        public static readonly ExpandedNodeId CSubscribeUpdates_Subscribe = new ExpandedNodeId(TPUM.OPC.Variables.CSubscribeUpdates_Subscribe, TPUM.OPC.Namespaces.TPUM_OPC);
+
+        /// <summary>
+        /// The identifier for the CSubscribeUpdates_CycleInSeconds Variable.
+        /// </summary>
+        public static readonly ExpandedNodeId CSubscribeUpdates_CycleInSeconds = new ExpandedNodeId(TPUM.OPC.Variables.CSubscribeUpdates_CycleInSeconds, TPUM.OPC.Namespaces.TPUM_OPC);
     }
     #endregion
 
@@ -398,6 +458,21 @@ namespace TPUM.OPC
         public const string CProduct = "CProduct";
 
         /// <summary>
+        /// The BrowseName for the CSendRequest component.
+        /// </summary>
+        public const string CSendRequest = "CSendRequest";
+
+        /// <summary>
+        /// The BrowseName for the CSubscribeUpdates component.
+        /// </summary>
+        public const string CSubscribeUpdates = "CSubscribeUpdates";
+
+        /// <summary>
+        /// The BrowseName for the CycleInSeconds component.
+        /// </summary>
+        public const string CycleInSeconds = "CycleInSeconds";
+
+        /// <summary>
         /// The BrowseName for the Entries component.
         /// </summary>
         public const string Entries = "Entries";
@@ -421,6 +496,21 @@ namespace TPUM.OPC
         /// The BrowseName for the Product component.
         /// </summary>
         public const string Product = "Product";
+
+        /// <summary>
+        /// The BrowseName for the RequestedID component.
+        /// </summary>
+        public const string RequestedID = "RequestedID";
+
+        /// <summary>
+        /// The BrowseName for the Subscribe component.
+        /// </summary>
+        public const string Subscribe = "Subscribe";
+
+        /// <summary>
+        /// The BrowseName for the Type component.
+        /// </summary>
+        public const string Type = "Type";
     }
     #endregion
 
@@ -1410,6 +1500,414 @@ namespace TPUM.OPC
         private BaseDataVariableState m_iD;
         private CClientState m_client;
         private CEvidenceEntryState m_entries;
+        #endregion
+    }
+    #endif
+    #endregion
+
+    #region CSendRequestState Class
+    #if (!OPCUA_EXCLUDE_CSendRequestState)
+    /// <summary>
+    /// Stores an instance of the CSendRequest ObjectType.
+    /// </summary>
+    /// <exclude />
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
+    public partial class CSendRequestState : BaseObjectState
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes the type with its default attribute values.
+        /// </summary>
+        public CSendRequestState(NodeState parent) : base(parent)
+        {
+        }
+
+        /// <summary>
+        /// Returns the id of the default type definition node for the instance.
+        /// </summary>
+        protected override NodeId GetDefaultTypeDefinitionId(NamespaceTable namespaceUris)
+        {
+            return Opc.Ua.NodeId.Create(TPUM.OPC.ObjectTypes.CSendRequest, TPUM.OPC.Namespaces.TPUM_OPC, namespaceUris);
+        }
+
+        #if (!OPCUA_EXCLUDE_InitializationStrings)
+        /// <summary>
+        /// Initializes the instance.
+        /// </summary>
+        protected override void Initialize(ISystemContext context)
+        {
+            Initialize(context, InitializationString);
+            InitializeOptionalChildren(context);
+        }
+
+        protected override void Initialize(ISystemContext context, NodeState source)
+        {
+            InitializeOptionalChildren(context);
+            base.Initialize(context, source);
+        }
+
+        /// <summary>
+        /// Initializes the any option children defined for the instance.
+        /// </summary>
+        protected override void InitializeOptionalChildren(ISystemContext context)
+        {
+            base.InitializeOptionalChildren(context);
+        }
+
+        #region Initialization String
+        private const string InitializationString =
+           "AQAAABcAAABodHRwOi8vZ20uY29tL3Nob3Avb3BjL/////8EYIAAAQAAAAEAFAAAAENTZW5kUmVxdWVz" +
+           "dEluc3RhbmNlAQElAAEBJQD/////AgAAABVgiQoCAAAAAQAEAAAAVHlwZQEBJgAALwA/JgAAAAAM////" +
+           "/wEB/////wAAAAAVYIkKAgAAAAEACwAAAFJlcXVlc3RlZElEAQEnAAAvAD8nAAAAABv/////AQH/////" +
+           "AAAAAA==";
+        #endregion
+        #endif
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// A description for the Type Variable.
+        /// </summary>
+        public BaseDataVariableState<string> Type
+        {
+            get
+            {
+                return m_type;
+            }
+
+            set
+            {
+                if (!Object.ReferenceEquals(m_type, value))
+                {
+                    ChangeMasks |= NodeStateChangeMasks.Children;
+                }
+
+                m_type = value;
+            }
+        }
+
+        /// <summary>
+        /// A description for the RequestedID Variable.
+        /// </summary>
+        public BaseDataVariableState RequestedID
+        {
+            get
+            {
+                return m_requestedID;
+            }
+
+            set
+            {
+                if (!Object.ReferenceEquals(m_requestedID, value))
+                {
+                    ChangeMasks |= NodeStateChangeMasks.Children;
+                }
+
+                m_requestedID = value;
+            }
+        }
+        #endregion
+
+        #region Overridden Methods
+        /// <summary>
+        /// Populates a list with the children that belong to the node.
+        /// </summary>
+        /// <param name="context">The context for the system being accessed.</param>
+        /// <param name="children">The list of children to populate.</param>
+        public override void GetChildren(
+            ISystemContext context,
+            IList<BaseInstanceState> children)
+        {
+            if (m_type != null)
+            {
+                children.Add(m_type);
+            }
+
+            if (m_requestedID != null)
+            {
+                children.Add(m_requestedID);
+            }
+
+            base.GetChildren(context, children);
+        }
+
+        /// <summary>
+        /// Finds the child with the specified browse name.
+        /// </summary>
+        protected override BaseInstanceState FindChild(
+            ISystemContext context,
+            QualifiedName browseName,
+            bool createOrReplace,
+            BaseInstanceState replacement)
+        {
+            if (QualifiedName.IsNull(browseName))
+            {
+                return null;
+            }
+
+            BaseInstanceState instance = null;
+
+            switch (browseName.Name)
+            {
+                case TPUM.OPC.BrowseNames.Type:
+                {
+                    if (createOrReplace)
+                    {
+                        if (Type == null)
+                        {
+                            if (replacement == null)
+                            {
+                                Type = new BaseDataVariableState<string>(this);
+                            }
+                            else
+                            {
+                                Type = (BaseDataVariableState<string>)replacement;
+                            }
+                        }
+                    }
+
+                    instance = Type;
+                    break;
+                }
+
+                case TPUM.OPC.BrowseNames.RequestedID:
+                {
+                    if (createOrReplace)
+                    {
+                        if (RequestedID == null)
+                        {
+                            if (replacement == null)
+                            {
+                                RequestedID = new BaseDataVariableState(this);
+                            }
+                            else
+                            {
+                                RequestedID = (BaseDataVariableState)replacement;
+                            }
+                        }
+                    }
+
+                    instance = RequestedID;
+                    break;
+                }
+            }
+
+            if (instance != null)
+            {
+                return instance;
+            }
+
+            return base.FindChild(context, browseName, createOrReplace, replacement);
+        }
+        #endregion
+
+        #region Private Fields
+        private BaseDataVariableState<string> m_type;
+        private BaseDataVariableState m_requestedID;
+        #endregion
+    }
+    #endif
+    #endregion
+
+    #region CSubscribeUpdatesState Class
+    #if (!OPCUA_EXCLUDE_CSubscribeUpdatesState)
+    /// <summary>
+    /// Stores an instance of the CSubscribeUpdates ObjectType.
+    /// </summary>
+    /// <exclude />
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Opc.Ua.ModelCompiler", "1.0.0.0")]
+    public partial class CSubscribeUpdatesState : BaseObjectState
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes the type with its default attribute values.
+        /// </summary>
+        public CSubscribeUpdatesState(NodeState parent) : base(parent)
+        {
+        }
+
+        /// <summary>
+        /// Returns the id of the default type definition node for the instance.
+        /// </summary>
+        protected override NodeId GetDefaultTypeDefinitionId(NamespaceTable namespaceUris)
+        {
+            return Opc.Ua.NodeId.Create(TPUM.OPC.ObjectTypes.CSubscribeUpdates, TPUM.OPC.Namespaces.TPUM_OPC, namespaceUris);
+        }
+
+        #if (!OPCUA_EXCLUDE_InitializationStrings)
+        /// <summary>
+        /// Initializes the instance.
+        /// </summary>
+        protected override void Initialize(ISystemContext context)
+        {
+            Initialize(context, InitializationString);
+            InitializeOptionalChildren(context);
+        }
+
+        protected override void Initialize(ISystemContext context, NodeState source)
+        {
+            InitializeOptionalChildren(context);
+            base.Initialize(context, source);
+        }
+
+        /// <summary>
+        /// Initializes the any option children defined for the instance.
+        /// </summary>
+        protected override void InitializeOptionalChildren(ISystemContext context)
+        {
+            base.InitializeOptionalChildren(context);
+        }
+
+        #region Initialization String
+        private const string InitializationString =
+           "AQAAABcAAABodHRwOi8vZ20uY29tL3Nob3Avb3BjL/////8EYIAAAQAAAAEAGQAAAENTdWJzY3JpYmVV" +
+           "cGRhdGVzSW5zdGFuY2UBASgAAQEoAP////8CAAAAFWCJCgIAAAABAAkAAABTdWJzY3JpYmUBASkAAC8A" +
+           "PykAAAAAAf////8BAf////8AAAAAFWCJCgIAAAABAA4AAABDeWNsZUluU2Vjb25kcwEBKgAALwA/KgAA" +
+           "AAAb/////wEB/////wAAAAA=";
+        #endregion
+        #endif
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// A description for the Subscribe Variable.
+        /// </summary>
+        public BaseDataVariableState<bool> Subscribe
+        {
+            get
+            {
+                return m_subscribe;
+            }
+
+            set
+            {
+                if (!Object.ReferenceEquals(m_subscribe, value))
+                {
+                    ChangeMasks |= NodeStateChangeMasks.Children;
+                }
+
+                m_subscribe = value;
+            }
+        }
+
+        /// <summary>
+        /// A description for the CycleInSeconds Variable.
+        /// </summary>
+        public BaseDataVariableState CycleInSeconds
+        {
+            get
+            {
+                return m_cycleInSeconds;
+            }
+
+            set
+            {
+                if (!Object.ReferenceEquals(m_cycleInSeconds, value))
+                {
+                    ChangeMasks |= NodeStateChangeMasks.Children;
+                }
+
+                m_cycleInSeconds = value;
+            }
+        }
+        #endregion
+
+        #region Overridden Methods
+        /// <summary>
+        /// Populates a list with the children that belong to the node.
+        /// </summary>
+        /// <param name="context">The context for the system being accessed.</param>
+        /// <param name="children">The list of children to populate.</param>
+        public override void GetChildren(
+            ISystemContext context,
+            IList<BaseInstanceState> children)
+        {
+            if (m_subscribe != null)
+            {
+                children.Add(m_subscribe);
+            }
+
+            if (m_cycleInSeconds != null)
+            {
+                children.Add(m_cycleInSeconds);
+            }
+
+            base.GetChildren(context, children);
+        }
+
+        /// <summary>
+        /// Finds the child with the specified browse name.
+        /// </summary>
+        protected override BaseInstanceState FindChild(
+            ISystemContext context,
+            QualifiedName browseName,
+            bool createOrReplace,
+            BaseInstanceState replacement)
+        {
+            if (QualifiedName.IsNull(browseName))
+            {
+                return null;
+            }
+
+            BaseInstanceState instance = null;
+
+            switch (browseName.Name)
+            {
+                case TPUM.OPC.BrowseNames.Subscribe:
+                {
+                    if (createOrReplace)
+                    {
+                        if (Subscribe == null)
+                        {
+                            if (replacement == null)
+                            {
+                                Subscribe = new BaseDataVariableState<bool>(this);
+                            }
+                            else
+                            {
+                                Subscribe = (BaseDataVariableState<bool>)replacement;
+                            }
+                        }
+                    }
+
+                    instance = Subscribe;
+                    break;
+                }
+
+                case TPUM.OPC.BrowseNames.CycleInSeconds:
+                {
+                    if (createOrReplace)
+                    {
+                        if (CycleInSeconds == null)
+                        {
+                            if (replacement == null)
+                            {
+                                CycleInSeconds = new BaseDataVariableState(this);
+                            }
+                            else
+                            {
+                                CycleInSeconds = (BaseDataVariableState)replacement;
+                            }
+                        }
+                    }
+
+                    instance = CycleInSeconds;
+                    break;
+                }
+            }
+
+            if (instance != null)
+            {
+                return instance;
+            }
+
+            return base.FindChild(context, browseName, createOrReplace, replacement);
+        }
+        #endregion
+
+        #region Private Fields
+        private BaseDataVariableState<bool> m_subscribe;
+        private BaseDataVariableState m_cycleInSeconds;
         #endregion
     }
     #endif

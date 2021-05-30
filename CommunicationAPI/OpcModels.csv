@@ -24,3 +24,9 @@ COrder_Entries_Product,33,Object
 COrder_Entries_Product_ID,34,Variable
 COrder_Entries_Product_Name,35,Variable
 COrder_Entries_Product_Price,36,Variable
+CSendRequest,37,ObjectType
+CSendRequest_Type,38,Variable
+CSendRequest_RequestedID,39,Variable
+CSubscribeUpdates,40,ObjectType
+CSubscribeUpdates_Subscribe,41,Variable
+CSubscribeUpdates_CycleInSeconds,42,Variable
