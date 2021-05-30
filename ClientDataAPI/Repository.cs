@@ -6,6 +6,7 @@ namespace Client.DataAPI
     public class Repository : IRepository
     {
         private readonly DataContext dataContext;
+        private readonly object lockobj = new object();
 
         public Repository()
         {
@@ -20,171 +21,228 @@ namespace Client.DataAPI
         // ADD
         public bool AddProduct(CProduct product)
         {
-            if (FindProductByID(product.ID) == null)
+            lock (lockobj)
             {
-                dataContext.CProducts.Add(product);
-                return AddEvidenceEntry((new CEvidenceEntry() { Product = product, Amount = 1 }));
+                if (FindProductByID(product.ID) == null)
+                {
+                    dataContext.CProducts.Add(product);
+                    return AddEvidenceEntry((new CEvidenceEntry() { Product = product, Amount = 1 }));
+                }
+                else
+                    return false;
             }
-            else
-                return false;
         }
         
         public bool AddEvidenceEntry(CEvidenceEntry evidenceEntry)
         {
-            if (FindEvidenceEntryByID(evidenceEntry.Product.ID) == null)
+            lock (lockobj)
             {
-                if (FindProductByID(evidenceEntry.Product.ID) == null)
-                    return false;
+                if (FindEvidenceEntryByID(evidenceEntry.Product.ID) == null)
+                {
+                    if (FindProductByID(evidenceEntry.Product.ID) == null)
+                        return false;
 
-                dataContext.CEvidenceEntries.Add(evidenceEntry);
-                return true;
+                    dataContext.CEvidenceEntries.Add(evidenceEntry);
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
 
         public bool AddOrder(COrder order)
         {
-            if (FindOrderByID(order.ID) == null)
+            lock (lockobj)
             {
-                dataContext.COrders.Add(order);
-                return true;
+                if (FindOrderByID(order.ID) == null)
+                {
+                    dataContext.COrders.Add(order);
+                    return true;
+                }
+                else
+                    return false;
             }
-            else
-                return false;
                 
         }
         public bool AddClient(CClient client)
         {
-            if (FindClientByID(client.ID) == null)
+            lock (lockobj)
             {
-                dataContext.CClients.Add(client);
-                return true;
+                if (FindClientByID(client.ID) == null)
+                {
+                    dataContext.CClients.Add(client);
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
 
         // MODIFY
         public bool ModifyProduct(CProduct product)
         {
-            foreach(CProduct pr in dataContext.CProducts)
+            lock (lockobj)
             {
-                if (pr.ID == product.ID)
+                foreach (CProduct pr in dataContext.CProducts)
                 {
-                    pr.Name = product.Name;
-                    pr.Price = product.Price;
-                    return true;
+                    if (pr.ID == product.ID)
+                    {
+                        pr.Name = product.Name;
+                        pr.Price = product.Price;
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
 
         public bool ModifyClient(CClient client)
         {
-            foreach (CClient cl in dataContext.CClients)
+            lock (lockobj)
             {
-                if (cl.ID == client.ID)
+                foreach (CClient cl in dataContext.CClients)
                 {
-                    cl.Name = client.Name;
-                    cl.Adress = client.Adress;
-                    return true;
+                    if (cl.ID == client.ID)
+                    {
+                        cl.Name = client.Name;
+                        cl.Adress = client.Adress;
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
 
         public bool ModifyOrder(COrder order)
         {
-            foreach (COrder or in dataContext.COrders)
+            lock (lockobj)
             {
-                if (or.ID == order.ID)
+                foreach (COrder or in dataContext.COrders)
                 {
-                    or.Entries = new List<CEvidenceEntry>(order.Entries);
-                    or.Client = order.Client;
-                    return true;
+                    if (or.ID == order.ID)
+                    {
+                        or.Entries = new List<CEvidenceEntry>(order.Entries);
+                        or.Client = order.Client;
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
 
         public bool ChangeProductAmount(int productID, int newAmount)
         {
-            foreach (CEvidenceEntry ev in dataContext.CEvidenceEntries)
+            lock (lockobj)
             {
-                if (ev.Product.ID == productID)
+                foreach (CEvidenceEntry ev in dataContext.CEvidenceEntries)
                 {
-                    ev.Amount = newAmount;
-                    return true;
+                    if (ev.Product.ID == productID)
+                    {
+                        ev.Amount = newAmount;
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
         // FIND
         public CProduct FindProductByName(string name)
         {
-            return dataContext.CProducts?.Find(x => x.Name == name);
+            lock (lockobj)
+            {
+                return dataContext.CProducts?.Find(x => x.Name == name);
+            }
         }
 
         public CProduct FindProductByID(int id)
         {
-            return dataContext.CProducts?.Find(x => x.ID == id);
+            lock (lockobj)
+            {
+                return dataContext.CProducts?.Find(x => x.ID == id);
+            }
         }
 
         public CEvidenceEntry FindEvidenceEntryByID(int id)
         {
-            return dataContext.CEvidenceEntries?.Find(x => x.Product.ID == id);
+            lock (lockobj)
+            {
+                return dataContext.CEvidenceEntries?.Find(x => x.Product.ID == id);
+            }
         }
 
         public CClient FindClientByID(int id)
         {
-            return dataContext.CClients?.Find(x => x.ID == id);
+            lock (lockobj)
+            {
+                return dataContext.CClients?.Find(x => x.ID == id);
+            }
         }
 
         public CClient FindClientByName(string name)
         {
-            return dataContext.CClients?.Find(x => x.Name == name);
+            lock (lockobj)
+            {
+                return dataContext.CClients?.Find(x => x.Name == name);
+            }
         }
 
         public COrder FindOrderByID(int id)
         {
-            return dataContext.COrders?.Find(x => x.ID == id);
+            lock (lockobj)
+            {
+                return dataContext.COrders?.Find(x => x.ID == id);
+            }
         }
 
         public List<COrder> FindOrdersByClientID(int clientID)
         {
-            List<COrder> copy = new List<COrder>();
-            foreach(COrder order in dataContext.COrders.FindAll(x => x.Client.ID == clientID))
+            lock (lockobj)
             {
-                copy.Add(order);
+                List<COrder> copy = new List<COrder>();
+                foreach (COrder order in dataContext.COrders.FindAll(x => x.Client.ID == clientID))
+                {
+                    copy.Add(order);
+                }
+                return copy;
             }
-            return copy;
         }
 
         // LIST GETTERS
-        public int CountProducts { get { return dataContext.CProducts.Count; } }
+        public int CountProducts { get { lock (lockobj) return dataContext.CProducts.Count; } }
 
-        public int CountOrders { get { return dataContext.COrders.Count; } }
+        public int CountOrders { get { lock (lockobj) return dataContext.COrders.Count; } }
 
-        public int CountClients { get { return dataContext.CClients.Count; } }
+        public int CountClients { get { lock (lockobj) return dataContext.CClients.Count; } }
 
-        public int CountProductEntries { get { return dataContext.CProducts.Count; } }
+        public int CountProductEntries { get { lock (lockobj) return dataContext.CProducts.Count; } }
 
         public List<CProduct> GetAllProducts()
         {
-            return new List<CProduct>(dataContext.CProducts);
+            lock (lockobj)
+            {
+                return new List<CProduct>(dataContext.CProducts);
+            }
         }
 
         public List<CClient> GetAllClients()
         {
-            return new List<CClient>(dataContext.CClients);
+            lock (lockobj)
+            {
+                return new List<CClient>(dataContext.CClients);
+            }
         }
         public List<COrder> GetAllOrders()
         {
-            return new List<COrder>(dataContext.COrders);
+            lock (lockobj)
+            {
+                return new List<COrder>(dataContext.COrders);
+            }
         }
 
         public List<CEvidenceEntry> GetAllEntries()
         {
-            return new List<CEvidenceEntry>(dataContext.CEvidenceEntries);
+            lock (lockobj)
+            {
+                return new List<CEvidenceEntry>(dataContext.CEvidenceEntries);
+            }
         }
     }
 }
