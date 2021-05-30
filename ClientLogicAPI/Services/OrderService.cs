@@ -171,6 +171,7 @@ namespace Client.LogicAPI.Services
                 {
                     orderModel.ID = -1;
                     connectionService.SendTask(Serialize<COrder>(orderModel));
+                    orderModel.ID = newID;
                     Logic.InvokeOrdersChanged();
                     return true;
                 }
