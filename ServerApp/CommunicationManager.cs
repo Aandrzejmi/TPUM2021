@@ -78,7 +78,7 @@ namespace Server.App
         {
             con.ws.onMessage = async (data) =>
             {
-                con.handler = new MessageHandler(con, GetConnectionLog(con));
+                con.handler = new MessageHandler(con, GetConnectionLog(con), async x => await con.ws.SendAsync(x));
                 await con.ws.SendAsync(con.handler.Handle(data));
             };
         }
@@ -86,13 +86,13 @@ namespace Server.App
         private void InitSessionTimer(Connection con)
         {
             con.timer = new SessionTimer(60);
-            con.observer = new SessionTimeoutObserver(con.ws, GetConnectionLog(con));
-            con.observer.Subscribe(con.timer);
+            con.timeoutObserver = new SessionTimeoutObserver(con.ws, GetConnectionLog(con));
+            con.timeoutObserver.Subscribe(con.timer);
             con.timer.Start();
         }
         private void InitServerTimer()
         {
-            serverTimer = new SessionTimer(int.MaxValue);
+            serverTimer = new SessionTimer(86400);
             pingObserver = new PingObserver(this, 15);
             serverTimer.Subscribe(pingObserver);
             serverTimer.Start();
@@ -106,7 +106,6 @@ namespace Server.App
                 _disconnectionTasks.Add(con.ws.DisconnectAsync());
             Task.WaitAll(_disconnectionTasks.ToArray());
         }
-
 
         private class PingObserver : IObserver<SessionTimer.State>
         {
@@ -122,6 +121,7 @@ namespace Server.App
             public void OnCompleted()
             {
                 _comManager.InitServerTimer();
+                _comManager.Log("ServerTimerReset");
             }
 
             public void OnError(Exception error)

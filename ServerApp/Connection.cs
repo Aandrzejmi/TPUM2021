@@ -18,7 +18,8 @@ namespace Server.App
 
         public WebSocketConnection ws;
         public SessionTimer timer;
-        public SessionTimeoutObserver observer;
+        public SessionTimeoutObserver timeoutObserver;
+        public SubscribeUpdateObserver updateObserver;
         public MessageHandler handler;
 
         public int refreshSubscription = -1;

@@ -6,23 +6,23 @@ using System.Runtime.Serialization;
 namespace CommunicationAPI.Models
 {
     [DataContract]
-    class CSubscribeUpdates
+    public class CSubscribeUpdates
     {
         [DataMember]
         public bool Subscribe { get; set; }
         [DataMember]
-        public int CycleInMs { get; set; }
+        public int CycleInSeconds { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is CSubscribeUpdates updates &&
                    Subscribe == updates.Subscribe &&
-                   CycleInMs == updates.CycleInMs;
+                   CycleInSeconds == updates.CycleInSeconds;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Subscribe, CycleInMs);
+            return HashCode.Combine(Subscribe, CycleInSeconds);
         }
     }
 }
