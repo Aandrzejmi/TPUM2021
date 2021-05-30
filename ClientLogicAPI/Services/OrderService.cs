@@ -169,7 +169,9 @@ namespace Client.LogicAPI.Services
                 }
                 if (_repository.AddOrder(orderModel))
                 {
-                    connectionService.SendTask($"add#order#{Serialize<COrder>(orderModel)}");
+                    orderModel.ID = -1;
+                    connectionService.SendTask(Serialize<COrder>(orderModel));
+                    orderModel.ID = newID;
                     Logic.InvokeOrdersChanged();
                     return true;
                 }
@@ -203,7 +205,7 @@ namespace Client.LogicAPI.Services
                     }
                     if (_repository.ModifyOrder(order))
                     {
-                        connectionService.SendTask($"update#order#{orderID}#{Serialize<COrder>(order)}");
+                        connectionService.SendTask(Serialize<COrder>(order));
                         Logic.InvokeOrdersChanged();
                         return true;
                     }

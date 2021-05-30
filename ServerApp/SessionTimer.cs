@@ -7,18 +7,28 @@ using CommunicationAPI;
 
 namespace Server.App
 {
-    class SessionTimer : IObservable<int>
+    class SessionTimer : IObservable<SessionTimer.State>
     {
-        public readonly int timeout;
-        public int Counter { get; private set; }
+        public struct State
+        {
+            public int counter;
+            public int limit;
+        }
 
+        private State CurrentState => new State() { counter = Counter, limit = Limit };
+
+        public readonly int timeout;
+
+        public int Counter { get; private set; }
+        public int Limit { get; private set; }
         public bool Stopped { get; private set; }
 
         Thread _thread;
 
         public SessionTimer(int timeout)
         {
-            Counter = this.timeout = timeout;
+            Counter = 0;
+            Limit = this.timeout = timeout;
             Stopped = true;
         }
 
@@ -38,7 +48,7 @@ namespace Server.App
 
         public void Reset()
         {
-            Counter = timeout;
+            Limit = Counter + timeout;
         }
 
         private void DecrementLoop()
@@ -47,14 +57,15 @@ namespace Server.App
             {
                 while (Stopped) {; }
                 
-                if (Counter <= 0)
+                if (Counter > Limit)
                 {
                     Completed();
                     _thread = null;
                     return;
                 }
 
-                Next(Counter--);
+                Next();
+                Counter++;
 
                 Thread.Sleep(1000);
             }
@@ -62,11 +73,11 @@ namespace Server.App
 
         #region observable
 
-        private void Next(int value)
+        private void Next()
         {
             foreach (var observer in _observers)
             {
-                observer.OnNext(value);
+                observer.OnNext(CurrentState);
             }
         }
 
@@ -78,9 +89,9 @@ namespace Server.App
             }
         }
 
-        private List<IObserver<int>> _observers = new List<IObserver<int>>();
+        private List<IObserver<SessionTimer.State>> _observers = new List<IObserver<SessionTimer.State>>();
 
-        public IDisposable Subscribe(IObserver<int> observer)
+        public IDisposable Subscribe(IObserver<SessionTimer.State> observer)
         {
             if (!_observers.Contains(observer))
                 _observers.Add(observer);
@@ -90,9 +101,9 @@ namespace Server.App
         private class Unsubscriber : IDisposable
         {
             private SessionTimer _observable;
-            private IObserver<int> _observer;
+            private IObserver<SessionTimer.State> _observer;
 
-            public Unsubscriber(SessionTimer observable, IObserver<int> observer)
+            public Unsubscriber(SessionTimer observable, IObserver<SessionTimer.State> observer)
             {
                 _observable = observable;
                 _observer = observer;
@@ -106,49 +117,5 @@ namespace Server.App
         }
 
         #endregion
-    }
-
-    class SessionTimeoutObserver : IObserver<int>
-    {
-        private readonly Action<string> Log;
-        private IDisposable _unsubscriber;
-        private WebSocketConnection _ws;
-
-        public SessionTimeoutObserver(WebSocketConnection ws, Action<string> logger)
-        {
-            _ws = ws;
-            Log = logger;
-        }
-
-        public void Subscribe(IObservable<int> provider)
-        {
-            _unsubscriber = provider.Subscribe(this);
-        }
-
-        public void Unsubscribe()
-        {
-            _unsubscriber.Dispose();
-        }
-
-        public void OnCompleted()
-        {
-            Task.Run(async() =>
-            {
-                var task = _ws.DisconnectAsync();
-                Log($"timeout!");
-                Unsubscribe();
-                await task;
-            });
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(int value)
-        {
-            Log($"{value} seconds to timeout");
-        }
     }
 }

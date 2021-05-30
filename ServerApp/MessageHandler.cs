@@ -1,5 +1,6 @@
 ﻿using CommunicationAPI;
 using CommunicationAPI.Models;
+using static CommunicationAPI.Serialization;
 using Server.LogicAPI;
 using Server.LogicAPI.Interfaces;
 using System;
@@ -15,12 +16,14 @@ namespace Server.App
         private readonly IOrderService _orderService = Logic.CreateOrderService();
         private readonly Connection _con;
         private readonly Action<string> Log;
+        private readonly Func<string, Task> SendMessage;
         private uint counter = 0;
 
-        public MessageHandler(Connection con, Action<string> logFinction)
+        public MessageHandler(Connection con, Action<string> logFunction, Func<string, Task> sendFunction)
         {
             _con = con;
-            Log = logFinction;
+            Log = logFunction;
+            SendMessage = sendFunction;
         }
 
         public string Handle(string data)
@@ -30,118 +33,156 @@ namespace Server.App
             uint no = counter++;
             Log($"[Received message {no}]: {data}");
 
-            var split = data.Split("#");
-
-            switch (split[0])
+            if (data.StartsWith("{\"__type\":\"CSendRequest"))
             {
-                case "send":
-                    // send [type] [id]
-                    // send [type] all
-                    return HandleSend(split, no);
-
-                case "add":
-                    // add [type] [json]
-                    HandleAdd(split, no);
-                    break;
-
-                case "update":
-                    // update [type] [id] [json]
-                    HandleUpdate(split, no);
-                    break;
-
-                default:
-                    HandleError(no);
-                    break;
+                return HandleSend(Deserialize<CSendRequest>(data), no);
             }
-            return "Request done";
-
-        }
-
-        private string HandleSend(string[] split, uint no)
-        {
-            int id;
-            bool all;
-            
-            if (!ParseId(split[2], out id, out all))
+            if (data.StartsWith("{\"__type\":\"CSubscribeUpdates"))
             {
-                HandleError(no);
-                return "Wrong request";
+                HandleSubscribe(Deserialize<CSubscribeUpdates>(data), no);
+                return "Request done";
             }
-
-            if (all)
-                return RespondSendAll(split, no);
+            else if (data.StartsWith("{\"__type\":\"CClient"))
+            {
+                HandleClient(Deserialize<CClient>(data), no);
+                return "Request done";
+            }
+            else if (data.StartsWith("{\"__type\":\"CProduct"))
+            {
+                HandleProduct(Deserialize<CProduct>(data), no);
+                return "Request done";
+            }
+            else if (data.StartsWith("{\"__type\":\"CEvidenceEntry"))
+            {
+                HandleEvEntry(Deserialize<CEvidenceEntry>(data), no);
+                return "Request done";
+            }
+            else if (data.StartsWith("{\"__type\":\"COrder"))
+            {
+                HandleOrder(Deserialize<COrder>(data), no);
+                return "Request done";
+            }
             else
-                return RespondSend(split, no, id);
-
-        }
-
-        private void HandleAdd(string[] split, uint no)
-        {
-            try
             {
-                switch (split[1])
-                {
-                    case "client":
-                        _clientService.AddClient(Serialization.Deserialize<CClient>(split[2]));
-                        Log($"[{no} - Add request]: client added");
-                        break;
-
-                    case "product":
-                        _productService.AddProduct(Serialization.Deserialize<CProduct>(split[2]));
-                        Log($"[{no} - Add request]: product added");
-                        break;
-
-                    case "entry":
-                        _evidenceEntryService.AddEvidenceEntry(Serialization.Deserialize<CEvidenceEntry>(split[2]));
-                        Log($"[{no} - Add request]: evidence entry added");
-                        break;
-
-                    case "order":
-                        _orderService.AddOrder(Serialization.Deserialize<COrder>(split[2]));
-                        Log($"[{no} - Add request]: order added");
-                        break;
-                }
-            }
-            catch
-            {
-                Log($"[{no} - Add request]: exception caugth.");
+                return HandleError(no);
             }
         }
 
-        private void HandleUpdate(string[] split, uint no)
+        private string HandleSend(CSendRequest request, uint no)
+        {
+            if (request.RequestedID.HasValue)
+                return RespondSend(request.Type, request.RequestedID.Value, no);
+            else
+                return RespondSendAll(request.Type, no);
+
+        }
+
+        private void HandleSubscribe(CSubscribeUpdates request, uint no)
+        {
+            if (request.Subscribe)
+            {
+                if (_con.updateObserver != null)
+                {
+                    _con.updateUnsubscriber?.Dispose();
+                }
+
+                _con.updateObserver = new SubscribeUpdateObserver(SendMessage, Log, request.CycleInSeconds);
+                _con.updateUnsubscriber = _con.timer.Subscribe(_con.updateObserver);
+                Log($"[{no} - Subscribe request]: Subscribed to updates");
+            }
+            else //(Unsubscribe)
+            {
+                _con.updateUnsubscriber?.Dispose();
+                Log($"[{no} - Subscribe request]: Unsubscribed from updates");
+            }
+        }
+
+        private void HandleClient(CClient model, uint no)
         {
             try
             {
-                int id = int.Parse(split[2]);
-
-                switch (split[1])
+                if (model.ID < 0)
                 {
-                    case "client":
-                        _clientService.ChangeClient(id, Serialization.Deserialize<CClient>(split[3]));
-                        Log($"[{no} - Update request]: client updated");
-                        break;
-
-                    case "product":
-                        _productService.ChangeProduct(id, Serialization.Deserialize<CProduct>(split[3]));
-                        Log($"[{no} - Update request]: product updated");
-                        break;
-
-                    case "entry":
-                        _evidenceEntryService.ChangeEvidenceEntry(id, Serialization.Deserialize<CEvidenceEntry>(split[3]));
-                        Log($"[{no} - Update request]: evidence entry updated");
-                        break;
-
-                    case "order":
-                        _orderService.ChangeOrder(id, Serialization.Deserialize<COrder>(split[3]));
-                        Log($"[{no} - Update request]: order updated");
-                        break;
+                    model.ID = 0;
+                    _clientService.AddClient(model);
+                    Log($"[{no} - Add request]: client added");
+                }
+                else
+                {
+                    _clientService.ChangeClient(model.ID, model);
+                    Log($"[{no} - Update request]: client updated");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Update request]: exception caugth.");
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
             }
+        }
 
+        private void HandleProduct(CProduct model, uint no)
+        {
+            try
+            {
+                if (model.ID < 0)
+                {
+                    model.ID = 0;
+                    _productService.AddProduct(model);
+                    Log($"[{no} - Add request]: client added");
+                }
+                else
+                {
+                    _productService.ChangeProduct(model.ID, model);
+                    Log($"[{no} - Update request]: client updated");
+                }
+            }
+            catch (Exception e)
+            {
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
+            }
+        }
+
+        private void HandleEvEntry(CEvidenceEntry model, uint no)
+        {
+            try
+            {
+                if (model.Product.ID < 0)
+                {
+                    model.Product.ID = 0;
+                    _evidenceEntryService.AddEvidenceEntry(model);
+                    Log($"[{no} - Add request]: client added");
+                }
+                else
+                {
+                    _evidenceEntryService.ChangeEvidenceEntry(model.Product.ID, model);
+                    Log($"[{no} - Update request]: client updated");
+                }
+            }
+            catch (Exception e)
+            {
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
+            }
+        }
+
+        private void HandleOrder(COrder model, uint no)
+        {
+            try
+            {
+                if (model.ID < 0)
+                {
+                    model.ID = 0;
+                    _orderService.AddOrder(model);
+                    Log($"[{no} - Add request]: client added");
+                }
+                else
+                {
+                    _orderService.ChangeOrder(model.ID, model);
+                    Log($"[{no} - Update request]: client updated");
+                }
+            }
+            catch (Exception e)
+            {
+                Log($"[{no} - Add/Update request]: exception caugth: {e}");
+            }
         }
 
         private string HandleError(uint no)
@@ -150,97 +191,94 @@ namespace Server.App
             return "Wrong request";
         }
 
-        private string RespondSend(string[] split, uint no, int id)
+        private string RespondSend(string typename, int id, uint no)
         {
             try
             {
-                switch (split[1])
+                if (typeof(CClient).ToString().Equals(typename))
                 {
-                    case "client":
-                        var client = _clientService.GetClientByID(id);
-                        string msgC = "client#" + Serialization.Serialize(client);
-                        Log($"[{no} - Send request]: responding - {msgC}");
-                        return msgC;
-
-                    case "product":
-                        var product = _productService.GetProductByID(id);
-                        string msgP = "product#" + Serialization.Serialize(product);
-                        Log($"[{no} - Send request]: responding - {msgP}");
-                        return msgP;
-
-                    case "entry":
-                        var evEntry = _evidenceEntryService.GetEvidenceEntryByID(id);
-                        string msgE = "entry#" + Serialization.Serialize(evEntry);
-                        Log($"[{no} - Send request]: responding - {msgE}");
-                        return msgE;
-
-                    case "order":
-                        var order = _clientService.GetClientByID(id);
-                        string msgO = "order#" + Serialization.Serialize(order);
-                        Log($"[{no} - Send request]: responding - {msgO}");
-                        return msgO;
-                    default:
-                        return "Wrong request";
+                    var client = _clientService.GetClientByID(id);
+                    string msgC = "client#" + Serialize(client);
+                    Log($"[{no} - Send request]: responding - {msgC}");
+                    return msgC;
+                }
+                else if (typeof(CProduct).ToString().Equals(typename))
+                {
+                    var product = _productService.GetProductByID(id);
+                    string msgP = "product#" + Serialize(product);
+                    Log($"[{no} - Send request]: responding - {msgP}");
+                    return msgP;
+                }
+                else if (typeof(CEvidenceEntry).ToString().Equals(typename))
+                {
+                    var evEntry = _evidenceEntryService.GetEvidenceEntryByID(id);
+                    string msgE = "entry#" + Serialize(evEntry);
+                    Log($"[{no} - Send request]: responding - {msgE}");
+                    return msgE;
+                }
+                else if (typeof(COrder).ToString().Equals(typename))
+                {
+                    var order = _clientService.GetClientByID(id);
+                    string msgO = "order#" + Serialize(order);
+                    Log($"[{no} - Send request]: responding - {msgO}");
+                    return msgO;
+                }
+                else
+                {
+                    Log($"[{no} - Send request]: no response, Unknown type: {typename}");
+                    return "Wrong request";
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Send request]: no response, exception caugth.");
+                Log($"[{no} - Send request]: no response, exception caugth : {e}");
                 return "Wrong request";
             }
         }
 
-        private string RespondSendAll(string[] split, uint no)
+        private string RespondSendAll(string typename, uint no)
         {
             try
             {
-                switch (split[1])
+                if (typeof(CClient).ToString().Equals(typename))
                 {
-                    case "client":
-                        var client = _clientService.GetAllClients();
-                        string msgC = "clientL#" + Serialization.Serialize(client);
-                        Log($"[{no} - Send request]: responding - {msgC}");
-                        return msgC;
-
-                    case "product":
-                        var product = _productService.GetAllProducts();
-                        string msgP = "productL#" + Serialization.Serialize(product);
-                        Log($"[{no} - Send request]: responding - {msgP}");
-                        return msgP;
-
-                    case "entry":
-                        var evEntry = _evidenceEntryService.GetAllEvidenceEntries();
-                        string msgE = "entryL#" + Serialization.Serialize(evEntry);
-                        Log($"[{no} - Send request]: responding - {msgE}");
-                        return msgE;
-
-                    case "order":
-                        var order = _orderService.GetAllOrders();
-                        string msgO = "orderL#" + Serialization.Serialize(order);
-                        Log($"[{no} - Send request]: responding - {msgO}");
-                        return msgO;
-                    default:
-                        return "Wrong request";
+                    var clients = _clientService.GetAllClients();
+                    string msgC = Serialize(clients);
+                    Log($"[{no} - Send request]: responding - {msgC}");
+                    return msgC;
+                }
+                else if (typeof(CProduct).ToString().Equals(typename))
+                {
+                    var products = _productService.GetAllProducts();
+                    string msgP = Serialize(products);
+                    Log($"[{no} - Send request]: responding - {msgP}");
+                    return msgP;
+                }
+                else if (typeof(CEvidenceEntry).ToString().Equals(typename))
+                {
+                    var evEntries = _evidenceEntryService.GetAllEvidenceEntries();
+                    string msgE = Serialize(evEntries);
+                    Log($"[{no} - Send request]: responding - {msgE}");
+                    return msgE;
+                }
+                else if (typeof(COrder).ToString().Equals(typename))
+                {
+                    var orders = _orderService.GetAllOrders();
+                    string msgO = Serialize(orders);
+                    Log($"[{no} - Send request]: responding - {msgO}");
+                    return msgO;
+                }
+                else
+                {
+                    Log($"[{no} - Send request]: no response, Unknown type: {typename}");
+                    return "Wrong request";
                 }
             }
-            catch
+            catch (Exception e)
             {
-                Log($"[{no} - Send request]: no response, exception caugth.");
+                Log($"[{no} - Send request]: no response, exception caugth : {e}");
                 return "Wrong request";
             }
-        }
-
-        private bool ParseId(string str, out int id, out bool all)
-        {
-            all = false;
-
-            if (int.TryParse(str, out id))
-                return true;
-
-            if (str == "all")
-                return all = true;
-
-            return false;
         }
     }
 }
