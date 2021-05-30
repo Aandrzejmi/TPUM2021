@@ -83,7 +83,7 @@ namespace CommunicationAPI
             {
                 try
                 {
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[4096];
                     while (true)
                     {
                         ArraySegment<byte> segment = new ArraySegment<byte>(buffer);
