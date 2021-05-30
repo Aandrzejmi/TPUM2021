@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunicationAPI.Models;
 using static CommunicationAPI.Serialization;
+using Client.App.ViewModels;
 
 namespace Client.App.Commands
 {
@@ -26,19 +27,18 @@ namespace Client.App.Commands
         {
             var task = Task.Run(async () =>
             {
-                await _connectionService.CreateConnection();
-                var task1 = _connectionService.SendTask(Serialize(new CSendRequest()
+                var tasks = new Task[4];
+
+                tasks[0] = _connectionService.SendTask(Serialize(new CSendRequest()
                     { Type = typeof(CProduct).ToString(), RequestedID = null }));
-                var task2 = _connectionService.SendTask(Serialize(new CSendRequest()
+                tasks[1] = _connectionService.SendTask(Serialize(new CSendRequest()
                     { Type = typeof(COrder).ToString(), RequestedID = null }));
-                var task3 = _connectionService.SendTask(Serialize(new CSendRequest()
+                tasks[2] = _connectionService.SendTask(Serialize(new CSendRequest()
                     { Type = typeof(CEvidenceEntry).ToString(), RequestedID = null }));
-                var task4 = _connectionService.SendTask(Serialize(new CSendRequest()
+                tasks[3] = _connectionService.SendTask(Serialize(new CSendRequest()
                     { Type = typeof(CClient).ToString(), RequestedID = null }));
-                await task1;
-                await task2;
-                await task3;
-                await task4;
+                
+                Task.WaitAll(tasks);
             });
         }
     }

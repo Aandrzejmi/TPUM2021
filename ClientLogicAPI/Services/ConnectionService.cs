@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Client.DataAPI;
 using Client.LogicAPI.Interfaces;
+using CommunicationAPI.Models;
 
 namespace Client.LogicAPI.Services
 {
@@ -12,6 +14,7 @@ namespace Client.LogicAPI.Services
         public ConnectionService(string peer)
         {
             socketController = new WebSocketController();
+            socketController.DataUpdate += OnDataUpdate;
             _peer = peer;
         }
 
@@ -30,6 +33,18 @@ namespace Client.LogicAPI.Services
         {
             await socketController.SendTask(newTask);            
             return true;
+        }
+
+        private void OnDataUpdate(Type type)
+        {
+            if (type == typeof(CClient))
+                Logic.InvokeClientsChanged();
+            else if (type == typeof(CEvidenceEntry))
+                Logic.InvokeEvidenceEntryChanged();
+            else if (type == typeof(CProduct))
+                Logic.InvokeProductsChanged();
+            else if (type == typeof(COrder))
+                Logic.InvokeOrdersChanged();
         }
     }
 }

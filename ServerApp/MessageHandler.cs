@@ -16,12 +16,14 @@ namespace Server.App
         private readonly IOrderService _orderService = Logic.CreateOrderService();
         private readonly Connection _con;
         private readonly Action<string> Log;
+        private readonly Func<string, Task> SendMessage;
         private uint counter = 0;
 
-        public MessageHandler(Connection con, Action<string> logFinction)
+        public MessageHandler(Connection con, Action<string> logFunction, Func<string, Task> sendFunction)
         {
             _con = con;
-            Log = logFinction;
+            Log = logFunction;
+            SendMessage = sendFunction;
         }
 
         public string Handle(string data)
@@ -34,7 +36,12 @@ namespace Server.App
             if (data.StartsWith("{\"__type\":\"CSendRequest"))
             {
                 return HandleSend(Deserialize<CSendRequest>(data), no);
-            } 
+            }
+            if (data.StartsWith("{\"__type\":\"CSubscribeUpdates"))
+            {
+                HandleSubscribe(Deserialize<CSubscribeUpdates>(data), no);
+                return "Request done";
+            }
             else if (data.StartsWith("{\"__type\":\"CClient"))
             {
                 HandleClient(Deserialize<CClient>(data), no);
@@ -68,6 +75,26 @@ namespace Server.App
             else
                 return RespondSendAll(request.Type, no);
 
+        }
+
+        private void HandleSubscribe(CSubscribeUpdates request, uint no)
+        {
+            if (request.Subscribe)
+            {
+                if (_con.updateObserver != null)
+                {
+                    _con.updateUnsubscriber?.Dispose();
+                }
+
+                _con.updateObserver = new SubscribeUpdateObserver(SendMessage, Log, request.CycleInSeconds);
+                _con.updateUnsubscriber = _con.timer.Subscribe(_con.updateObserver);
+                Log($"[{no} - Subscribe request]: Subscribed to updates");
+            }
+            else //(Unsubscribe)
+            {
+                _con.updateUnsubscriber?.Dispose();
+                Log($"[{no} - Subscribe request]: Unsubscribed from updates");
+            }
         }
 
         private void HandleClient(CClient model, uint no)
