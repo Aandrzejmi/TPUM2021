@@ -20,6 +20,7 @@ namespace Server.App
         public SessionTimer timer;
         public SessionTimeoutObserver timeoutObserver;
         public SubscribeUpdateObserver updateObserver;
+        public IDisposable updateUnsubscriber;
         public MessageHandler handler;
 
         public int refreshSubscription = -1;

@@ -83,16 +83,16 @@ namespace Server.App
             {
                 if (_con.updateObserver != null)
                 {
-                    //todo unsubscribe
+                    _con.updateUnsubscriber?.Dispose();
                 }
 
                 _con.updateObserver = new SubscribeUpdateObserver(SendMessage, Log, request.CycleInSeconds);
-                _con.timer.Subscribe(_con.updateObserver);
+                _con.updateUnsubscriber = _con.timer.Subscribe(_con.updateObserver);
                 Log($"[{no} - Subscribe request]: Subscribed to updates");
             }
             else //(Unsubscribe)
             {
-                //todo unsubscribe
+                _con.updateUnsubscriber?.Dispose();
                 Log($"[{no} - Subscribe request]: Unsubscribed from updates");
             }
         }

@@ -14,6 +14,8 @@ namespace Client.App.ViewModels
     class ConnectionViewModel : INotifyPropertyChanged
     {
         private bool _connected;
+        private bool _subscribed;
+
         public ConnectionCommand ConnectButtonCommand { get; set; }
         public RefreshDataCommand RefreshButtonCommand { get; set; }
         public CloseCommand CloseButtonCommand { get; set; }
@@ -33,11 +35,22 @@ namespace Client.App.ViewModels
             {
                 _connected = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Connected"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ButtonLabel"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ConnectButtonLabel"));
+            }
+        }
+        public bool Subscribed
+        {
+            get => _subscribed;
+            set
+            {
+                _subscribed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Subscribed"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SubscribeButtonLabel"));
             }
         }
 
-        public string ButtonLabel => _connected ? "Disconnect" : "Connect";
+        public string ConnectButtonLabel => _connected ? "Disconnect" : "Connect";
+        public string SubscribeButtonLabel => _subscribed ? "Unsubscribe" : "Subscribe";
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
