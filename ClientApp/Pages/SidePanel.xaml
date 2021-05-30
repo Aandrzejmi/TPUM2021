@@ -11,11 +11,10 @@
 
 
     <Page.Resources>
-        <vm:BackgroundAddViewModel x:Key="vm"/>
         <vm:ConnectionViewModel x:Key="cvm"/>
     </Page.Resources>
 
-    <Grid DataContext="{StaticResource vm}">
+    <Grid DataContext="{StaticResource cvm}">
         <Border x:Name="leftPanel" Grid.Column="0" BorderBrush="Black" Background="Firebrick" BorderThickness="1"/>
 
         <TextBlock x:Name="AppNameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="30" Foreground="White"
@@ -23,15 +22,15 @@
                 TPUM 2021
         </TextBlock>
 
-        <Button x:Name="button1" DataContext="{StaticResource cvm}" Content="{Binding ButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+        <Button x:Name="button1" Content="{Binding ButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,80" Width="80" Height="20"
                         Command="{Binding ConnectButtonCommand}"/>
         <Button x:Name="button2" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,56" Width="80" Height="20"
-                        Command="{Binding Refresh}"/>
+                        Command="{Binding RefreshButtonCommand}"/>
         <Button x:Name="button3" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                         HorizontalContentAlignment="Center" Margin="49,0,0,31" Width="80" Height="20"
-                        Command="{Binding Disconnect}"/>
-        <Label Content="Auto add:" HorizontalAlignment="Left" Margin="58,0,0,105" VerticalAlignment="Bottom" Foreground="White"/>
+                        Command="{Binding CloseButtonCommand}"/>
+        <Label Content="Connection:" HorizontalAlignment="Left" Margin="58,0,0,105" VerticalAlignment="Bottom" Foreground="White"/>
     </Grid>
 </Page>

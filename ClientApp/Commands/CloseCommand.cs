@@ -1,4 +1,5 @@
-﻿using Client.LogicAPI;
+﻿using Client.App.ViewModels;
+using Client.LogicAPI;
 using Client.LogicAPI.DTOs;
 using Client.LogicAPI.Interfaces;
 using System;
@@ -10,7 +11,13 @@ namespace Client.App.Commands
 {
     class CloseCommand : ICommand
     {
+        private ConnectionViewModel _vm;
         public event Action OnExecute;
+
+        public CloseCommand(ConnectionViewModel vm)
+        {
+            _vm = vm;
+        }
 
         private IConnectionService _connectionService = Logic.CreateConnectionService();
 
@@ -22,6 +29,7 @@ namespace Client.App.Commands
         public void Execute(object parameter)
         {
             _connectionService.CloseConnection();
+            _vm.Connected = false;
         }
     }
 }

@@ -31,31 +31,35 @@ namespace Client.App.Commands
 
         public void Execute(object parameter)
         {
-            if (_vm._connected)
+            if (_vm.Connected)
             {
                 Task.Run(async () =>
                 {
-                    _vm.Connected = false;
                     await _connectionService.CloseConnection();
+                    _vm.Connected = false;
                 });
             }
             else
             {
                 var task = Task.Run(async () =>
                 {
+                    var tasks = new Task[5];
+
                     await _connectionService.CreateConnection();
-                    var task1 = _connectionService.SendTask(Serialize(new CSendRequest()
+                    _vm.Connected = true;
+
+                    tasks[0] = _connectionService.SendTask(Serialize(new CSendRequest()
                         { Type = typeof(CProduct).ToString(), RequestedID = null }));
-                    var task2 = _connectionService.SendTask(Serialize(new CSendRequest()
+                    tasks[1] = _connectionService.SendTask(Serialize(new CSendRequest()
                         { Type = typeof(COrder).ToString(), RequestedID = null }));
-                    var task3 = _connectionService.SendTask(Serialize(new CSendRequest()
+                    tasks[2] = _connectionService.SendTask(Serialize(new CSendRequest()
                         { Type = typeof(CEvidenceEntry).ToString(), RequestedID = null }));
-                    var task4 = _connectionService.SendTask(Serialize(new CSendRequest()
+                    tasks[3] = _connectionService.SendTask(Serialize(new CSendRequest()
                         { Type = typeof(CClient).ToString(), RequestedID = null }));
-                    await task1;
-                    await task2;
-                    await task3;
-                    await task4;
+                    tasks[4] = _connectionService.SendTask(Serialize(new CSubscribeUpdates()
+                        { Subscribe = true, CycleInSeconds = 10 }));
+
+                    Task.WaitAll(tasks);
                 });
             }
         }
