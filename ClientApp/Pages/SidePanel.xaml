@@ -22,15 +22,18 @@
                 TPUM 2021
         </TextBlock>
 
-        <Button x:Name="button1" Content="{Binding ButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                        HorizontalContentAlignment="Center" Margin="49,0,0,80" Width="80" Height="20"
+        <Button x:Name="button1" Content="{Binding ConnectButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,108" Width="80" Height="20"
                         Command="{Binding ConnectButtonCommand}"/>
         <Button x:Name="button2" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                        HorizontalContentAlignment="Center" Margin="49,0,0,56" Width="80" Height="20"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,83" Width="80" Height="20"
                         Command="{Binding RefreshButtonCommand}"/>
-        <Button x:Name="button3" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                        HorizontalContentAlignment="Center" Margin="49,0,0,31" Width="80" Height="20"
+        <Button x:Name="button3" Content="{Binding SubscribeButtonLabel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,58" Width="80" Height="20"
+                        Command="{Binding SubscribeButtonCommand}"/>
+        <Button x:Name="button4" Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        HorizontalContentAlignment="Center" Margin="49,0,0,33" Width="80" Height="20"
                         Command="{Binding CloseButtonCommand}"/>
-        <Label Content="Connection:" HorizontalAlignment="Left" Margin="58,0,0,105" VerticalAlignment="Bottom" Foreground="White"/>
+        <Label Content="Connection:" HorizontalAlignment="Left" Margin="52,0,0,128" VerticalAlignment="Bottom" Foreground="White"/>
     </Grid>
 </Page>

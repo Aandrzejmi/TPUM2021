@@ -19,11 +19,13 @@ namespace Client.App.ViewModels
         public ConnectionCommand ConnectButtonCommand { get; set; }
         public RefreshDataCommand RefreshButtonCommand { get; set; }
         public CloseCommand CloseButtonCommand { get; set; }
+        public SubscribeCommand SubscribeButtonCommand { get; set; }
 
         public ConnectionViewModel()
         {
             _connected = false;
             ConnectButtonCommand = new ConnectionCommand(this);
+            SubscribeButtonCommand = new SubscribeCommand(this);
             RefreshButtonCommand = new RefreshDataCommand();
             CloseButtonCommand = new CloseCommand(this);
         }

@@ -46,7 +46,7 @@ namespace Client.App.Commands
                     var tasks = new Task[5];
 
                     await _connectionService.CreateConnection();
-                    _vm.Connected = true;
+                    _vm.Subscribed = true;
 
                     tasks[0] = _connectionService.SendTask(Serialize(new CSendRequest()
                         { Type = typeof(CProduct).ToString(), RequestedID = null }));
@@ -60,6 +60,7 @@ namespace Client.App.Commands
                         { Subscribe = true, CycleInSeconds = 10 }));
 
                     Task.WaitAll(tasks);
+                    _vm.Connected = true;
                 });
             }
         }
