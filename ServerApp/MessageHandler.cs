@@ -87,6 +87,7 @@ namespace Server.App
                 }
 
                 _con.updateObserver = new SubscribeUpdateObserver(SendMessage, Log, request.CycleInSeconds);
+                _con.timer.Subscribe(_con.updateObserver);
                 Log($"[{no} - Subscribe request]: Subscribed to updates");
             }
             else //(Unsubscribe)
