@@ -11,5 +11,7 @@ namespace Server.App
         public SessionTimer timer;
         public SessionTimeoutObserver observer;
         public MessageHandler handler;
+
+        public int refreshSubscription = -1;
     }
 }

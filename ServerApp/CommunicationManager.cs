@@ -83,6 +83,11 @@ namespace Server.App
             con.timer.Start();
         }
 
+        private void PingLoop()
+        {
+
+        }
+
         public void Dispose()
         {
             Log($"Shuting down the communication manager");
